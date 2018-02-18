@@ -148,8 +148,6 @@ $(document).ready(function(){
 
       if (hit = project.hitTest(e.point))
       hit.item.selected = true;
-      
-      console.log(project.selectedItems);
 
     }
 
@@ -164,5 +162,14 @@ $(document).ready(function(){
       lastOperation.remove();
     }
 
+
+    //////////////////////////////////////
+    //         delete
+    //////////////////////////////////////
+    del = function(){
+      var selected;
+      if (selected = project.selectedItems[0])
+      selected.remove();
+    }
 
 });

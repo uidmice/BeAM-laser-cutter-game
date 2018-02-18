@@ -10,11 +10,12 @@ $(document).ready(function(){
     var eraser_tool = $('<button onclick="eraser.activate()">eraser</button>');
     var select_tool = $('<button onclick="select.activate()">select</button>');
     var undo_tool = $('<button onclick="undo()">undo</button>');
+    var del_tool = $('<button onclick="del()">delete</button>');
 
 
 
 
-    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(circle_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool);
+    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(circle_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool).append(del_tool);
 
 
 
