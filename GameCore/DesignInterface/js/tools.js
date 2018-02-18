@@ -91,12 +91,32 @@ $(document).ready(function(){
     //////////////////////////////////////
     //         brush
     //////////////////////////////////////
-    brush.onMouseDown = onMouseDown;
-    brush.onMouseDrag = function(e){
+    brush.maxDistance = 25;
+    brush.minDistance =10;
+    brush.onMouseDown = function(e){
+      temp = new Path();
+	    temp.fillColor = line_color;
       temp.add(e.point);
+	};
+    brush.onMouseDrag = function(e){
+      var step = new Point(0,0);
+      step = step.add(e.delta.x/2, e.delta.y/2);
+      step.angle += 90;
+      step.length +=brush_width;
+      console.log(step);
+
+      var top = e.middlePoint.add(step.x, step.y);
+      var bottom = e.middlePoint.add(-step.x, -step.y);
+
+      temp.add(top);
+      temp.insert(0, bottom);
+      temp.smooth();
     }
     brush.onMouseUp = function (e){
       temp.add(e.point);
+      temp.closed = true;
+      temp.smooth();
+
       operations.push(temp);
     };
 
