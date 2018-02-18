@@ -2,19 +2,19 @@ $(document).ready(function(){
 
     var tool_bar = $("#tool_bar");
 
-    var pencil_tool=$('<button>pencil</button>');
-    var line_tool = $('<button>line</button>');
-    var rectangle_tool = $('<button>rectangle</button>');
-    var circle_tool = $('<button>circle</button>');
-    var brush_tool = $('<button>brush</button>');
-    var eraser_tool = $('<button>eraser</button>');
-    var select_tool = $('<button>select</button>');
-    var undo_tool = $('<button>undo</button>');
+    var pencil_tool=$('<button onclick="pencil.activate()">pencil</button>');
+    var line_tool = $('<button onclick="line.activate()">line</button>');
+    var rectangle_tool = $('<button onclick="rectangle.activate()">rectangle</button>');
+    var circle_tool = $('<button onclick="circle.activate()">circle</button>');
+    var brush_tool = $('<button onclick="brush.activate()">brush</button>');
+    var eraser_tool = $('<button onclick="eraser.activate()">eraser</button>');
+    var select_tool = $('<button onclick="select.activate()">select</button>');
+    var undo_tool = $('<button onclick="undo()">undo</button>');
 
 
 
 
-    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(circle_tool);
+    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(circle_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool);
 
 
 
