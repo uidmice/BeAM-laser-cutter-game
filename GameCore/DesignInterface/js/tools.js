@@ -146,7 +146,14 @@ $(document).ready(function(){
       var hit;
       project.deselectAll();
 
-      if (hit = project.hitTest(e.point))
+      if (hit = project.hitTest(e.point, {
+        tolerance: 4,
+        fill: true,
+        stoke: true,
+        segments: true,
+        curves: true
+
+        }))
       hit.item.selected = true;
 
     }

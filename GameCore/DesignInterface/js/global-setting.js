@@ -10,7 +10,7 @@ paper.install(window);
     }
 
     var line_color = COLOR.black;
-    var line_width = 1;
+    var line_width = 3;
     var fill_color = COLOR.red;
     var brush_width = 10;
     var eraser_width = 10;
