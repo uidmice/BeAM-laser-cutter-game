@@ -120,6 +120,26 @@ $(document).ready(function(){
       operations.push(temp);
     };
 
+    //////////////////////////////////////
+    //         eraser
+    //////////////////////////////////////
+    eraser.onMouseDown = function(e){
+      temp = new Path();
+	    temp.strokeWidth = eraser_width;
+      temp.blendMode = 'destination-out';
+      temp.add(e.point);
+	};
+    eraser.onMouseDrag = function (e){
+      temp.add(e.point);
+    }
+    eraser.onMouseUp = function(e){
+      temp.add(e.point);
+      operations.push(temp);
+    }
+
+    //////////////////////////////////////
+    //         undo
+    //////////////////////////////////////
 
     undo = function(){
       var lastOperation;
