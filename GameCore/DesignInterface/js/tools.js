@@ -121,7 +121,6 @@ $(document).ready(function(){
     //////////////////////////////////////
     //         eraser
     //////////////////////////////////////
-<<<<<<< HEAD
     eraser.onMouseDown = function (e){
       var Alayer = project.activeLayer;
       Alayer.activate();
@@ -139,25 +138,25 @@ $(document).ready(function(){
       temp.add(e.point);
       operations.push(temp);
     }
-=======
-    eraser.onMouseDown = function(e){
-      temp = new Path();
-	    temp.strokeWidth = eraser_width;
-      temp.blendMode = 'destination-out';
-      temp.add(e.point);
-	};
-    eraser.onMouseDrag = function (e){
-      temp.add(e.point);
+
+    //////////////////////////////////////
+    //         select
+    //////////////////////////////////////
+    select.onMouseDown = function (e){
+      var hit;
+      project.deselectAll();
+
+      if (hit = project.hitTest(e.point))
+      hit.item.selected = true;
+      
+      console.log(project.selectedItems);
+
     }
-    eraser.onMouseUp = function(e){
-      temp.add(e.point);
-      operations.push(temp);
-    }
+
 
     //////////////////////////////////////
     //         undo
     //////////////////////////////////////
->>>>>>> 796c29a8ce6fdf7903ee0ed8fa32c02f6eaa8383
 
     undo = function(){
       var lastOperation;
