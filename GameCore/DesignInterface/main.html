@@ -4,14 +4,24 @@
 <head>
   <meta charset="utf-8">
   		<title>Adobe.x</title>
-  		<link href="styles/tool_box.css" rel="stylesheet" type="text/css">
+  		<link href="styles/tool_bar.css" rel="stylesheet" type="text/css">
   		<link rel="icon" href="images/icons/16.png" sizes="16x16" type="image/png">
-      <script src="../jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
+      <script type="text/javascript">
+        paper.install(window);
+      </script>
+      <script src="js/tools.js"></script>
+      <script src="js/tool-options.js"></script>
+      <script src="js/init.js"></script>
   	</head>
   	<body>
-  		<script src="js/canvas.js"></script>
-  		<script src="js/tool-options.js"></script>
-  		<script src="js/tools.js"></script>
-  		<script src="src/functions.js"></script>
+      <div id="main_frame">
+        <canvas id="Canvas" width="600" height="600" style=
+        "border:1px solid #999;position:absolute;top:45px;left:60px"></canvas>
+      </div>
+      <div id="tool_bar">
+
+      </div>
   </body>
 </html>
