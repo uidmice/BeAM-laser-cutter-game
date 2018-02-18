@@ -103,7 +103,6 @@ $(document).ready(function(){
       step = step.add(e.delta.x/2, e.delta.y/2);
       step.angle += 90;
       step.length +=brush_width;
-      console.log(step);
 
       var top = e.middlePoint.add(step.x, step.y);
       var bottom = e.middlePoint.add(-step.x, -step.y);
@@ -116,10 +115,29 @@ $(document).ready(function(){
       temp.add(e.point);
       temp.closed = true;
       temp.smooth();
-
       operations.push(temp);
     };
 
+    //////////////////////////////////////
+    //         eraser
+    //////////////////////////////////////
+    eraser.onMouseDown = function (e){
+      var Alayer = project.activeLayer;
+      Alayer.activate();
+      temp = new Path();
+      temp.add(e.point);
+      temp.strokeWidth = eraser_width;
+      temp.strokeColor = 'black';
+      temp.blendMode = "destination-out";
+    }
+    eraser.onMouseDrag= function (e){
+      temp.add(e.point);
+    }
+
+    eraser.onMouseUp = function (e){
+      temp.add(e.point);
+      operations.push(temp);
+    }
 
     undo = function(){
       var lastOperation;
