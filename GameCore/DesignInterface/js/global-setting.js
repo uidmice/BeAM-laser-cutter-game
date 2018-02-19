@@ -15,5 +15,4 @@ paper.install(window);
     var brush_width = 10;
     var eraser_width = 10;
 
-    var layers = [];
     var operations = [];

@@ -19,6 +19,14 @@ $(document).ready(function(){
     tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(ellipse_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool).append(del_tool).append(move_tool);
 
 
+    setInterval(function () {
+      $.each(project.layers, function (k, v){
+        if(v.isEmpty()&& project.layers.length!=1)
+        v.remove();
+      });
+    },3000);
+
+
 
 
 

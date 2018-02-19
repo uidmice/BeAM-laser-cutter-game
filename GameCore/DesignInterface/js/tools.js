@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     paper.setup('Canvas');
-    layers.push(project.activeLayer);
+
 
     pencil = new Tool();
     line = new Tool();
@@ -110,15 +110,13 @@ $(document).ready(function(){
 
     }
     rectangle.onMouseUp=function (e){
+      var layer = new Layer();
+      layer.activate();
       var rect = new Shape.Rectangle(p1, p2);
       rect.strokeColor = line_color;
       rect.strokeWidth = line_width;
       rect.fillColor = fill_color;
-      var layer = new Layer({
-        children: rect,
-      });
 
-      layers.push(layer);
       operations.push(rect);
       moving.remove();
     }
@@ -156,11 +154,10 @@ $(document).ready(function(){
 
     }
     ellipse.onMouseUp = function(e){
+      var layer = new Layer();
+      layer.activate();
       var ellipse = moving.clone();
-      var layer = new Layer({
-        children: ellipse,
-      });
-      layers.push(layer);
+
       operations.push(ellipse);
       moving.remove();
     }
