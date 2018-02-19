@@ -14,11 +14,15 @@ $(document).ready(function(){
 
 
     var temp;
+    var moving, p1, p2;
     function onMouseDown(event) {
 			temp = new Path();
+      moving = new Path();
 			temp.strokeColor = line_color;
       temp.strokeWidth = line_width;
 			temp.add(event.point);
+      moving.add(event.point);
+      moving.add(event.point)
 		}
 
     //////////////////////////////////////
@@ -30,6 +34,7 @@ $(document).ready(function(){
     }
     pencil.onMouseUp = function (e){
       temp.add(e.point);
+      moving.remove();
       operations.push(temp);
     };
 
@@ -39,16 +44,37 @@ $(document).ready(function(){
     //////////////////////////////////////
 
     line.onMouseDown=onMouseDown;
+    line.onMouseDrag=function(e){
+      moving.removeSegments(1);
+      moving.strokeColor = line_color;
+      moving.strokeWidth = line_width;
+      moving.add(e.point);
+    }
     line.onMouseUp = function(e){
       temp.add(e.point);
       operations.push(temp);
+      moving.remove();
     }
 
 
     //////////////////////////////////////
     //         rectangle
     //////////////////////////////////////
+    rectangle.onMouseDown = function(e){
+      p1 = e.point;
 
+    }
+    rectangle.onMouseDrag = function (e){
+      p2=e.point;
+      if(moving){
+        moving.remove();
+      }
+      moving = new Shape.Rectangle(p1, p2);
+      moving.strokeColor = line_color;
+      moving.strokeWidth = line_width;
+      moving.fillColor = fill_color;
+
+    }
 
     rectangle.onMouseUp=function (e){
       var endPoint = e.point;
@@ -63,12 +89,31 @@ $(document).ready(function(){
 
       layers.push(layer);
       operations.push(rect);
+      moving.remove();
     }
 
 
     //////////////////////////////////////
     //         circle
     //////////////////////////////////////
+    circle.onMouseDown = function(e){
+      p1 = e.point;
+
+    }
+    circle.onMouseDrag = function (e){
+      p2=e.point;
+      if(moving){
+        moving.remove();
+      }
+
+      var d = p2.add(-p1.x, -p1.y);
+      var r = d.length;
+      moving = new Shape.Circle(p1, r);
+      moving.strokeColor = line_color;
+      moving.strokeWidth = line_width;
+      moving.fillColor = fill_color;
+
+    }
 
     circle.onMouseUp = function(e){
       var endPoint = e.point;
