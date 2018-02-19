@@ -16,7 +16,6 @@ $(document).ready(function(){
 
     var temp;
     var moving, p1, p2;
-    var move_offset = [];
     var move_tool_flag = false;
     function onMouseDown(event) {
 			temp = new Path();
@@ -250,7 +249,6 @@ $(document).ready(function(){
 
       }
     }
-
     move.onMouseUp = function (e){
       if(move_tool_flag){
         move_tool_flag=false;
