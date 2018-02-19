@@ -66,6 +66,20 @@ $(document).ready(function(){
     }
     rectangle.onMouseDrag = function (e){
       p2=e.point;
+      if(e.modifiers.shift){
+        var width = p2.x-p1.x;
+        var height = p2.y-p1.y;
+
+        if(Math.abs(width)<Math.abs(height)){
+          height = height * Math.abs(width)/Math.abs(height);
+        }else{
+          width = width *Math.abs(height)/Math.abs(width);
+        }
+
+        p2 = new Point(p1.x+width, p1.y+height);
+      }
+
+
       if(moving){
         moving.remove();
       }
@@ -77,9 +91,7 @@ $(document).ready(function(){
     }
 
     rectangle.onMouseUp=function (e){
-      var endPoint = e.point;
-      var startPoint = e.point.add(-e.delta.x,-e.delta.y);
-      var rect = new Shape.Rectangle(startPoint, endPoint);
+      var rect = new Shape.Rectangle(p1, p2);
       rect.strokeColor = line_color;
       rect.strokeWidth = line_width;
       rect.fillColor = fill_color;
