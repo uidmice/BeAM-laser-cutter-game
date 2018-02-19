@@ -11,11 +11,12 @@ $(document).ready(function(){
     var select_tool = $('<button onclick="select.activate()">select</button>');
     var undo_tool = $('<button onclick="undo()">undo</button>');
     var del_tool = $('<button onclick="del()">delete</button>');
+    var move_tool = $('<button onclick="move.activate()">move</button>');
 
 
 
 
-    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(ellipse_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool).append(del_tool);
+    tool_bar.append(pencil_tool).append(line_tool).append(rectangle_tool).append(ellipse_tool).append(brush_tool).append(eraser_tool).append(select_tool).append(undo_tool).append(del_tool).append(move_tool);
 
 
 

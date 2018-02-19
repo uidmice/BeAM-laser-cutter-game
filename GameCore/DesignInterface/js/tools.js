@@ -10,11 +10,14 @@ $(document).ready(function(){
     brush = new Tool();
     eraser = new Tool();
     select = new Tool();
+    move = new Tool();
 
 
 
     var temp;
     var moving, p1, p2;
+    var move_offset = [];
+    var move_tool_flag = false;
     function onMouseDown(event) {
 			temp = new Path();
       moving = new Path();
@@ -24,6 +27,24 @@ $(document).ready(function(){
       moving.add(event.point);
       moving.add(event.point)
 		}
+
+    function select_by_click(e){
+      var hit = project.hitTest(e.point, {
+        tolerance: 4,
+        fill: true,
+        stoke: true,
+        segments: true,
+        curves: true
+      });
+      if(!e.modifiers.shift){
+        project.deselectAll();
+        if (hit)
+        hit.item.selected = true;
+      }else{
+        if (hit)
+        hit.item.selected = true;
+      }
+    }
 
     //////////////////////////////////////
     //         pencil
@@ -89,7 +110,6 @@ $(document).ready(function(){
       moving.fillColor = fill_color;
 
     }
-
     rectangle.onMouseUp=function (e){
       var rect = new Shape.Rectangle(p1, p2);
       rect.strokeColor = line_color;
@@ -110,7 +130,6 @@ $(document).ready(function(){
     //////////////////////////////////////
     ellipse.onMouseDown = function(e){
       p1 = e.point;
-
     }
     ellipse.onMouseDrag = function (e){
       p2=e.point;
@@ -137,13 +156,11 @@ $(document).ready(function(){
       moving.fillColor = fill_color;
 
     }
-
     ellipse.onMouseUp = function(e){
       var ellipse = moving.clone();
       var layer = new Layer({
         children: ellipse,
       });
-
       layers.push(layer);
       operations.push(ellipse);
       moving.remove();
@@ -160,7 +177,7 @@ $(document).ready(function(){
       temp = new Path();
 	    temp.fillColor = line_color;
       temp.add(e.point);
-	};
+    };
     brush.onMouseDrag = function(e){
       var step = new Point(0,0);
       step = step.add(e.delta.x/2, e.delta.y/2);
@@ -196,7 +213,6 @@ $(document).ready(function(){
     eraser.onMouseDrag= function (e){
       temp.add(e.point);
     }
-
     eraser.onMouseUp = function (e){
       temp.add(e.point);
       operations.push(temp);
@@ -206,19 +222,39 @@ $(document).ready(function(){
     //         select
     //////////////////////////////////////
     select.onMouseDown = function (e){
-      var hit;
-      project.deselectAll();
+      select_by_click(e);
+    }
 
-      if (hit = project.hitTest(e.point, {
-        tolerance: 4,
-        fill: true,
-        stoke: true,
-        segments: true,
-        curves: true
+    //////////////////////////////////////
+    //         move
+    //////////////////////////////////////
+    move.minDistance = 5;
+    move.onMouseDown = function (e){
+        select_by_click(e);
+        var hit = project.hitTest(e.point, {
+          tolerance: 4,
+          fill: true,
+          stoke: true,
+          segments: true,
+          curves: true
+        });
+        if(hit)
+          move_tool_flag = true;
+    }
+    move.onMouseDrag = function (e){
+      if(move_tool_flag){
+        $.each(project.selectedItems, function(k, v){
+          v.position.x = v.position.x + e.delta.x;
+          v.position.y = v.position.y + e.delta.y;
+        })
 
-        }))
-      hit.item.selected = true;
+      }
+    }
 
+    move.onMouseUp = function (e){
+      if(move_tool_flag){
+        move_tool_flag=false;
+      }
     }
 
 
@@ -238,8 +274,13 @@ $(document).ready(function(){
     //////////////////////////////////////
     del = function(){
       var selected;
-      if (selected = project.selectedItems[0])
-      selected.remove();
+      if (selected = project.selectedItems){
+        var l = selected.length;
+        for (var i = l-1; i>=0; i--){
+          selected[i].remove();
+        }
+      }
+
     }
 
 });
