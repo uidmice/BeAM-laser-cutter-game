@@ -6,7 +6,7 @@ $(document).ready(function(){
     pencil = new Tool();
     line = new Tool();
     rectangle = new Tool();
-    circle = new Tool();
+    ellipse = new Tool();
     brush = new Tool();
     eraser = new Tool();
     select = new Tool();
@@ -106,41 +106,47 @@ $(document).ready(function(){
 
 
     //////////////////////////////////////
-    //         circle
+    //         ellipse
     //////////////////////////////////////
-    circle.onMouseDown = function(e){
+    ellipse.onMouseDown = function(e){
       p1 = e.point;
 
     }
-    circle.onMouseDrag = function (e){
+    ellipse.onMouseDrag = function (e){
       p2=e.point;
+      var width = p2.x-p1.x;
+      var height = p2.y-p1.y;
+      if(e.modifiers.shift){
+        if(Math.abs(width)<Math.abs(height)){
+          height = width;
+        }else{
+          width = height;
+        }
+      }
+
+      var rect = new Rectangle(new Point(p1.x+width, p1.y+height), new Point(p1.x-width, p1.y-height));
+
+
       if(moving){
         moving.remove();
       }
 
-      var d = p2.add(-p1.x, -p1.y);
-      var r = d.length;
-      moving = new Shape.Circle(p1, r);
+      moving = new Shape.Ellipse(rect);
       moving.strokeColor = line_color;
       moving.strokeWidth = line_width;
       moving.fillColor = fill_color;
 
     }
 
-    circle.onMouseUp = function(e){
-      var endPoint = e.point;
-      var center = e.point.add(-e.delta.x,-e.delta.y);
-      var r = e.delta.length;
-      var circle = new Shape.Circle(center, r);
-      circle.strokeColor = line_color;
-      circle.strokeWidth = line_width;
-      circle.fillColor = fill_color;
+    ellipse.onMouseUp = function(e){
+      var ellipse = moving.clone();
       var layer = new Layer({
-        children: circle,
+        children: ellipse,
       });
 
       layers.push(layer);
-      operations.push(circle);
+      operations.push(ellipse);
+      moving.remove();
     }
 
 
