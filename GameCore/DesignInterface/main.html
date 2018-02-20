@@ -5,7 +5,10 @@
   <meta charset="utf-8">
   		<title>Adobe.x</title>
   		<link href="styles/tool_bar.css" rel="stylesheet" type="text/css">
-  		<link rel="icon" href="images/icons/16.png" sizes="16x16" type="image/png">
+    <link rel="stylesheet" type= 'text/css'href="styles/main_style.css">
+    <link rel="stylesheet" type= 'text/css'href="styles/button_style.css">
+
+    <link rel="icon" href="images/icons/16.png" sizes="16x16" type="image/png">
       <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
       <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
       
@@ -16,10 +19,26 @@
   	</head>
   	<body>
       <div id="main_frame">
-        <canvas id="Canvas" width="600" height="600" style=
-        "border:1px solid #999;position:absolute;top:45px;left:60px"></canvas>
+          <div id="taskbar">
+              <button id="save">save</button>
+              <button id="discard">discard</button>
+              <button id="next">next</button>
+          </div>
+          <div id="modification">
+              <button id="color">color</button>
+
+              <button id="line_width">line width</button>
+              <button id="undo">undo</button>
+          </div>
+          <div id="operation">
+              <div id="tool_bar"></div>
+              <div class="operative" id="opening" width="600" height="600">
+
+              </div>
+              <canvas class= "operative" id="Canvas" width="600" height="600" style=
+                      "border:1px solid #999;position:absolute;top:45px;left:60px"></canvas>
+
       </div>
-      <div id="tool_bar">
 
       </div>
   </body>

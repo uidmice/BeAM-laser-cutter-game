@@ -2701,7 +2701,8 @@ var Project = PaperScopeItem.extend({
 			if (entry) {
 				entry.flags |= flags;
 			} else {
-				changes.push(changesById[id] = { item: item, flags: flags });
+				changes.push(changesById[id] = {
+					item: item, flags: flags });
 			}
 		}
 	},

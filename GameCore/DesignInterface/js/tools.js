@@ -11,6 +11,7 @@ $(document).ready(function(){
     eraser = new Tool();
     select = new Tool();
     move = new Tool();
+    text = new Tool();
 
 
 
@@ -250,6 +251,47 @@ $(document).ready(function(){
       if(move_tool_flag){
         move_tool_flag=false;
       }
+    }
+
+    //////////////////////////////////////
+    //         text
+    //////////////////////////////////////
+    hasInput = false;
+    text.onMouseDown = function(e){
+        if(hasInput) return;
+        addInput(e.point.x, e.point.y);
+
+
+        function addInput(x,y){
+            var input = document.createElement('input');
+            input.type = 'text';
+            input.style.position = 'fixed';
+            input.style.left = (x+5) + 'px' ;
+            input.style.top = (y+5) + 'px';
+
+            input.onkeydown = Enter;
+
+            document.body.appendChild(input);
+            input.focus();
+            hasInput = true;
+
+        }
+
+
+        function Enter(a){
+            var keyCode = a.keyCode;
+            if (keyCode === 13) {
+                var content = this.value.toString();
+                var text = new PointText(e.point);
+                text.justification = 'center';
+                text.fillColor = line_color;
+                text.content = content;
+                document.body.removeChild(this);
+                hasInput = false;
+
+            }
+        }
+
     }
 
 
