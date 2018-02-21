@@ -1,0 +1,101 @@
+#modification{
+    order:2;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#color_dropdown{
+    z-index: 3;
+    width: 50px;
+    position: relative;
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 3;
+}
+
+#modification button{
+    width: 50px;
+    border: hidden;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+}
+
+
+#black{
+    width: 100px;
+}
+
+#black:hover{
+    background-color: lightgrey;
+}
+#red{
+    width: 100px;
+}
+#red:hover{
+    background-color: lightgrey;
+}
+#blue{
+    width: 100px;
+}
+#blue:hover{
+    background-color: lightgrey;
+}
+
+
+#colorhint{
+    width: 20px;
+    height: 20px;
+    margin-top: 8px;
+    background-color: white;
+    border-style: solid;
+    border-color: white;
+
+}
+
+#modification .black{
+    background-color: black;
+}
+#modification .blue{
+    background-color: deepskyblue;
+}
+#modification .red{
+    background-color: red;
+}
+
+#modification .clicked{
+    background-color: dimgrey;
+}
+
+#line_dropdown{
+    z-index: 3;
+    width: 50px;
+    position: relative;
+
+}
+
+#line_dropdown #LineRange {
+    width: 10px;
+    z-index: 3;
+}
+
+#widthhint{
+    width: 40px;
+    height: 20px;
+    margin-top: 8px;
+    background-color: white;
+    border-style: solid;
+    border-color: white;
+    text-align:center ;
+
+}

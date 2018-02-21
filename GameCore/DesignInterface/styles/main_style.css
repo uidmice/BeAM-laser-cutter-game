@@ -1,54 +1,55 @@
 body{
     display: flex;
-    flex-direction: column;
     height: 100%;
     width: 100%;
+    margin:0;
 
 }
 
 #taskbar {
-    order: 1;
     display: flex;
-    flex-direction: row;
-    height: 40px;
-    width: 1000px;
-    background-color: lightskyblue;
+    width: 100%;
 }
 
- button{
-    padding: 20px;
-    height: 10px;
-     text-align: center;
-}
-
-#modification{
-    order:2;
-    display: flex;
-    flex-direction: row;
-    height: 40px;
-    width: 1000px;
-    background-color: lightgrey;
-}
 
 #operation{
-    order:3;
-    height:1500px;
-    display:flex;
-    flex-direction:row;
+    display:block;
+    width: 100%;
 
 }
 
 #tool_bar{
-    order:1;
     display:flex;
     flex-direction: column;
-    margin-top: 8px;
+    border:0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+#tool_bar *{
+    margin: auto;
+    font-size:40px;
+    color:white
 
 }
 
 #Canvas{
-    order:2;
-    margin-top:50px;
-    margin-left: 50px;
+  position: fixed;
+  top:0;
+  border:0;
+}
 
+#overlay{
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.3);
+  z-index: 2;
 }

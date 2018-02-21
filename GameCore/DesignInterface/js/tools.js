@@ -1,7 +1,5 @@
 $(document).ready(function(){
-
     paper.setup('Canvas');
-
 
     pencil = new Tool();
     line = new Tool();
@@ -28,6 +26,10 @@ $(document).ready(function(){
       moving.add(event.point)
 		}
 
+    function onMouseUp(e){
+      console.log("Mouse Up");
+    }
+
     function select_by_click(e){
       var hit = project.hitTest(e.point, {
         tolerance: 4,
@@ -52,11 +54,13 @@ $(document).ready(function(){
     pencil.onMouseDown = onMouseDown;
     pencil.onMouseDrag = function(e){
       temp.add(e.point);
+      console.log("pencil drag");
     }
     pencil.onMouseUp = function (e){
       temp.add(e.point);
       moving.remove();
       operations.push(temp);
+      console.log("pencil up");
     };
 
 
@@ -262,12 +266,13 @@ $(document).ready(function(){
         addInput(e.point.x, e.point.y);
 
 
+
         function addInput(x,y){
             var input = document.createElement('input');
             input.type = 'text';
             input.style.position = 'fixed';
-            input.style.left = (x+5) + 'px' ;
-            input.style.top = (y+5) + 'px';
+            input.style.left = (x+80) + 'px' ;
+            input.style.top = (y+80) + 'px';
 
             input.onkeydown = Enter;
 
