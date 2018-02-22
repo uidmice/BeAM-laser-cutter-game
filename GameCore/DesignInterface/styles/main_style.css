@@ -30,15 +30,24 @@ body{
 
 #tool_bar *{
     margin: auto;
-    font-size:40px;
-    color:white
+    font-size:35px;
+    color:rgba(255,255,255, 0.65);
 
+}
+
+#tool_bar *:hover{
+    color:white
+}
+
+#tool_bar .selected *{
+  color: white;
 }
 
 #Canvas{
   position: fixed;
   top:0;
   border:0;
+  background-color: #464646;
 }
 
 #overlay{

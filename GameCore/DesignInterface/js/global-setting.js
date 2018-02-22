@@ -16,16 +16,17 @@ paper.install(window);
     var modification_h = 40;
     var hue = "#343430";
 
+    c = null;
     canvas = null;
 
     var canvas_height=0;
     var canvas_width=0;
-    var canvas_position = {x:40, y:40};
+    var canvas_bounds = null;
 
     var PPI = 1;
     var line_color = COLOR.black;
-    var line_width = 3;
-    var fill_color = COLOR.red;
+    var line_width = 10;
+    var fill_color = false;
     var brush_width = 10;
     var eraser_width = 10;
     var operations = [];
