@@ -7,7 +7,6 @@ $(document).ready(function(){
     ellipse = new Tool();
     brush = new Tool();
     eraser = new Tool();
-    select = new Tool();
     move = new Tool();
     text = new Tool();
 
@@ -17,50 +16,61 @@ $(document).ready(function(){
     var moving, p1, p2;
     var move_tool_flag = false;
     function onMouseDown(event) {
-			temp = new Path();
-      moving = new Path();
-			temp.strokeColor = line_color;
-      temp.strokeWidth = line_width;
-			temp.add(event.point);
-      moving.add(event.point);
-      moving.add(event.point)
+      if(event.point.isInside(canvas_bounds)){
+        temp = new Path();
+        moving = new Path();
+  			temp.strokeColor = line_color;
+        temp.strokeWidth = line_width;
+  			temp.add(event.point);
+        canvas.addChild(temp);
+        moving.add(event.point);
+      }
 		}
 
-    function onMouseUp(e){
-      console.log("Mouse Up");
-    }
 
     function select_by_click(e){
       var hit = project.hitTest(e.point, {
         tolerance: 4,
         fill: true,
+        bounds:true,
         stoke: true,
         segments: true,
-        curves: true
+        curves: true,
+        guides: true,
+        matches: function(item){
+          return ((item.clipMask ==false))}
       });
       if(!e.modifiers.shift){
         project.deselectAll();
-        if (hit)
-        hit.item.selected = true;
+        if (hit){
+          hit.item.selected = true;
+          c.selected = false;
+        }
       }else{
-        if (hit)
-        hit.item.selected = true;
+        if (hit){
+          hit.item.selected = true;
+          c.selected = false;
+        }
       }
     }
 
     //////////////////////////////////////
     //         pencil
     //////////////////////////////////////
+    pencil.maxDistance=2;
     pencil.onMouseDown = onMouseDown;
     pencil.onMouseDrag = function(e){
+      if(temp)
       temp.add(e.point);
-      console.log("pencil drag");
     }
     pencil.onMouseUp = function (e){
-      temp.add(e.point);
-      moving.remove();
-      operations.push(temp);
-      console.log("pencil up");
+      if(temp){
+        temp.add(e.point);
+        temp.guide = true;
+        operations.push(temp);
+        moving.remove();
+      }
+
     };
 
 
@@ -77,6 +87,7 @@ $(document).ready(function(){
     }
     line.onMouseUp = function(e){
       temp.add(e.point);
+      temp.guide = true;
       operations.push(temp);
       moving.remove();
     }
@@ -87,7 +98,6 @@ $(document).ready(function(){
     //////////////////////////////////////
     rectangle.onMouseDown = function(e){
       p1 = e.point;
-
     }
     rectangle.onMouseDrag = function (e){
       p2=e.point;
@@ -103,16 +113,15 @@ $(document).ready(function(){
 
         p2 = new Point(p1.x+width, p1.y+height);
       }
-
-
       if(moving){
         moving.remove();
       }
       moving = new Shape.Rectangle(p1, p2);
       moving.strokeColor = line_color;
       moving.strokeWidth = line_width;
-      moving.fillColor = fill_color;
-
+      if(fill_color){
+        moving.fillColor = fill_color;
+      }
     }
     rectangle.onMouseUp=function (e){
       var layer = new Layer();
@@ -120,8 +129,14 @@ $(document).ready(function(){
       var rect = new Shape.Rectangle(p1, p2);
       rect.strokeColor = line_color;
       rect.strokeWidth = line_width;
-      rect.fillColor = fill_color;
-
+      if(fill_color){
+        rect.fillColor = fill_color
+      }else{
+        rect.fillColor = "black";
+        rect.fillColor.alpha=0.001;
+      }
+      rect.guide = true;
+      canvas.addChild(rect);
       operations.push(rect);
       moving.remove();
     }
@@ -219,12 +234,6 @@ $(document).ready(function(){
       operations.push(temp);
     }
 
-    //////////////////////////////////////
-    //         select
-    //////////////////////////////////////
-    select.onMouseDown = function (e){
-      select_by_click(e);
-    }
 
     //////////////////////////////////////
     //         move

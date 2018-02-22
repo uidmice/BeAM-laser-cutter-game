@@ -1,27 +1,60 @@
 $(document).ready(function(){
 
-    $("#move").click(function(){move.activate()});
-    $("#pencil").click(function(){pencil.activate()});
-    $("#brush").click(function(){brush.activate()});
-    $("#line").click(function(){line.activate()});
-    $("#rectangle").click(function(){rectangle.activate()});
-    $("#ellipse").click(function(){ellipse.activate()});
-    $("#eraser").click(function(){eraser.activate()});
-    $("#undo").click(function(){undo()});
-    $("#delete").click(function(){del()});
-    $("#text").click(function(){text.activate()});
-
-
-
-
-    var bg = new Path.Rectangle({
-    point: [0, 0],
-    size: [view.size.width, view.size.height],
-    strokeColor: '#464646',
-    selected: false
+    $("#move").click(function(){
+      move.activate();
+      $(".selected").removeClass("selected");
+      $("#move").addClass("selected");
     });
-    bg.sendToBack();
-    bg.fillColor = '#464646';
+    $("#pencil").click(function(){
+      project.deselectAll();
+      pencil.activate();
+      $(".selected").removeClass("selected");
+      $("#pencil").addClass("selected");
+    });
+    $("#brush").click(function(){
+      project.deselectAll();
+      brush.activate();
+      $(".selected").removeClass("selected");
+      $("#brush").addClass("selected");
+    });
+    $("#line").click(function(){
+      project.deselectAll();
+      line.activate();
+      $(".selected").removeClass("selected");
+      $("#line").addClass("selected");
+    });
+    $("#rectangle").click(function(){
+      project.deselectAll();
+      rectangle.activate();
+      $(".selected").removeClass("selected");
+      $("#rectangle").addClass("selected");
+    });
+    $("#ellipse").click(function(){
+      project.deselectAll();
+      ellipse.activate();
+      $(".selected").removeClass("selected");
+      $("#ellipse").addClass("selected");
+    });
+    $("#eraser").click(function(){
+      project.deselectAll();
+      eraser.activate();
+      $(".selected").removeClass("selected");
+      $("#eraser").addClass("selected");
+    });
+    $("#delete").click(function(){
+      del();
+      $(".selected").removeClass("selected");
+      $("#move").addClass("selected");
+    });
+    $("#text").click(function(){
+      project.deselectAll();
+      text.activate();
+      $(".selected").removeClass("selected");
+      $("#text").addClass("selected");
+    });
+
+
+
 
     create_new_file();
 

@@ -60,12 +60,21 @@
   }
 
   function new_canvas(){
-    var p = new Point(canvas_position.x,canvas_position.y);
+    var p = new Point(0,0);
     var s = new Size(600*canvas_width/canvas_height, 600);
-    canvas = new Shape.Rectangle(p,s);
-    canvas.fillColor = "white";
+    c = new Shape.Rectangle(p,s);
+    c.fillColor = "white";
+    c.position=new Point(view.size.width/2, view.size.height/2);
+    c.guide = false;
+
+    canvas_bounds = new Rectangle(c.bounds);
+
+    var mask = new Path.Rectangle(canvas_bounds);
+    canvas = new Group(mask,c);
+    canvas.clipped = true;
     var layer = new Layer();
     layer.activate();
+    move.activate();
   }
 
   function remove_emptyLayer(){
