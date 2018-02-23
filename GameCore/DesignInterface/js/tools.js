@@ -55,6 +55,19 @@ $(document).ready(function(){
       }
     }
 
+
+    function onKeyDown(e){
+      if((e.key=="delete")||(e.key=="backspace")){
+        if(project.selectedItems.length>0){
+          var selected = project.selectedItems;
+          var l = selected.length;
+          for (var i = l-1; i>=0; i--){
+            selected[i].remove();
+          }
+        }
+      }
+    }
+
     //////////////////////////////////////
     //         pencil
     //////////////////////////////////////
@@ -72,7 +85,6 @@ $(document).ready(function(){
       }
 
     };
-
 
     //////////////////////////////////////
     //         line
@@ -321,6 +333,7 @@ $(document).ready(function(){
         move_tool_flag=false;
       }
     }
+    move.onKeyDown = onKeyDown;
 
     //////////////////////////////////////
     //         text
@@ -388,8 +401,9 @@ $(document).ready(function(){
         }
       }
       move.activate();
-
     }
+
+
 
 
 
