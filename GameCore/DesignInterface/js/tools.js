@@ -94,14 +94,52 @@ $(document).ready(function(){
     //////////////////////////////////////
     //         multipolygon
     //////////////////////////////////////
+    var multi_temp = null;
+    var multi = false;
     multipolygon.onMouseDown = function (e){
-      if (!moving){
+      if (!multi){
+        if(multi_temp){
+          multi_temp.remove();
+        }
+        multi_temp = new Path();
+        multi_temp.guide=true;
+        multi_temp.strokeColor = line_color;
+        multi_temp.strokeWidth = line_width;
+        multi = true;
+      }
+      if(moving){
+        moving.remove();
+      }
+      multi_temp.add(e.point);
+      p1=e.point;
+
+      if(e.modifiers.shift){
+        this.deactivate();
+      }
+    }
+    multipolygon.onMouseMove = function(e){
+      if(moving){
+        moving.remove();
+      }
+      if(multi){
         moving = new Path();
         moving.strokeColor = line_color;
         moving.strokeWidth = line_width;
-        canvas.addChild(moving);
+        moving.add(p1);
+        moving.add(e.point);
+
       }
-      moving.add(e.point);
+    }
+    multipolygon.deactivate = function(){
+      if(multi){
+        canvas.addChild(multi_temp.clone());
+        multi_temp.remove();
+        multi = false;
+        if(moving){
+          moving.remove();
+        }
+      }
+
     }
     //////////////////////////////////////
     //         rectangle
