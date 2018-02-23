@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8">
   		<title>Adobe.x</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type= 'text/css'href="styles/main_style.css">
     <link rel="stylesheet" type= 'text/css'href="styles/button_style.css">
     <link rel="stylesheet" type= 'text/css'href="styles/dropdown_style.css">
-      <script defer src="../../Arts/FontsAwesome/js/fontawesome-all.js"></script>
       <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
       <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
 
@@ -39,15 +39,15 @@
           </div>
           <div id="operation" class="UI">
               <ul id="tool_bar">
-                <li id="move" class="selected"><i class="fa fa-mouse-pointer" ></i></li>
-                <li id="pencil"><i class="fas fa-pencil-alt" data-fa-transform="rotate-90"></i></li>
-                <li id="brush"><i class="fas fa-paint-brush"></i></li>
-                <li id="line"><i class="fas fa-long-arrow-alt-up" data-fa-transform="rotate-315"></i></li>
-                <li id="rectangle"><i class="far fa-square"></i></li>
-                <li id="ellipse"><i class="far fa-circle"></i></li>
-                <li id="eraser"><i class="fas fa-eraser"></i></li>
-                <li id="delete"><i class="fas fa-trash-alt"></i></li>
-                <li id="text"><i class="fa fa-text-height"></i></li>
+                <i class="material-icons  selected"  id="move">near_me</i>
+                <i class="material-icons" id="pencil">edit</i>
+                <i class="material-icons" id="brush">brush</i>
+                <i class="material-icons" id="line">call_made</i>
+                <i class="material-icons" id="multipolygon">signal_cellular_null</i>
+                <i class="material-icons" id="rectangle">crop_5_4</i>
+                <i class="material-icons" id="ellipse">panorama_fish_eye</i>
+                <i class="material-icons" id="delete">delete</i>
+                <i class="material-icons" id="text">title</i>
               </ul>
               <canvas id="Canvas"></canvas>
       </div>

@@ -30,8 +30,9 @@ body{
 
 #tool_bar *{
     margin: auto;
-    font-size:35px;
+    font-size:40px;
     color:rgba(255,255,255, 0.65);
+    z-index: 3;
 
 }
 
@@ -39,7 +40,7 @@ body{
     color:white
 }
 
-#tool_bar .selected *{
+#tool_bar .selected {
   color: white;
 }
 

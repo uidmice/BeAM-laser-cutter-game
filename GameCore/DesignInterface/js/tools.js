@@ -9,6 +9,7 @@ $(document).ready(function(){
     eraser = new Tool();
     move = new Tool();
     text = new Tool();
+    multipolygon = new Tool();
 
 
 
@@ -57,7 +58,6 @@ $(document).ready(function(){
     //////////////////////////////////////
     //         pencil
     //////////////////////////////////////
-    pencil.maxDistance=2;
     pencil.onMouseDown = onMouseDown;
     pencil.onMouseDrag = function(e){
       if(temp)
@@ -91,8 +91,18 @@ $(document).ready(function(){
       operations.push(temp);
       moving.remove();
     }
-
-
+    //////////////////////////////////////
+    //         multipolygon
+    //////////////////////////////////////
+    multipolygon.onMouseDown = function (e){
+      if (!moving){
+        moving = new Path();
+        moving.strokeColor = line_color;
+        moving.strokeWidth = line_width;
+        canvas.addChild(moving);
+      }
+      moving.add(e.point);
+    }
     //////////////////////////////////////
     //         rectangle
     //////////////////////////////////////
@@ -170,7 +180,11 @@ $(document).ready(function(){
       moving = new Shape.Ellipse(rect);
       moving.strokeColor = line_color;
       moving.strokeWidth = line_width;
-      moving.fillColor = fill_color;
+      if(fill_color){
+        moving.fillColor=fill_color;
+      }else{
+        moving.fillColor = new Color(0,0,0,0.001);
+      }
 
     }
     ellipse.onMouseUp = function(e){
@@ -178,6 +192,8 @@ $(document).ready(function(){
       layer.activate();
       var ellipse = moving.clone();
 
+      ellipse.guide = true;
+      canvas.addChild(ellipse);
       operations.push(ellipse);
       moving.remove();
     }
@@ -192,7 +208,9 @@ $(document).ready(function(){
     brush.onMouseDown = function(e){
       temp = new Path();
 	    temp.fillColor = line_color;
+      temp.guide = true;
       temp.add(e.point);
+      canvas.addChild(temp);
     };
     brush.onMouseDrag = function(e){
       var step = new Point(0,0);
@@ -331,7 +349,11 @@ $(document).ready(function(){
           selected[i].remove();
         }
       }
+      move.activate();
 
     }
+
+
+
 
 });

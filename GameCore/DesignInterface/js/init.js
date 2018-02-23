@@ -35,6 +35,12 @@ $(document).ready(function(){
       $(".selected").removeClass("selected");
       $("#ellipse").addClass("selected");
     });
+    $("#multipolygon").click(function(){
+      project.deselectAll();
+      multipolygon.activate();
+      $(".selected").removeClass("selected");
+      $("#multipolygon").addClass("selected");
+    });
     $("#eraser").click(function(){
       project.deselectAll();
       eraser.activate();
