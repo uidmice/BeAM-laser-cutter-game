@@ -362,6 +362,7 @@ $(document).ready(function(){
                 text.fillColor = line_color;
                 text.content = content;
                 text.bounds.topLeft = text_p;
+                text.guide = true;
                 document.body.removeChild(this);
                 hasInput = false;
 
