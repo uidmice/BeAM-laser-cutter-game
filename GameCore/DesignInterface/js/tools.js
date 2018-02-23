@@ -339,36 +339,29 @@ $(document).ready(function(){
     //         text
     //////////////////////////////////////
     hasInput = false;
+    var text_p;
     text.onMouseDown = function(e){
-        if(hasInput) return;
-        addInput(e.point.x, e.point.y);
-
-
-
-        function addInput(x,y){
-            var input = document.createElement('input');
-            input.type = 'text';
-            input.style.position = 'fixed';
-            input.style.left = (x+80) + 'px' ;
-            input.style.top = (y+80) + 'px';
-
-            input.onkeydown = Enter;
-
-            document.body.appendChild(input);
-            input.focus();
-            hasInput = true;
-
+        if(!hasInput){
+          text_p = e.point;
+          var input = document.createElement('input');
+          input.type = 'text';
+          input.style.position = 'fixed';
+          input.style.left = (e.point.x+toolbar_w) + 'px' ;
+          input.style.top = (e.point.y+taskbar_h+modification_h) + 'px';
+          hasInput = true;
+          input.onkeydown = Enter;
+          document.body.appendChild(input);
+          input.focus();
         }
-
 
         function Enter(a){
             var keyCode = a.keyCode;
             if (keyCode === 13) {
                 var content = this.value.toString();
-                var text = new PointText(e.point);
-                text.justification = 'center';
+                var text = new PointText(text_p);
                 text.fillColor = line_color;
                 text.content = content;
+                text.bounds.topLeft = text_p;
                 document.body.removeChild(this);
                 hasInput = false;
 
