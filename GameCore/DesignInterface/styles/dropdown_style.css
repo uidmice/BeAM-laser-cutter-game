@@ -1,16 +1,59 @@
 #modification{
-    order:2;
     display: flex;
     flex-direction: row;
     width: 100%;
+    border: 2px solid black;
 }
 
-#color_dropdown{
-    z-index: 3;
-    width: 50px;
-    position: relative;
-
+#modification button{
+      margin-left: 20px;
 }
+
+#modification :first-child{
+      margin-left: 100px;
+}
+
+
+#fill_color {
+  border: 1px solid rgba(255,255,255, 0.65);
+  border-radius: 4px;
+  width: 30px;
+  height:30px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+#fill_color.black{
+  background-color: #000000;
+}
+#fill_color.red{
+  background-color: #FF0000;
+}
+#fill_color.blue{
+  background-color: #0000FF;
+}
+
+#stroke_color {
+  background-color: rgba(255,255,255, 0.3);;
+  border-radius: 4px;
+  width: 30px;
+  height:30px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+}
+#stroke_color.red{
+  border: 6px solid #FF0000;
+}
+#stroke_color.black{
+  border: 6px solid #000000;
+}
+#stroke_color.blue{
+  border: 6px solid #0000FF;
+}
+
+
+
 
 .dropdown-content {
     display: none;
@@ -21,36 +64,8 @@
     z-index: 3;
 }
 
-#modification button{
-    width: 50px;
-    border: hidden;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    text-align: center;
-    font-size: 15px;
-}
 
 
-#black{
-    width: 100px;
-}
-
-#black:hover{
-    background-color: lightgrey;
-}
-#red{
-    width: 100px;
-}
-#red:hover{
-    background-color: lightgrey;
-}
-#blue{
-    width: 100px;
-}
-#blue:hover{
-    background-color: lightgrey;
-}
 
 
 #colorhint{
@@ -63,19 +78,7 @@
 
 }
 
-#modification .black{
-    background-color: black;
-}
-#modification .blue{
-    background-color: deepskyblue;
-}
-#modification .red{
-    background-color: red;
-}
 
-#modification .clicked{
-    background-color: dimgrey;
-}
 
 #line_dropdown{
     z-index: 3;
