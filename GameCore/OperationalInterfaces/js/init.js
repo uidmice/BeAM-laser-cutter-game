@@ -69,8 +69,19 @@ $(document).ready(function(){
       $("#text").addClass("selected");
     });
 
+    $("#save").click(function(){
+      save("730015648");
+    })
 
+    $("#next").click(function(){
+      save("730015648");
+      downloadSVG(temp_save);
+    })
 
+    $("#new_file").click(function(){
+      delete_file();
+
+    })
 
     create_new_file();
 

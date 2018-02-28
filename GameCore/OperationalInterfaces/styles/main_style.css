@@ -78,6 +78,10 @@ body{
   background-color: #464646;
 }
 
+#invisible{
+  display:none;
+}
+
 #overlay{
   display: none;
   position: fixed;

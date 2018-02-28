@@ -15,35 +15,10 @@ $(document).ready(function(){
         fillColor_dropdown.toggleClass("show");
     })
 
-     black.click(function(){
-        colorhint.attr('class','black');
-     })
 
-    blue.on("click",function(){
-        colorhint.attr('class','blue');
-
-    })
-
-    red.on("click",function(){
-        colorhint.attr('class','red');
-    })
-//Line Width Adjust
     var range = $('<input type="range" min="1" max="100" value="50" class="slider" id="lineRange">');
     var line_button = $('#line_width');
     var width_hint = $('#widthhint');
-
-    line_button.on("click", function(){
-        $("#line_dropdown").append(range);
-        line_button.attr("class","clicked");
-    })
-
-
-
-        range.click(function(){
-            width_hint.empty();
-            width_hint.append(this.value);
-
-    })
 
 //Activate Undo
     var undo_button = $('#undo');

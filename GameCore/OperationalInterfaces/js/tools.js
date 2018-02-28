@@ -20,8 +20,8 @@ $(document).ready(function(){
       if(event.point.isInside(canvas_bounds)){
         temp = new Path();
         moving = new Path();
-  			temp.strokeColor = line_color;
-        temp.strokeWidth = line_width;
+  			temp.strokeColor = stroke_color;
+        temp.strokeWidth = stroke_width;
   			temp.add(event.point);
         canvas.addChild(temp);
         moving.add(event.point);
@@ -93,8 +93,8 @@ $(document).ready(function(){
     line.onMouseDown=onMouseDown;
     line.onMouseDrag=function(e){
       moving.removeSegments(1);
-      moving.strokeColor = line_color;
-      moving.strokeWidth = line_width;
+      moving.strokeColor = stroke_color;
+      moving.strokeWidth = stroke_width;
       moving.add(e.point);
     }
     line.onMouseUp = function(e){
@@ -115,8 +115,8 @@ $(document).ready(function(){
         }
         multi_temp = new Path();
         multi_temp.guide=true;
-        multi_temp.strokeColor = line_color;
-        multi_temp.strokeWidth = line_width;
+        multi_temp.strokeColor = stroke_color;
+        multi_temp.strokeWidth = stroke_width;
         multi = true;
       }
       if(moving){
@@ -135,8 +135,8 @@ $(document).ready(function(){
       }
       if(multi){
         moving = new Path();
-        moving.strokeColor = line_color;
-        moving.strokeWidth = line_width;
+        moving.strokeColor = stroke_color;
+        moving.strokeWidth = stroke_width;
         moving.add(p1);
         moving.add(e.point);
 
@@ -177,8 +177,8 @@ $(document).ready(function(){
         moving.remove();
       }
       moving = new Shape.Rectangle(p1, p2);
-      moving.strokeColor = line_color;
-      moving.strokeWidth = line_width;
+      moving.strokeColor = stroke_color;
+      moving.strokeWidth = stroke_width;
       if(fill_color){
         moving.fillColor = fill_color;
       }
@@ -187,8 +187,8 @@ $(document).ready(function(){
       var layer = new Layer();
       layer.activate();
       var rect = new Shape.Rectangle(p1, p2);
-      rect.strokeColor = line_color;
-      rect.strokeWidth = line_width;
+      rect.strokeColor = stroke_color;
+      rect.strokeWidth = stroke_width;
       if(fill_color){
         rect.fillColor = fill_color
       }else{
@@ -228,8 +228,8 @@ $(document).ready(function(){
       }
 
       moving = new Shape.Ellipse(rect);
-      moving.strokeColor = line_color;
-      moving.strokeWidth = line_width;
+      moving.strokeColor = stroke_color;
+      moving.strokeWidth = stroke_width;
       if(fill_color){
         moving.fillColor=fill_color;
       }else{
@@ -257,7 +257,7 @@ $(document).ready(function(){
     brush.minDistance =10;
     brush.onMouseDown = function(e){
       temp = new Path();
-	    temp.fillColor = line_color;
+	    temp.fillColor = stroke_color;
       temp.guide = true;
       temp.add(e.point);
       canvas.addChild(temp);
@@ -359,7 +359,7 @@ $(document).ready(function(){
             if (keyCode === 13) {
                 var content = this.value.toString();
                 var text = new PointText(text_p);
-                text.fillColor = line_color;
+                text.fillColor = stroke_color;
                 text.content = content;
                 text.bounds.topLeft = text_p;
                 text.guide = true;
