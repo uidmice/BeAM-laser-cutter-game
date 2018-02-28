@@ -76,6 +76,7 @@ $(document).ready(function(){
     $("#next").click(function(){
       save("730015648");
       downloadSVG(temp_save);
+      window.location.href="position.html";
     })
 
     $("#new_file").click(function(){
