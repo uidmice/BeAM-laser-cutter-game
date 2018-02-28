@@ -2,11 +2,16 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    border: 2px solid black;
+    box-sizing: border-box;
+    border-bottom: 1px  solid black;
 }
 
-#modification button{
+#modification *{
       margin-left: 20px;
+}
+
+#modification input{
+      margin-left: 5px;
 }
 
 #modification :first-child{
@@ -17,8 +22,8 @@
 #fill_color {
   border: 1px solid rgba(255,255,255, 0.65);
   border-radius: 4px;
-  width: 30px;
-  height:30px;
+  width: 28px;
+  height:28px;
   transition: all 0.5s;
   cursor: pointer;
   margin: 5px;
@@ -36,11 +41,11 @@
 #stroke_color {
   background-color: rgba(255,255,255, 0.3);;
   border-radius: 4px;
-  width: 30px;
-  height:30px;
+  width: 28px;
+  height:28px;
   transition: all 0.5s;
   cursor: pointer;
-  margin: 5px;
+  margin: 5px 5px 5px 20px ;
 }
 #stroke_color.red{
   border: 6px solid #FF0000;
@@ -55,50 +60,14 @@
 
 
 
-.dropdown-content {
+.dropdown {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
     z-index: 3;
 }
 
-
-
-
-
-#colorhint{
-    width: 20px;
-    height: 20px;
-    margin-top: 8px;
-    background-color: white;
-    border-style: solid;
-    border-color: white;
-
-}
-
-
-
-#line_dropdown{
-    z-index: 3;
-    width: 50px;
-    position: relative;
-
-}
-
-#line_dropdown #LineRange {
-    width: 10px;
-    z-index: 3;
-}
-
-#widthhint{
-    width: 40px;
-    height: 20px;
-    margin-top: 8px;
-    background-color: white;
-    border-style: solid;
-    border-color: white;
-    text-align:center ;
-
+.dropdown.show {
+    display: inline-block;
 }
