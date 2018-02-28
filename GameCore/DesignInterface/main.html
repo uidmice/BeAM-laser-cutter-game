@@ -6,7 +6,6 @@
   		<title>Adobe.x</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type= 'text/css'href="styles/main_style.css">
-    <link rel="stylesheet" type= 'text/css'href="styles/button_style.css">
     <link rel="stylesheet" type= 'text/css'href="styles/dropdown_style.css">
       <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
       <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
@@ -21,21 +20,27 @@
       <div id='overlay'></div>
       <div id="main_frame">
           <div id="taskbar" class="UI">
-              <button id="save">save</button>
-              <button id="discard">discard</button>
-              <button id="next">next</button>
+              <i class="material-icons" id="logo">font_download</i>
+              <div id="save" class="top_manu">
+                <i class="material-icons">save</i>
+                <p>Save</p>
+              </div>
+              <div id="save" class="top_manu">
+                <i class="material-icons">insert_drive_file</i>
+                <p>New File</p>
+              </div>
+              <div id="save" class="top_manu">
+                <i class="material-icons">navigate_next</i>
+                <p>Next</p>
+              </div>
           </div>
           <div id="modification" class="UI">
-            <div id="color_dropdown">
-            <button id="color">color</button>
-            </div>
-            <div id="colorhint"></div>
-
-            <div id="line_dropdown">
-            <button id="line_width">width</button>
-            </div>
-            <div id="widthhint"></div>
-              <button id="undo">undo</button>
+            <button id="fill_color" class="black"></button>
+            <button id="stroke_color" class="red"></button>
+            <div>Stroke:</div>
+            <input type="number" name="stroke_width" defaultValue=1></button>
+            <button id="brush_width"></button>
+            <button id="undo">undo</button>
           </div>
           <div id="operation" class="UI">
               <div id="tool_bar">

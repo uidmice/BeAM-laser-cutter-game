@@ -1,21 +1,19 @@
 $(document).ready(function(){
 //Color choice
-    var color_button =  $("#color");
-    var black = $("<button id='black'>black</button>");
-    var blue = $("<button id='blue'>blue</button>");
-    var red = $("<button id='red'>red</button>");
-    var color_dropdown = $('<div class="dropdown_content"></div>');
-    var color_dropdown_holder = $("#color_dropdown");
-    color_dropdown.append(black).append(blue).append(red);
+    var fillColor_button =  $("#fill_color");
+    var black = $("<input type='color' value='#000000' disabled/>");
+    var blue = $("<input type='color' value='#0000ff' disabled/>");
+    var red = $("<input type='color' value='#ff0000' disabled/>");
+    var tran = $("<input type='color' value='rgba(255,255,255,0)' disabled />");
+
+    var fillColor_dropdown = $('<div class="dropdown"></div>');
+    fillColor_dropdown.append(black).append(blue).append(red).append(tran);
+    $("body").append(fillColor_dropdown);
 
 
-    color_button.on("click", function(){
-        $("#color_dropdown").append(color_dropdown);
-        color_button.attr("class","clicked");
+    fillColor_button.on("click", function(){
+        fillColor_dropdown.toggleClass("show");
     })
-
-
-    var colorhint = $("#colorhint");
 
      black.click(function(){
         colorhint.attr('class','black');
