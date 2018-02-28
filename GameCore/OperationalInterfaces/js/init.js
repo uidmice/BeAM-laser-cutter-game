@@ -76,13 +76,29 @@ $(document).ready(function(){
     $("#next").click(function(){
       save("730015648");
       downloadSVG(temp_save);
-      window.location.href="position.html";
+      window.location.href="SpInterface.html";
     })
 
     $("#new_file").click(function(){
       delete_file();
-
     })
+
+    var fillColor_button =  $("#fill_color");
+    var strokeColor_button = $("#stroke_color");
+    var fillColor_dropdown = create_color_dropdown(fillColor_button,0);
+    var strokeColor_dropdown = create_color_dropdown(strokeColor_button,1);
+
+    $("body").append(fillColor_dropdown).append(strokeColor_dropdown);
+
+
+//Activate Undo
+    var undo_button = $('#undo');
+
+    undo_button.click(function(){
+        undo();
+    })
+
+
 
     create_new_file();
 

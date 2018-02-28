@@ -58,21 +58,38 @@
 
   function create_new_file(){
     var create_new_file_win = $("<div></div>");
-    var t1 = $("<span>Height:</span>");
-    var t2 = $("<span>Width:</span>");
-    var t3 = $("<span>Color Mode:</span>");
-    var height_input = $("<input type='number'></input>");
-    var width_input = $("<input type='number'></input><br>");
-    var sel_units = $("<select><option>Inches</option><option>Points</option></select><br>");
-    var sel_color_mode = $("<select><option>CYMK</option><option>RGB</option></select><br>");
+    create_new_file_win.html('<label for="height">Height:</label><input id="height" type="number" name="height" step="0.5" min="1" max="100" value="5" required><span class="validity"></span><select style="margin-left: 40px"><option>Inches</option><option>Points</option></select><br/><label for="width">Width:</label><input id="width" type="number" name="width" step="0.5" min="1" max="100" value="5" required><span class="validity"><br/></span><label for="mode">Color Mode:</label><select name="mode"><option>CYMK</option><option>RGB</option></select><br>');
+    var txtCSS = {
+      "margin-left": "40px",
+      "width": "90px",
+      "display":"inline-block",
+      "font-size":"15px"
+    };
+
+    var inputCSS = {
+      "margin-top":"10px",
+      "width": "80px",
+      "margin-bottom": "20px"
+    };
+    var butmCSS = {
+        "align": "right",
+        "margin-top": "20px"
+
+    }
+    create_new_file_win.css("text-align","left");
+    create_new_file_win.find("label").css(txtCSS);
+    create_new_file_win.find("input").css(inputCSS);
     var sbmt = $("<button>create</button>");
     sbmt.click(function(){
-      canvas_height = height_input.val();
-      canvas_width = width_input.val();
+      canvas_height = create_new_file_win.find("input").val()[0];
+      canvas_width = create_new_file_win.find("input").val()[0];
+      PPI = 600/canvas_height;
       close_pop_up();
       new_canvas();
     });
-    create_new_file_win.append(t1).append(height_input).append(sel_units).append(t2).append(width_input).append(t3).append(sel_color_mode).append(sbmt);
+
+    create_new_file_win.append(sbmt);
+
 
     pop_up_window("New File", create_new_file_win,"200px","400px");
   }
@@ -96,12 +113,6 @@
     save();
   }
 
-  function remove_emptyLayer(){
-      $.each(project.layers, function (k, v){
-        if(v.isEmpty()&& project.layers.length!=1)
-        v.remove();
-  })}
-
   function save(pid){
      temp_save = project.exportSVG({bounds: canvas_bounds});
      console.log(temp_save);
@@ -112,13 +123,8 @@
 
      var svgDocType = document.implementation.createDocumentType('svg', "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd");
      var svgDoc = document.implementation.createDocument('http://www.w3.org/2000/svg', 'svg', svgDocType);
-  // replace the documentElement with our clone
      svgDoc.replaceChild(svg, svgDoc.documentElement);
-  // get the data
      var svgData = (new XMLSerializer()).serializeToString(svgDoc);
-
-
-
 
      var a = document.createElement('a');
       a.href = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svgData.replace(/></g, '>\n\r<'));
@@ -126,8 +132,6 @@
       a.style.visibility = "hidden";
       document.body.appendChild(a);
       a.click();
-
-
 };
 
 var parseStyles = function(svg) {
@@ -186,3 +190,84 @@ var parseStyles = function(svg) {
   }
 
 };
+
+function change_color(button, color,flag){
+  button.removeClass("red").removeClass("black").removeClass("transparent").removeClass("blue");
+  button.addClass(color.attr("name"));
+  if(flag){
+    stroke_color = color.attr("color");
+    $.each(project.selectedItems, function(k, v){
+      if(stroke_color!="false"){
+        v.strokeColor = stroke_color;
+      }else{
+        v.strokeColor = new Color(0,0,0,0.001);
+      }
+    })
+  }else{
+    fill_color = color.attr("color");
+    $.each(project.selectedItems, function(k, v){
+      if(fill_color!="false"){
+        v.fillColor = fill_color;
+      }else{
+        v.fillColor = new Color(0,0,0,0.001);
+      }
+    })
+  }
+
+
+
+}
+
+function create_color_dropdown(button, flag){
+  var black = $("<div style='background-color:black'></div>");
+  var blue =  $("<div style='background-color:blue'></div>");
+  var red =  $("<div style='background-color:red'></div>");
+  var tran =  $("<div ></div>");
+  tran.css("background","url('images/Transparency500.png') no-repeat center center");
+  var colCSS = {
+    "height": "20px",
+    "width": "20px",
+    "margin":"5px",
+    "border":"1px solid rgba(255,255,255,0.7)"
+  };
+
+  black.css(colCSS).attr("color", COLOR.black).attr("name","black");
+  red.css(colCSS).attr("color", COLOR.red).attr("name","red");
+  blue.css(colCSS).attr("color", COLOR.blue).attr("name","blue");
+  tran.css(colCSS).attr("color", COLOR.transparent).attr("name","transparent");
+
+  var dropdown = $('<div class="dropdown"></div>');
+  dropdown.append(red).append(blue).append(black).append(tran);
+  red.click(function(){
+    change_color(button, red,flag);
+    dropdown.removeClass("show");
+  })
+
+  blue.click(function(){
+    change_color(button, blue,flag);
+    dropdown.removeClass("show");
+  })
+
+  black.click(function(){
+    change_color(button, black,flag);
+    dropdown.removeClass("show");
+  })
+
+  tran.click(function(){
+    change_color(button, tran,flag);
+    dropdown.removeClass("show");
+  })
+
+  if(flag){
+    dropdown.css("top",button.offset().top+button.height()+12+"px").css("left",button.offset().left-2+"px");
+  }else{
+    dropdown.css("top", button.offset().top+button.height()+3+"px").css("left",button.offset().left-2+"px");
+
+  }
+  button.click(function(){
+    dropdown.toggleClass("show");
+  })
+
+
+  return dropdown;
+}

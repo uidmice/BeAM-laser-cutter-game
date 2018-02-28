@@ -12,6 +12,15 @@
 
 #modification input{
       margin-left: 5px;
+      margin-top: 5px;
+      height: 20px;
+      width: 40px;
+
+}
+
+#modification label {
+  color: white;
+  margin-top: 10px;
 }
 
 #modification :first-child{
@@ -38,8 +47,12 @@
   background-color: #0000FF;
 }
 
+#fill_color.transparent{
+  background: url('../images/Transparency500.png') no-repeat center center;
+}
+
 #stroke_color {
-  background-color: rgba(255,255,255, 0.3);;
+  background: rbga(0,0,0,0.4);
   border-radius: 4px;
   width: 28px;
   height:28px;
@@ -56,7 +69,10 @@
 #stroke_color.blue{
   border: 6px solid #0000FF;
 }
-
+#stroke_color.transparent{
+  background: url('../images/Transparency500_1.png') no-repeat left top;
+  background-size: 250px;
+}
 
 
 
@@ -70,4 +86,14 @@
 
 .dropdown.show {
     display: inline-block;
+}
+
+#undo {
+  color: rgba(255,255,255,0.7);
+  font-size: 30px;
+  cursor: pointer;
+}
+
+#undo:hover {
+  color: rgb(255,255,255);
 }

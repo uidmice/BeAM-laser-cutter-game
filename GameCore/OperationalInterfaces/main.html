@@ -35,12 +35,13 @@
               </div>
           </div>
           <div id="modification" class="UI">
-            <button id="fill_color" class="black"></button>
+            <button id="fill_color" class="transparent"></button>
             <button id="stroke_color" class="red"></button>
-            <div>Stroke:</div>
-            <input type="number" name="stroke_width" defaultValue=1></button>
-            <button id="brush_width"></button>
-            <button id="undo">undo</button>
+            <label for='stroke_width'>Stroke:</label>
+            <input type="number" name="stroke_width" id="stroke_width" value=0.5 step="0.01" max="2"></input>
+            <label for='brush_width'>Brush:</label>
+            <input type="number" name="brush_width" id="brush_width" value=5></input>
+            <i class="material-icons" id="undo">undo</i>
           </div>
           <div id="operation" class="UI">
               <div id="tool_bar">
@@ -55,7 +56,6 @@
                 <i class="material-icons" id="text">title</i>
               </div>
               <canvas id="Canvas"></canvas>
-              <canvas id="invisible"></canvas>
       </div>
 
       </div>
