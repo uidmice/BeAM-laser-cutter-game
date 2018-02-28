@@ -25,22 +25,23 @@
                 <i class="material-icons">save</i>
                 <p>Save</p>
               </div>
-              <div id="save" class="top_manu">
+              <div id="new_file" class="top_manu">
                 <i class="material-icons">insert_drive_file</i>
                 <p>New File</p>
               </div>
-              <div id="save" class="top_manu">
+              <div id="next" class="top_manu">
                 <i class="material-icons">navigate_next</i>
                 <p>Next</p>
               </div>
           </div>
           <div id="modification" class="UI">
-            <button id="fill_color" class="black"></button>
+            <button id="fill_color" class="transparent"></button>
             <button id="stroke_color" class="red"></button>
-            <div>Stroke:</div>
-            <input type="number" name="stroke_width" defaultValue=1></button>
-            <button id="brush_width"></button>
-            <button id="undo">undo</button>
+            <label for='stroke_width'>Stroke:</label>
+            <input type="number" name="stroke_width" id="stroke_width" value=0.5 step="0.01" max="2"></input>
+            <label for='brush_width'>Brush:</label>
+            <input type="number" name="brush_width" id="brush_width" value=5></input>
+            <i class="material-icons" id="undo">undo</i>
           </div>
           <div id="operation" class="UI">
               <div id="tool_bar">

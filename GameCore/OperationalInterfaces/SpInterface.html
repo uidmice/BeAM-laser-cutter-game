@@ -517,7 +517,7 @@
                         "</div>";
                     $('body').prepend($content);
                     $('.doAction').click(function () {
-                        window.open($link, "_blank"); /*new*/
+                        window.location.href=$link; /*new*/
                         $(this).parents('.dialog-ovelay').fadeOut(500, function () {
                             $(this).remove();
                         });
@@ -531,7 +531,7 @@
                 }
 
                 $('a').click(function () {
-                    Confirm('Make sure before you go!', 'Did you set power and speed correctly by color?', 'Yes, I am pretty sure', 'No, I have to make changes', "https://www.google.com.eg"); /*change*/
+                    Confirm('Make sure before you go!', 'Did you set power and speed correctly by color?', 'Yes, I am pretty sure', 'No, I have to make changes', "position.html"); /*change*/
                 });
             </script>
         </div>

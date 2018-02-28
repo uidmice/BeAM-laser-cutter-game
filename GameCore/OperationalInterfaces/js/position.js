@@ -11,6 +11,11 @@ var expandFlag = false;
 var cur_imgW;
 var cur_imgH;
 
+var back = $("#back");
+back.click(function(){
+  window.location.href="SpInterface.html";
+})
+
 function update(activeAnchor) {
     var group = activeAnchor.getParent();
 
@@ -160,7 +165,7 @@ var ImgGroup = new Konva.Group({
 
 var imageObj = new Image();
 
-imageObj.src = 'IMG_2010.svg';
+imageObj.src = 'images/IMG_2010.svg';
 
 imageObj.onload = function() {
     Img.image(imageObj);
@@ -326,6 +331,7 @@ document.getElementById('start_button').addEventListener('click', function() {
 
 
 
+
 document.getElementById('start_text').addEventListener('click', function() {
     var r;
     if(expandFlag){
@@ -370,7 +376,3 @@ document.getElementById('start_text').addEventListener('click', function() {
     console.log(finalWidth);
     console.log(finalHeight);
 }, false);
-
-
-
-

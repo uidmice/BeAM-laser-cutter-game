@@ -6,8 +6,9 @@ paper.install(window);
       'black' : '#000000',
       'green' : '#008000',
       'white' : '#FFFFFF',
-      'yellow' : '#FFFF00'
-    }
+      'yellow' : '#FFFF00',
+      "transparent": false
+    };
 
     var screen_h=0;
     var screen_w = 0;
@@ -16,19 +17,19 @@ paper.install(window);
     var modification_h = 40;
     var hue = "#343430";
 
-    c = null;
-    canvas = null;
+    c = null;       //white rectangle shape
+    canvas = null;  //group of everything on canvas
 
     var canvas_height=0;
     var canvas_width=0;
-    var canvas_bounds = null;
+    var canvas_bounds = null;  //Rectangle of the region of Canvas
 
     var PPI = 1;
-    var line_color = COLOR.black;
-    var line_width = 10;
-    var fill_color = false;
+    var stroke_color = COLOR.red;
+    var stroke_width = 2;
+    var fill_color = COLOR.transparent;
     var brush_width = 10;
-    var eraser_width = 10;
+    var temp_save = null;
     var operations = [];
 
 $(document).ready(function(){
