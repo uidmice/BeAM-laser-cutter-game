@@ -1,0 +1,227 @@
+#PsPage{
+  z-index: 3;
+  position: absolute;
+  height:100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: whitesmoke;
+}
+
+
+#PsPage .material-icons{
+  color: rgba(0, 0, 0, 0);
+}
+#PsPage .material-icons.show{
+  color: #FF4500;
+}
+
+
+#PsPage .colorSelection {
+    height: 100%;
+    flex:1;
+    background-color:whitesmoke;
+    margin: auto;
+}
+
+#PsPage #t_header{
+  background: black;
+  color: white;
+}
+
+
+#PsPage table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 80%;
+    border: 1px solid #ddd;
+    margin: auto;
+}
+
+#PsPage th,#PsPage td {
+    text-align: left;
+    padding: 16px;
+}
+
+#PsPage th:last-child{
+  padding: 0;
+}
+
+#PsPage tr:nth-child(even) {
+    background-color: white;
+}
+#PsPage .input-color {
+    position: relative;
+}
+
+#PsPage .color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: lightgrey;
+    position: absolute;
+    left: 2px;
+    top: 18px;
+}
+
+
+#PsPage .input-color:hover{
+    background-color: dimgray;
+}
+
+#PsPage tr.input-color.PsSelect{
+  background-color: rgba(0,0,0,0.3);
+}
+
+#PsPage .sliders {
+    flex:2;
+    height: 100%;
+    background-color:whitesmoke;
+}
+
+#PsPage .slideContainer {
+    width: 100%;
+}
+
+#PsPage .sliderDivide{
+    display: flex;
+    flex-direction: row;
+    background: 100%;
+}
+
+#PsPage .sliderDivide p {
+  width:15%;
+}
+
+#PsPage .slider{
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    width: 88%;
+    flex:1;
+}
+
+#PsPage .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: lightslategray;
+    cursor: pointer;
+}
+
+#PsPage .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: lightslategray;
+    cursor: pointer;
+}
+
+#PsPage .confirmButton {
+    padding: 15px 25px;
+    font-size: 24px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: grey;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    margin-left: 220px;
+    margin-top: 50px;
+    font-family: sans-serif;
+}
+
+#PsPage .confirmButton:hover
+{background-color: lightgrey}
+
+#PsPage .confirmButton:active {
+    background-color: lightgrey;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.dialog-ovelay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.50);
+    z-index: 999999
+}
+
+
+.dialog-ovelay .dialog {
+    width: 400px;
+    margin: 320px auto 0;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,.2);
+    border-radius: 3px;
+    overflow: hidden
+}
+.dialog-ovelay .dialog header {
+    padding: 10px 8px;
+    background-color: #f6f7f9;
+    border-bottom: 1px solid #e5e5e5
+}
+.dialog-ovelay .dialog header h3 {
+    font-size: 14px;
+    margin: 0;
+    color: #555;
+    display: inline-block
+}
+.dialog-ovelay .dialog header .fa-close {
+    float: right;
+    color: #c4c5c7;
+    cursor: pointer;
+    transition: all .5s ease;
+    padding: 0 2px;
+    border-radius: 1px
+}
+.dialog-ovelay .dialog header .fa-close:hover {
+    color: #b9b9b9
+}
+.dialog-ovelay .dialog header .fa-close:active {
+    box-shadow: 0 0 5px #673AB7;
+    color: #a2a2a2
+}
+.dialog-ovelay .dialog .dialog-msg {
+    padding: 12px 10px
+}
+.dialog-ovelay .dialog .dialog-msg p{
+    margin: 0;
+    font-size: 15px;
+    color: #333
+}
+.dialog-ovelay .dialog footer {
+    border-top: 1px solid #e5e5e5;
+    padding: 8px 10px
+}
+.dialog-ovelay .dialog footer .controls {
+    direction: rtl
+}
+.dialog-ovelay .dialog footer .controls .button {
+    padding: 5px 15px;
+    border-radius: 3px
+}
+.button {
+    cursor: pointer
+}
+.button-default {
+    background-color: rgb(248, 248, 248);
+    border: 1px solid rgba(204, 204, 204, 0.5);
+    color: #5D5D5D;
+}
+.button-danger {
+    background-color: #f44336;
+    border: 1px solid #d32f2f;
+    color: #f5f5f5
+}

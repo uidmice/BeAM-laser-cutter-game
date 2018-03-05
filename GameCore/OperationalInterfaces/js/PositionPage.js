@@ -1,5 +1,3 @@
-var width = document.getElementById('canvas').clientWidth;
-var height = document.getElementById('canvas').clientHeight;
 
 var finalX;
 var finalY;
@@ -50,18 +48,18 @@ function update(activeAnchor) {
 
     image.position(topLeft.position());
 
-    var width = topRight.getX() - topLeft.getX();
-    var height = bottomLeft.getY() - topLeft.getY();
-    if(width && height) {
-        image.width(width);
-        image.height(height);
+    var board_width = topRight.getX() - topLeft.getX();
+    var board_height = bottomLeft.getY() - topLeft.getY();
+    if(board_width && board_height) {
+        image.board_width(board_width);
+        image.board_height(board_height);
     }
 
-    cur_imgW = width;
-    cur_imgH = height;
+    cur_imgW = board_width;
+    cur_imgH = board_height;
 
-    document.getElementById('img_width').innerHTML = "Image width:   " + cur_imgW;
-    document.getElementById('img_height').innerHTML = "Image height:   " + cur_imgH;
+    document.getElementById('img_width').innerHTML = "Image board_width:   " + cur_imgW;
+    document.getElementById('img_height').innerHTML = "Image board_height:   " + cur_imgH;
 }
 
 function addAnchor(group, x, y, name) {
@@ -111,14 +109,6 @@ function addAnchor(group, x, y, name) {
 }
 
 
-
-
-var stage = new Konva.Stage({
-    container: 'canvas',
-    width: width,
-    height: height
-});
-
 var layer = new Konva.Layer();
 stage.add(layer);
 
@@ -129,10 +119,10 @@ var STEP_SIZE = 15;
 var line;
 
 // generate lines
-for (var ix = 1; ix < width; ix=ix+STEP_SIZE) {
+for (var ix = 1; ix < board_width; ix=ix+STEP_SIZE) {
 
     line = new Konva.Line({
-        points: [ix, 0, ix, height],
+        points: [ix, 0, ix, board_height],
         stroke: 'gray',
         strokeWidth: 0.5,
         opacity: 0.5
@@ -140,10 +130,10 @@ for (var ix = 1; ix < width; ix=ix+STEP_SIZE) {
     layer.add(line);
 }
 
-for (var iy = 1; iy < height; iy=iy+STEP_SIZE) {
+for (var iy = 1; iy < board_height; iy=iy+STEP_SIZE) {
 
     line = new Konva.Line({
-        points: [0, iy, width, iy],
+        points: [0, iy, board_width, iy],
         stroke: 'gray',
         strokeWidth: 0.5,
         opacity: 0.2
@@ -170,8 +160,8 @@ imageObj.src = 'images/IMG_2010.svg';
 imageObj.onload = function() {
     Img.image(imageObj);
     layer.draw();
-    document.getElementById('img_width').innerHTML = "Image width:   " + imageObj.width;
-    document.getElementById('img_height').innerHTML = "Image height:   " + imageObj.height;
+    document.getElementById('img_width').innerHTML = "Image board_width:   " + imageObj.board_width;
+    document.getElementById('img_height').innerHTML = "Image board_height:   " + imageObj.board_height;
 };
 
 
@@ -181,9 +171,9 @@ ImgGroup.add(Img);
 document.getElementById('resize').addEventListener('click', function() {
     if(!expandFlag){
         addAnchor(ImgGroup, 0, 0, 'topLeft');
-        addAnchor(ImgGroup, imageObj.width, 0, 'topRight');
-        addAnchor(ImgGroup, imageObj.width, imageObj.height, 'bottomRight');
-        addAnchor(ImgGroup, 0, imageObj.height, 'bottomLeft');
+        addAnchor(ImgGroup, imageObj.board_width, 0, 'topRight');
+        addAnchor(ImgGroup, imageObj.board_width, imageObj.board_height, 'bottomRight');
+        addAnchor(ImgGroup, 0, imageObj.board_height, 'bottomLeft');
         expandFlag = true;
     }
 }, false);
@@ -301,25 +291,25 @@ document.getElementById('start_button').addEventListener('click', function() {
         }else{
             r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
                 "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-                + imageObj.width + "\nheight:   " + imageObj.height +
+                + imageObj.board_width + "\nheight:   " + imageObj.board_height +
                 ".\nYou cannot change these parameters after you click OK.")
             if(r){
                 finalX = (ImgGroup.x());
                 finalY = (ImgGroup.y());
-                finalWidth = imageObj.width;
-                finalHeight = imageObj.height;
+                finalWidth = imageObj.board_width;
+                finalHeight = imageObj.board_height;
             }
         }
     }else{
         r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
             "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-            + imageObj.width + "\nheight:   " + imageObj.height +
+            + imageObj.board_width + "\nheight:   " + imageObj.board_height +
             ".\nYou cannot change these parameters after you click OK.")
         if(r){
             finalX = (ImgGroup.x());
             finalY = (ImgGroup.y());
-            finalWidth = imageObj.width;
-            finalHeight = imageObj.height;
+            finalWidth = imageObj.board_width;
+            finalHeight = imageObj.board_height;
         }
     }
 
@@ -349,25 +339,25 @@ document.getElementById('start_text').addEventListener('click', function() {
         }else{
             r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
                 "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-                + imageObj.width + "\nheight:   " + imageObj.height +
+                + imageObj.board_width + "\nheight:   " + imageObj.board_height +
                 ".\nYou cannot change these parameters after you click OK.")
             if(r){
                 finalX = (ImgGroup.x());
                 finalY = (ImgGroup.y());
-                finalWidth = imageObj.width;
-                finalHeight = imageObj.height;
+                finalWidth = imageObj.board_width;
+                finalHeight = imageObj.board_height;
             }
         }
     }else{
         r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
             "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-            + imageObj.width + "\nheight:   " + imageObj.height +
+            + imageObj.board_width + "\nheight:   " + imageObj.board_height +
             ".\nYou cannot change these parameters after you click OK.")
         if(r){
             finalX = (ImgGroup.x());
             finalY = (ImgGroup.y());
-            finalWidth = imageObj.width;
-            finalHeight = imageObj.height;
+            finalWidth = imageObj.board_width;
+            finalHeight = imageObj.board_height;
         }
     }
 

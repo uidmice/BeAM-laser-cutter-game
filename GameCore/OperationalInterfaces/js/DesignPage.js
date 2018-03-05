@@ -71,12 +71,14 @@ $(document).ready(function(){
 
     $("#save").click(function(){
       save("730015648");
+      downloadSVG(temp_save);
     })
 
     $("#next").click(function(){
       save("730015648");
-      downloadSVG(temp_save);
-      window.location.href="SpInterface.html";
+      $("#DesignPage").fadeOut("slow", function () {
+      });
+      $("#PsPosition").css("display","block");
     })
 
     $("#new_file").click(function(){
@@ -88,7 +90,23 @@ $(document).ready(function(){
     var fillColor_dropdown = create_color_dropdown(fillColor_button,0);
     var strokeColor_dropdown = create_color_dropdown(strokeColor_button,1);
 
-    $("body").append(fillColor_dropdown).append(strokeColor_dropdown);
+    $("#DesignPage").append(fillColor_dropdown).append(strokeColor_dropdown);
+
+    stroke_width = $("#stroke_width").val()*PPI*10;
+    brush_width = $("#brush_width").val()*PPI;
+
+    $("#stroke_width").change(function(){
+      if($(this).val()!=0){
+        stroke_width = $(this).val()*PPI*10;
+        $.each(project.selectedItems, function(k, v){
+          v.strokeWidth=stroke_width;
+        })}
+    })
+
+    $("#brush_width").change(function(){
+      if($(this).val()!=0){
+        brush_width = $(this).val()*PPI;}
+    })
 
 
 //Activate Undo
@@ -97,8 +115,6 @@ $(document).ready(function(){
     undo_button.click(function(){
         undo();
     })
-
-
 
     create_new_file();
 
