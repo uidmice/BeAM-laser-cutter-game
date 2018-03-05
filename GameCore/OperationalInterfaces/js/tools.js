@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    paper.setup('Canvas');
+
+    paper.setup('canvas1');
 
     pencil = new Tool();
     line = new Tool();
@@ -17,7 +18,7 @@ $(document).ready(function(){
     var moving, p1, p2;
     var move_tool_flag = false;
     function onMouseDown(event) {
-      if(event.point.isInside(canvas_bounds)){
+
         temp = new Path();
         moving = new Path();
   			temp.strokeColor = stroke_color;
@@ -25,7 +26,7 @@ $(document).ready(function(){
   			temp.add(event.point);
         canvas.addChild(temp);
         moving.add(event.point);
-      }
+
 		}
 
 
@@ -253,8 +254,8 @@ $(document).ready(function(){
     //////////////////////////////////////
     //         brush
     //////////////////////////////////////
-    brush.maxDistance = 25;
-    brush.minDistance =10;
+    brush.maxDistance = 4;
+    brush.minDistance =1;
     brush.onMouseDown = function(e){
       temp = new Path();
 	    temp.fillColor = stroke_color;

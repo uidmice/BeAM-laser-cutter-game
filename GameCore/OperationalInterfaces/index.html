@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  		<title>Adobe.x</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type= 'text/css'href="styles/design_style.css">
+    <link rel="stylesheet" type= "text/css" href="styles/share.css">
+    <link rel="stylesheet" type= 'text/css'href="styles/ps_style.css">
+    <link rel="stylesheet" type= 'text/css'href="styles/position_style.css">
+      <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
+      <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
+      <script src="https://cdn.rawgit.com/konvajs/konva/1.7.6/konva.min.js"></script>
+
+      <script type="text/javascript" src="js/global-setting.js"></script>
+      <script type="text/javascript" src="js/tools.js"></script>
+      <script type="text/javascript" src="js/functions.js"></script>
+      <script type="text/javascript" src="js/DesignPage.js"></script>
+      <script type="text/javascript" src="js/PsPage.js"></script>
+
+  	</head>
+  	<body>
+      <div id="InterfaceContainer">
+        <div id="DesignPage">
+          <div id='overlay'>
+          </div>
+          <div id="main_frame">
+            <div id="taskbar" class="UI">
+                <i class="material-icons" id="logo">font_download</i>
+                <div id="save" class="top_manu">
+                  <i class="material-icons">save</i>
+                  <p>Save</p>
+                </div>
+                <div id="new_file" class="top_manu">
+                  <i class="material-icons">insert_drive_file</i>
+                  <p>New File</p>
+                </div>
+                <div id="next" class="top_manu">
+                  <i class="material-icons">navigate_next</i>
+                  <p>Next</p>
+                </div>
+            </div>
+            <div id="modification" class="UI">
+              <button id="fill_color" class="transparent"></button>
+              <button id="stroke_color" class="red"></button>
+              <label for='stroke_width'>Stroke:</label>
+              <input type="number" name="stroke_width" id="stroke_width" value=0.002 step=0.0005 max=1 min=0></input>
+              <span>in</span>
+              <label for='brush_width'>Brush:</label>
+              <input type="number" name="brush_width" id="brush_width" value=0.05 min=0 max=1 step=0.0005></input>
+              <span>in</span>
+              <i class="material-icons" id="undo">undo</i>
+            </div>
+            <div id="operation" class="UI">
+                <div id="tool_bar">
+                  <i class="material-icons  selected"  id="move">near_me</i>
+                  <i class="material-icons" id="pencil">edit</i>
+                  <i class="material-icons" id="brush">brush</i>
+                  <i class="material-icons" id="line">call_made</i>
+                  <i class="material-icons" id="multipolygon">signal_cellular_null</i>
+                  <i class="material-icons" id="rectangle">crop_5_4</i>
+                  <i class="material-icons" id="ellipse">panorama_fish_eye</i>
+                  <i class="material-icons" id="delete">delete</i>
+                  <i class="material-icons" id="text">title</i>
+                </div>
+                <div id="DesignCanvasContainer">
+                </div>
+            </div>
+          </div>
+        </div>
+        <div id="PsPosition">
+          <div id = "nav_bar" class="w3-bar w3-black">
+            <button class="w3-bar-item w3-button tablink w3-red" >Manual Control</button>
+            <button class="w3-bar-item w3-button tablink">Viewer</button>
+          </div>
+          <div class="title">
+              <h2>VLS6.60 Control Panel</h2>
+          </div>
+          <div class="container">
+            <div id="PsPage">
+              <div class="colorSelection" >
+                  <table>
+                      <tr id="t_header">
+                          <th>Color</th>
+                          <th >Mode</th>
+                          <th >Power</th>
+                          <th >Speed</th>
+                          <th>Estimated Depth</th>
+                          <th></th>
+                      </tr>
+                      <tr class="input-color" id="red">
+                          <td>
+                              Red
+                              <div class="color-box" style="background-color: red;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <th><span id="redPower"></span></th>
+                          <th><span id="redSpeed"></span></th>
+                          <th><span id="redDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="blue" >
+                          <td>
+                              Blue
+                              <div class="color-box" style="background-color: blue;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <th><span id="bluePower"></span></th>
+                          <th><span id="blueSpeed"></span></th>
+                          <th><span id="blueDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="black">
+                          <td>
+                              Black
+                              <div class="color-box" style="background-color: black;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <th><span id="blackPower"></span></th>
+                          <th><span id="blackSpeed"></span></th>
+                          <th><span id="blackDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="orange">
+                          <td>
+                              Orange
+                              <div class="color-box" style="background-color: orange;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <td><span id="orangePower">50</span></th>
+                          <th><span id="orangeSpeed">60</span></td>
+                          <th><span id="orangeDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="green">
+                          <td>
+                              Green
+                              <div class="color-box" style="background-color: green;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <td><span id="greenPower">50</span></th>
+                          <th><span id="greenSpeed">60</span></td>
+                          <th><span id="greenDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="cyan">
+                          <td>
+                              Cyan
+                              <div class="color-box" style="background-color: cyan;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <td><span id="cyanPower">50</span></th>
+                          <th><span id="cyanSpeed">60</td>
+                          <th><span id="cyanDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="magenta">
+                          <td>
+                              Magenta
+                              <div class="color-box" style="background-color: Magenta;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <td><span id="magentaPower">50</span></th>
+                          <th><span id="magentaSpeed">60</td>
+                          <th><span id="magentaDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                      <tr class="input-color" id="yellow" >
+                          <td>
+                              Yellow
+                              <div class="color-box" style="background-color: yellow;"></div>
+                          </td>
+                          <td>Rast/Vect</td>
+                          <th><span id="yellowPower"></span></th>
+                          <th><span id="yellowSpeed"></span></th>
+                          <th><span id="yellowDepth"></span></th>
+                          <th><i class="material-icons">chevron_left</i>
+                      </tr>
+                  </table>
+              </div>
+
+              <div class="sliders">
+                  <div class="slideContainer">
+                      <p style="width:80%">You are now setting: <span id="currentColor"></span></p>
+                      <h3>Power</h3>
+                      <div class="sliderDivide">
+                          <input type="range" min="0" max="100" value="0" class="slider" id="powerRange">
+                          <p>Value: <span id="demoPower"></span></p>
+                      </div>
+                  </div>
+
+                  <div class="slideContainer">
+                      <h3>Speed</h3>
+                      <div class="sliderDivide">
+                          <input type="range" min="0" max="100" value="0" class="slider" id="speedRange">
+                          <p>Value: <span id="demoSpeed"></span></p>
+                      </div>
+                  </div>
+                  <div>
+                      <a> <button class="confirmButton" id="PsButton">SET</button> </a>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+</html>

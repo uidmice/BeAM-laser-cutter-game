@@ -4,14 +4,19 @@ paper.install(window);
       'red' : '#FF0000',
       'blue' : '#0000FF',
       'black' : '#000000',
+      'orange': '#FFA500',
       'green' : '#008000',
-      'white' : '#FFFFFF',
+      'cyan':'#00FFFF',
+      'magenta': '#FF00FF',
       'yellow' : '#FFFF00',
       "transparent": false
     };
 
-    var screen_h=0;
-    var screen_w = 0;
+    var actual_size_w = 36;
+    var actual_size_h = 24;
+
+    var screen_h=750;
+    var screen_w = 1300;
     var toolbar_w = 80;
     var taskbar_h = 40;
     var modification_h = 40;
@@ -24,7 +29,7 @@ paper.install(window);
     var canvas_width=0;
     var canvas_bounds = null;  //Rectangle of the region of Canvas
 
-    var PPI = 1;
+    var PPI = 100;
     var stroke_color = COLOR.red;
     var stroke_width = 2;
     var fill_color = COLOR.transparent;
@@ -32,25 +37,35 @@ paper.install(window);
     var temp_save = null;
     var operations = [];
 
+
+    var cutting_coef = 0.033;
+
+
+
+//positionPage
+    var board_width = actual_size_w*PPI;
+    var board_height = actual_size_h*PPI;
+    var stage =  null;
+
+
+
 $(document).ready(function(){
+          setWidth($('#InterfaceContainer'), screen_w);
+          setHeight($('#InterfaceContainer'), screen_h);
 
 
-      function update_windowSize(){
-      // This will execute whenever the window is resized
-        screen_h=$(window).height(); // New height
-        screen_w=$(window).width();
-      }
+          setWidth($("#taskbar"),screen_w);
+          setHeight($("#taskbar"),taskbar_h);
+          setWidth($("#modification"),screen_w);
+          setHeight($("#modification"),modification_h);
+          setHeight($("#tool_bar"),screen_h-modification_h-taskbar_h);
+          setWidth($("#tool_bar"),toolbar_w);
 
-
-          update_windowSize();
-          $(window).resize(function(){update_windowSize();});
-          $("#taskbar").css("height", taskbar_h+"px").css("width",screen_w+"px" );
-          $("#modification").css("height", modification_h+"px").css("width",screen_w+"px" );
-          $("#tool_bar").css("height", (screen_h-modification_h-taskbar_h)+"px").css("width", toolbar_w+"px");
           $(".UI").css("background-color", hue);
-          $("#Canvas").css("height", (screen_h-modification_h-taskbar_h)+"px").css("width", (screen_w-toolbar_w)+"px").css("left",toolbar_w+"px").css("top",(modification_h+taskbar_h)+"px");
-
-
-
+          setWidth($("#DesignCanvasContainer"),screen_w-toolbar_w);
+          setHeight($("#DesignCanvasContainer"),screen_h-modification_h-taskbar_h);
+          $("#DesignCanvasContainer").append($("<canvas id='canvas1' width='" + (board_width)+ "' height='" + (board_height) + "'></canvas>"));
+          $("#DesignCanvasContainer").scrollTop((board_height-(screen_h-modification_h-taskbar_h))/2);
+          $("#DesignCanvasContainer").scrollLeft((board_width-(screen_w-toolbar_w))/2);
 
   })

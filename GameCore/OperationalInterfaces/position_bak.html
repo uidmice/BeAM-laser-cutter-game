@@ -5,13 +5,15 @@
     <title>Position Adjustment</title>
 
     <!-- css -->
-    <link rel="stylesheet" href="styles/position_styles.css">
+    <link rel="stylesheet" href="position_styles_bak.css">
 
     <!-- Add icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- javascript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="https://cdn.rawgit.com/konvajs/konva/1.7.6/konva.min.js"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>
 
@@ -20,15 +22,16 @@
 
 <body>
 <div id="PositionPage">
-<div style="height:50px"> </div>
+  <div style="height:50px"> </div>
 <div  id="PositionContainer">
-    <div class="title">
-        <h2>VLS6.60 Control Panel</h2>
+    <div class="header">
+        <p style="color: white; margin: auto; font-size: 20px">VLS6.60 Control Panel</p>
+
     </div>
 
     <div class="main_body">
 
-        <div id="CanvasContainer"></div>
+        <div id="canvas"></div>
 
         <div class="buttons">
             <div class="item1">

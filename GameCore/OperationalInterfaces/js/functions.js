@@ -32,6 +32,14 @@
 
   }
 
+  function setHeight(element, height){
+    $(element).css("height", height+"px");
+  }
+
+  function setWidth(element, w){
+    $(element).css("width", w+"px");
+  }
+
   function close_pop_up(){
     var overdiv = $("#overlay");
     overdiv.css("display", "none");
@@ -58,7 +66,7 @@
 
   function create_new_file(){
     var create_new_file_win = $("<div></div>");
-    create_new_file_win.html('<label for="height">Height:</label><input id="height" type="number" name="height" step="0.5" min="1" max="100" value="5" required><span class="validity"></span><select style="margin-left: 40px"><option>Inches</option><option>Points</option></select><br/><label for="width">Width:</label><input id="width" type="number" name="width" step="0.5" min="1" max="100" value="5" required><span class="validity"><br/></span><label for="mode">Color Mode:</label><select name="mode"><option>CYMK</option><option>RGB</option></select><br>');
+    create_new_file_win.html('<label for="height">Height:</label><input id="height" type="number" name="height" step="0.5" min="1" max="'+actual_size_h+'" value="5" required><span class="validity"></span><select style="margin-left: 40px"><option>Inches</option><option>Points</option></select><br/><label for="width">Width:</label><input id="width" type="number" name="width" step="0.5" min="1" max="'+actual_size_w+'" value="5" required><span class="validity"><br/></span><label for="mode">Color Mode:</label><select name="mode"><option>CYMK</option><option>RGB</option></select><br>');
     var txtCSS = {
       "margin-left": "40px",
       "width": "90px",
@@ -79,11 +87,35 @@
     create_new_file_win.css("text-align","left");
     create_new_file_win.find("label").css(txtCSS);
     create_new_file_win.find("input").css(inputCSS);
-    var sbmt = $("<button>create</button>");
+    var sbmt = $("<button class='w3-button w3-white w3-border w3-round-large'>Create</button>");
+    sbmt.css('position',"absolute").css("right","20px");
+
+    create_new_file_win.find("select").change(function(){
+      var h = create_new_file_win.find("input").val();
+      var w = create_new_file_win.find("input:nth-of-type(2)").val();
+      $(this).find(":selected").each(function () {
+            if($(this).val()=='Inches' ){
+              create_new_file_win.find("input").val(h/72).attr('max',actual_size_h);
+              create_new_file_win.find("input:nth-of-type(2)").val(w/72).attr('max',actual_size_w);
+            };
+
+            if($(this).val()=='Points' ){
+              create_new_file_win.find("input").val(h*72).attr('max',actual_size_h*72);
+              create_new_file_win.find("input:nth-of-type(2)").val(w*72).attr('max',actual_size_w*72);;
+            };
+    });
+
+    })
     sbmt.click(function(){
-      canvas_height = create_new_file_win.find("input").val()[0];
-      canvas_width = create_new_file_win.find("input").val()[0];
-      PPI = 600/canvas_height;
+      var h = create_new_file_win.find("input").val();
+      var w = create_new_file_win.find("input:nth-of-type(2)").val();
+      if (create_new_file_win.find("select:nth-of-type(1)").find(":selected").val()=="Points"){
+          h/=72;
+          w/=72;
+
+      }
+      canvas_height = h;
+      canvas_width = w;
       close_pop_up();
       new_canvas();
     });
@@ -91,12 +123,12 @@
     create_new_file_win.append(sbmt);
 
 
-    pop_up_window("New File", create_new_file_win,"200px","400px");
+    pop_up_window("New File", create_new_file_win,"250px","400px");
   }
 
   function new_canvas(){
     var p = new Point(0,0);
-    var s = new Size(600*canvas_width/canvas_height, 600);
+    var s = new Size(canvas_width*PPI, canvas_height*PPI);
     c = new Shape.Rectangle(p,s);
     c.fillColor = "white";
     c.position=new Point(view.size.width/2, view.size.height/2);
@@ -112,6 +144,54 @@
     move.activate();
     save();
   }
+
+
+
+  function Confirm(title, msg, $true, $false, target) { /*change*/
+        var $content =  "<div class='dialog-ovelay'>" +
+            "<div class='dialog'><header>" +
+            " <h3> " + title + " </h3> " +
+            "<i class='fa fa-close'></i>" +
+            "</header>" +
+            "<div class='dialog-msg'>" +
+            " <p> " + msg + " </p> " +
+            "</div>" +
+            "<footer>" +
+            "<div class='controls'>" +
+            " <button class='button button-danger doAction'>" + $true + "</button> " +
+            " <button class='button button-default cancelAction'>" + $false + "</button> " +
+            "</div>" +
+            "</footer>" +
+            "</div>" +
+            "</div>";
+        $('body').prepend($content);
+        if(target==1){
+          $('.doAction').click(function () {
+              $("#PositionPage").css("display","none");
+              $("#PsPage").css("display","block");
+              $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                  $(this).remove();
+              });
+          });
+        }else if (target==2){
+          $('.doAction').click(function () {
+              $("#PositionPage").css("display","block");
+              $("#PsPage").css("display","none");
+              $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                  $(this).remove();
+              });
+          });
+        }else{
+          $('.doAction').remove();
+        }
+
+        $('.cancelAction, .fa-close').click(function () {
+            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
+                $(this).remove();
+            });
+        });
+
+    }
 
   function save(pid){
      temp_save = project.exportSVG({bounds: canvas_bounds});
@@ -133,7 +213,6 @@
       document.body.appendChild(a);
       a.click();
 };
-
 var parseStyles = function(svg) {
   var styleSheets = [];
   var i;
