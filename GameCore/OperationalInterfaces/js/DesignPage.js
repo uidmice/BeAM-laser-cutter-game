@@ -79,6 +79,12 @@ $(document).ready(function(){
       $("#DesignPage").fadeOut("slow", function () {
       });
       $("#PsPosition").css("display","block");
+      $("#PsTab").click(function(){
+        $("#PositionPage").css("z-index","1");
+      })
+      $("#PositionTab").click(function(){
+        $("#PositionPage").css("z-index","4");
+      })
     })
 
     $("#new_file").click(function(){
