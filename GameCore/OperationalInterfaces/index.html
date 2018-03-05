@@ -23,9 +23,10 @@
   	</head>
   	<body>
       <div id="InterfaceContainer">
+        <div id='overlay'>
+        </div>
         <div id="DesignPage">
-          <div id='overlay'>
-          </div>
+
           <div id="main_frame">
             <div id="taskbar" class="UI">
                 <i class="material-icons" id="logo">font_download</i>
@@ -72,8 +73,8 @@
         </div>
         <div id="PsPosition">
           <div id = "nav_bar" class="w3-bar w3-black">
-            <button class="w3-bar-item w3-button tablink w3-red" >Manual Control</button>
-            <button class="w3-bar-item w3-button tablink">Viewer</button>
+            <button id="PsTab" class="w3-bar-item w3-button tablink w3-red" >Manual Control</button>
+            <button id="PositionTab" class="w3-bar-item w3-button tablink">Viewer</button>
           </div>
           <div class="title">
               <h2>VLS6.60 Control Panel</h2>
@@ -88,7 +89,6 @@
                           <th >Power</th>
                           <th >Speed</th>
                           <th>Estimated Depth</th>
-                          <th></th>
                       </tr>
                       <tr class="input-color" id="red">
                           <td>
@@ -96,10 +96,9 @@
                               <div class="color-box" style="background-color: red;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <th><span id="redPower"></span></th>
-                          <th><span id="redSpeed"></span></th>
-                          <th><span id="redDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="redPower">50</span>%</th>
+                          <th><span id="redSpeed">60</span>%</th>
+                          <th><span id="redDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="blue" >
                           <td>
@@ -107,10 +106,9 @@
                               <div class="color-box" style="background-color: blue;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <th><span id="bluePower"></span></th>
-                          <th><span id="blueSpeed"></span></th>
-                          <th><span id="blueDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="bluePower">50</span>%</th>
+                          <th><span id="blueSpeed">60</span>%</th>
+                          <th><span id="blueDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="black">
                           <td>
@@ -118,10 +116,9 @@
                               <div class="color-box" style="background-color: black;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <th><span id="blackPower"></span></th>
-                          <th><span id="blackSpeed"></span></th>
-                          <th><span id="blackDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="blackPower">50</span>%</th>
+                          <th><span id="blackSpeed">60</span>%</th>
+                          <th><span id="blackDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="orange">
                           <td>
@@ -129,10 +126,9 @@
                               <div class="color-box" style="background-color: orange;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <td><span id="orangePower">50</span></th>
-                          <th><span id="orangeSpeed">60</span></td>
-                          <th><span id="orangeDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="orangePower">50</span>%</th>
+                          <th><span id="orangeSpeed">60</span>%</th>
+                          <th><span id="orangeDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="green">
                           <td>
@@ -140,10 +136,9 @@
                               <div class="color-box" style="background-color: green;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <td><span id="greenPower">50</span></th>
-                          <th><span id="greenSpeed">60</span></td>
-                          <th><span id="greenDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="greenPower">50</span>%</th>
+                          <th><span id="greenSpeed">60</span>%</th>
+                          <th><span id="greenDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="cyan">
                           <td>
@@ -151,10 +146,9 @@
                               <div class="color-box" style="background-color: cyan;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <td><span id="cyanPower">50</span></th>
-                          <th><span id="cyanSpeed">60</td>
-                          <th><span id="cyanDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="cyanPower">50</span>%</th>
+                          <th><span id="cyanSpeed">60</span>%</th>
+                          <th><span id="cyanDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="magenta">
                           <td>
@@ -162,10 +156,9 @@
                               <div class="color-box" style="background-color: Magenta;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <td><span id="magentaPower">50</span></th>
-                          <th><span id="magentaSpeed">60</td>
-                          <th><span id="magentaDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="magentaPower">50</span>%</th>
+                          <th><span id="magentaSpeed">60</span>%</th>
+                          <th><span id="magentaDepth">0.028</span>''</th>
                       </tr>
                       <tr class="input-color" id="yellow" >
                           <td>
@@ -173,17 +166,16 @@
                               <div class="color-box" style="background-color: yellow;"></div>
                           </td>
                           <td>Rast/Vect</td>
-                          <th><span id="yellowPower"></span></th>
-                          <th><span id="yellowSpeed"></span></th>
-                          <th><span id="yellowDepth"></span></th>
-                          <th><i class="material-icons">chevron_left</i>
+                          <th><span id="yellowPower">50</span>%</th>
+                          <th><span id="yellowSpeed">60</span>%</th>
+                          <th><span id="yellowDepth">0.028</span>''</th>
                       </tr>
                   </table>
               </div>
 
               <div class="sliders">
+                  <p style="width:80%">You are now setting: <b><span id="currentColor"></span></b></p>
                   <div class="slideContainer">
-                      <p style="width:80%">You are now setting: <span id="currentColor"></span></p>
                       <h3>Power</h3>
                       <div class="sliderDivide">
                           <input type="range" min="0" max="100" value="0" class="slider" id="powerRange">
@@ -199,9 +191,16 @@
                       </div>
                   </div>
                   <div>
-                      <a> <button class="confirmButton" id="PsButton">SET</button> </a>
+                    <div style="display:flex; flex-direction:row; margin-top:150px; margin-left:auto">
+                      <button class="w3-btn w3-red w3-xlarge w3-round" id="PsDefaultsButton">Defaults</button>
+                      <button class="w3-btn w3-red w3-xlarge w3-wide w3-round" id="PsOKButton">OK</button>
+                    </div>
                   </div>
               </div>
+            </div>
+            <div id="PositionPage">
+              <div id="PositionCanvasContainer"></div>
+              <div id="PositionControl"></div>
             </div>
           </div>
         </div>

@@ -4,31 +4,13 @@ $(document).ready(function(){
   var sliderSpeed = $("#speedRange");
   var outputSpeed =$("#demoSpeed");
   var PsSelected = null;
-  var PsUncomplete = [];
-
-  $(".input-color").each(function(k,v){
-    if(!checkInputComplete($(v).attr('id'))){
-      PsUncomplete.push($(v).attr('id'));
-    };
-  })
 
   sliderPower.on("input", function() {
-      outputPower.html($(this).val());
-      $("#"+PsSelected+"Power").text($(this).val());
-      if($.inArray(PsSelected, PsUncomplete)>-1){
-        if(checkInputComplete(PsSelected)){
-          PsUncomplete.splice( $.inArray(PsSelected, PsUncomplete), 1 );
-        }
-      }
+      updateColor();
   })
   sliderSpeed.on("input", function() {
-      outputSpeed.html($(this).val());
-      $("#"+PsSelected+"Speed").text($(this).val());
-      if($.inArray(PsSelected, PsUncomplete)>-1){
-        if(checkInputComplete(PsSelected)){
-          PsUncomplete.splice( $.inArray(PsSelected, PsUncomplete), 1 );
-        }
-      }
+    updateColor();
+
   })
 
   $(".input-color").click(function(){
@@ -56,26 +38,53 @@ $(document).ready(function(){
     outputSpeed.html(speed);
   }
 
-  function checkInputComplete(color){
-    if(color)
-    {var target = $("#"+color);
-    var power = target.find('span[id*="Power"]').html();
-    var speed = target.find('span[id*="Speed"]').html();
-    if((power=='')||(speed=='')){
-      target.find(".material-icons").addClass('show');
-      return false;}
-    else {
-      target.find(".material-icons").removeClass('show');
-      return true;
-    }}
+  function updateColor(){
+    outputPower.html($(sliderPower).val());
+    outputSpeed.html($(sliderSpeed).val());
+    if(PsSelected){
+      $("#"+PsSelected+"Power").text($(sliderPower).val());
+      $("#"+PsSelected+"Speed").text($(sliderSpeed).val());
+      $("#"+PsSelected+"Depth").text(Number(cutting_coef*$(sliderPower).val()/$(sliderSpeed).val()).toFixed(3));
+    }
   }
 
-  $('#PsButton').click(function () {
-    if (PsUncomplete.length>0){
-      Confirm("","Please set the power and speed for all colors!","","Alright.");
-    }else{
-      Confirm('Make sure before you go!', 'Did you set power and speed correctly by color?', 'Yes, I am pretty sure', 'No, I have to make changes', 2);
-    }
+  $('#PsOKButton').click(function () {
+    var OK_win = $("<div></div>");
+    OK_win.html("<p>Did you set power and speed correctly by color?</p>");
+    var yesB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>Yes</button>");
+    yesB.css("margin","25px").click(function(){
+      $("#PositionPage").css("z-index","5");
+      close_pop_up();
+    })
+    var NoB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>No</button>").css("margin","25px").click(function(){
+      close_pop_up();
+    });
+
+    OK_win.append(yesB).append(NoB);
+
+    pop_up_window("Make sure before you go!", OK_win, "170px","400px");
   });
+
+  $('#PsDefaultsButton').click(function(){
+    var Default_win = $("<div></div>");
+    Default_win.html("<p>Reset to Defaults?</p>");
+    var yesB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>Yes</button>");
+    yesB.css("margin","25px").click(function(){
+      reset();
+      close_pop_up();
+    })
+    var NoB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>No</button>").css("margin","25px").click(function(){
+      close_pop_up();
+    });
+    Default_win.append(yesB).append(NoB);
+    pop_up_window("", Default_win, "170px","400px");
+
+  })
+
+  function reset(){
+    $(".input-color").find('span[id*="Power"]').html("50");
+    $(".input-color").find('span[id*="Speed"]').html("60");
+    $(".input-color").find('span[id*="Depth"]').html("0.028");
+  }
 
 })

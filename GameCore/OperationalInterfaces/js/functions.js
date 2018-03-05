@@ -42,7 +42,7 @@
 
   function close_pop_up(){
     var overdiv = $("#overlay");
-    overdiv.css("display", "none");
+    overdiv.fadeOut(500, function () {});
     overdiv.empty();
   }
 
@@ -145,55 +145,7 @@
     save();
   }
 
-
-
-  function Confirm(title, msg, $true, $false, target) { /*change*/
-        var $content =  "<div class='dialog-ovelay'>" +
-            "<div class='dialog'><header>" +
-            " <h3> " + title + " </h3> " +
-            "<i class='fa fa-close'></i>" +
-            "</header>" +
-            "<div class='dialog-msg'>" +
-            " <p> " + msg + " </p> " +
-            "</div>" +
-            "<footer>" +
-            "<div class='controls'>" +
-            " <button class='button button-danger doAction'>" + $true + "</button> " +
-            " <button class='button button-default cancelAction'>" + $false + "</button> " +
-            "</div>" +
-            "</footer>" +
-            "</div>" +
-            "</div>";
-        $('body').prepend($content);
-        if(target==1){
-          $('.doAction').click(function () {
-              $("#PositionPage").css("display","none");
-              $("#PsPage").css("display","block");
-              $(this).parents('.dialog-ovelay').fadeOut(500, function () {
-                  $(this).remove();
-              });
-          });
-        }else if (target==2){
-          $('.doAction').click(function () {
-              $("#PositionPage").css("display","block");
-              $("#PsPage").css("display","none");
-              $(this).parents('.dialog-ovelay').fadeOut(500, function () {
-                  $(this).remove();
-              });
-          });
-        }else{
-          $('.doAction').remove();
-        }
-
-        $('.cancelAction, .fa-close').click(function () {
-            $(this).parents('.dialog-ovelay').fadeOut(500, function () {
-                $(this).remove();
-            });
-        });
-
-    }
-
-  function save(pid){
+  function save(){
      temp_save = project.exportSVG({bounds: canvas_bounds});
      console.log(temp_save);
   }
