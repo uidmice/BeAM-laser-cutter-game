@@ -20,6 +20,7 @@ paper.install(window);
     var toolbar_w = 80;
     var taskbar_h = 40;
     var modification_h = 40;
+    var PsTitle = 40;
     var hue = "#343430";
 
     c = null;       //white rectangle shape

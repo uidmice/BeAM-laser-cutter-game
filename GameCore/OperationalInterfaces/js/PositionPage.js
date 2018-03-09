@@ -1,368 +1,241 @@
+function initPositionPage(){
+  $("#timer_btn").click(function(){
+    var total_time_sec = 4080; //68 min
+    var h = Math.floor(total_time_sec/3600);
+    var m = Math.floor((total_time_sec%3600)/60);
+    var s = (total_time_sec%3600)%60;
+    var date = new Date()
 
-var finalX;
-var finalY;
-var finalWidth;
-var finalHeight;
+    var dateToUse = new Date(date.getYear(), date.getMonth(), date.getDay(), h, m, s, 0);
 
-var expandFlag = false;
+    var hours = addZero(dateToUse.getHours());
+    var minutes = addZero(dateToUse.getMinutes());
+    var seconds = addZero(dateToUse.getSeconds());
 
-var cur_imgW;
-var cur_imgH;
+    $("#timer").html(hours+":" + minutes + ":" + seconds).toggleClass('show');
+    if($(this).hasClass("w3-brown")){
+      $(this).removeClass("w3-brown");
+      $(this).addClass("w3-red");
+    }else{
+      $(this).removeClass("w3-red");
+      $(this).addClass("w3-brown");
+    }
+  })
 
-var back = $("#back");
-back.click(function(){
-  window.location.href="SpInterface.html";
+  function addZero(i) {
+      if (i < 10) {
+          i = "0" + i;
+      }
+      return i;
+  }
+
+var board_topLeft = new Point(40,40);
+var board_size = new Size(board_width/2.5, board_height/2.5);
+stage = new Shape.Rectangle(board_topLeft,board_size);
+stage.fillColor='white';
+stage.guide=false;
+
+var ruler=new Path();
+ruler.add(project.view.bounds.topLeft);
+ruler.add(project.view.bounds.topRight);
+
+ruler.add(stage.bounds.topRight);
+ruler.add(stage.bounds.topLeft);
+ruler.add(stage.bounds.bottomLeft);
+ruler.add(project.view.bounds.bottomLeft);
+ruler.closed = true;
+ruler.fillColor='black';
+
+
+var grader1 = new Path();
+var grader2 = new Path();
+var grader3 = new Path();
+var grader4 = new Path();
+grader1.add(new Point(0,0), new Point(0,25));
+grader2.add(new Point(PPI/5, 5), new Point(PPI/5, 25));
+grader3.add(new Point(0,0), new Point(25,0));
+grader4.add(new Point(5, PPI/5), new Point(25, PPI/5));
+var twoGrader = new Group(grader1, grader2);
+var twoGrader2 = new Group(grader4, grader3);
+twoGrader.strokeWidth=1;
+twoGrader.strokeColor = 'white';
+twoGrader2.strokeWidth=1;
+twoGrader2.strokeColor = 'white';
+
+var graders_v = new Symbol(twoGrader);
+var graders_h = new Symbol(twoGrader2);
+
+
+for (i = 0; i<actual_size_w; i++){
+  graders_v.place(new Point(i*PPI/2.5+40+PPI/10, 40-12.5));
+  var text =new PointText(new Point(i*PPI/2.5+40-2, 14));
+  text.fillColor='white';
+  text.content = i;
+}
+
+for (i = 0; i<actual_size_h; i++){
+  graders_h.place(new Point(40-12.5,i*PPI/2.5+40+PPI/10));
+  var text =new PointText(new Point( 5,i*PPI/2.5+43));
+  text.fillColor='white';
+  text.content = i;
+  text.rotate(270);
+}
+
+
+var pic = project.importSVG(temp_save);
+var item = pic.rasterize(PPI);
+pic.remove();
+item.scale(0.4);
+
+
+var item_w = item.bounds.width;
+var item_h = item.bounds.height;
+
+item.position=new Point(item_w/2+80, item_h/2+80);
+item.selected = true;
+update_position();
+
+
+var relocate = new Tool();
+var zoom = new Tool();
+var zoom_fac = 1;
+
+relocate.onMouseDown=function(e){
+  if(e.point.isInside(item.bounds)){
+    item.selected = true;
+  }else{
+    item.selected = false;
+  }
+}
+relocate.onMouseDrag=function(e){
+  if(item.selected){
+    item.position.x+=e.delta.x;
+    item.position.y+=e.delta.y;
+    limit_position();
+    update_position();
+  }
+}
+
+relocate.onMouseMove=function(e){
+  if(e.point.isInside(item.bounds)){
+    $("body").css('cursor',"move");
+  }else{
+    $("body").css('cursor',"default");
+  }
+}
+
+zoom.onMouseDown=function(e){
+  zoom_fac *=1.05;
+  project.view.center =e.point;
+  console.log(e.point);
+  project.view.zoom=zoom_fac;
+  if(project.view.bounds.topLeft.x>0){
+    project.view.bounds.topLeft.x=0;
+  }
+  if(project.view.bounds.topLeft.y>0){
+    project.view.bounds.topLeft.y=0;
+  }
+}
+
+
+relocate.activate();
+
+$("#up").click(function(){
+  move_by_px("Up",2);
+  update_position();
 })
 
-function update(activeAnchor) {
-    var group = activeAnchor.getParent();
+$("#down").click(function(){
+  move_by_px("Down",2);
+  update_position();
+})
 
-    var topLeft = group.get('.topLeft')[0];
-    var topRight = group.get('.topRight')[0];
-    var bottomRight = group.get('.bottomRight')[0];
-    var bottomLeft = group.get('.bottomLeft')[0];
-    var image = group.get('Image')[0];
+$("#left").click(function(){
+  move_by_px("Left",2);
+  update_position();
+})
 
-    var anchorX = activeAnchor.getX();
-    var anchorY = activeAnchor.getY();
+$("#right").click(function(){
+  move_by_px("Right",2);
+  update_position();
+})
 
-    // update anchor positions
-    switch (activeAnchor.getName()) {
-        case 'topLeft':
-            topRight.setY(anchorY);
-            bottomLeft.setX(anchorX);
-            break;
-        case 'topRight':
-            topLeft.setY(anchorY);
-            bottomRight.setX(anchorX);
-            break;
-        case 'bottomRight':
-            bottomLeft.setY(anchorY);
-            topRight.setX(anchorX);
-            break;
-        case 'bottomLeft':
-            bottomRight.setY(anchorY);
-            topLeft.setX(anchorX);
-            break;
-    }
+$("#homeXY").click(function(){
+  item.bounds.topLeft.x=40;
+  item.bounds.topLeft.y=40;
+  update_position();
 
-    image.position(topLeft.position());
+})
 
-    var board_width = topRight.getX() - topLeft.getX();
-    var board_height = bottomLeft.getY() - topLeft.getY();
-    if(board_width && board_height) {
-        image.board_width(board_width);
-        image.board_height(board_height);
-    }
+$("#relocate").click(function(){
+  relocate.activate();
+  $("#zoom").removeClass("w3-brown").addClass("w3-red");
+  $(this).removeClass("w3-red").addClass("w3-brown");
 
-    cur_imgW = board_width;
-    cur_imgH = board_height;
+});
 
-    document.getElementById('img_width').innerHTML = "Image board_width:   " + cur_imgW;
-    document.getElementById('img_height').innerHTML = "Image board_height:   " + cur_imgH;
+$("#zoom").click(function(){
+  zoom.activate();
+  $("#relocate").removeClass("w3-brown").addClass("w3-red");
+  $(this).removeClass("w3-red").addClass("w3-brown");
+
+});
+
+$("#back").click(function(){
+  $("#PositionPage").css("z-index","1");
+  $('#PositionTab').removeClass('w3-red');
+  $('#PsTab').addClass('w3-red');
+
+})
+
+
+function move_by_px(direction, delta){
+  if(direction=="Up"){
+    item.position.y-=delta;
+  }else if (direction=="Down"){
+    item.position.y+=delta;
+  }else if (direction=="Left"){
+    item.position.x-=delta;
+  }else if(direction=="Right"){
+    item.position.x+=delta;
+  }
+  limit_position();
+
 }
 
-function addAnchor(group, x, y, name) {
-    var stage = group.getStage();
-    var layer = group.getLayer();
+function limit_position(){
+  if(item.bounds.topLeft.x<40){
+    item.bounds.topLeft.x=40;
+  }
+  if(item.bounds.topLeft.y<40){
+    item.bounds.topLeft.y=40;
+  }
+  if(item.bounds.bottomRight.x>40+board_width/2.5-item_w/2){
+    item.bounds.bottomRight.x=40+board_width/2.5-item_w/2;
+  }
+  if(item.bounds.bottomRight.y>40+board_height/2.5-item_h/2){
+    item.bounds.bottomRight.y=40+board_height/2.5-item_h/2;
+  }
+}
 
-    var anchor = new Konva.Circle({
-        x: x,
-        y: y,
-        stroke: '#666',
-        fill: '#ddd',
-        strokeWidth: 2,
-        radius: 5,
-        name: name,
-        draggable: true,
-        dragOnTop: false
-    });
-
-    anchor.on('dragmove', function() {
-        update(this);
-        layer.draw();
-    });
-    anchor.on('mousedown touchstart', function() {
-        group.setDraggable(false);
-        this.moveToTop();
-    });
-    anchor.on('dragend', function() {
-        group.setDraggable(true);
-        layer.draw();
-    });
-    // add hover styling
-    anchor.on('mouseover', function() {
-        var layer = this.getLayer();
-        document.body.style.cursor = 'pointer';
-        this.setStrokeWidth(4);
-        layer.draw();
-    });
-    anchor.on('mouseout', function() {
-        var layer = this.getLayer();
-        document.body.style.cursor = 'default';
-        this.setStrokeWidth(2);
-        layer.draw();
-    });
-
-    group.add(anchor);
-    layer.draw();
+function update_position(){
+  $("#xdemo").html(Number((item.bounds.topLeft.x-40)/PPI*2.5).toFixed(3));
+  $("#ydemo").html(Number((item.bounds.topLeft.y-40)/PPI*2.5).toFixed(3));
 }
 
 
-var layer = new Konva.Layer();
-stage.add(layer);
 
 
 
-//add grid
-var STEP_SIZE = 15;
-var line;
 
-// generate lines
-for (var ix = 1; ix < board_width; ix=ix+STEP_SIZE) {
 
-    line = new Konva.Line({
-        points: [ix, 0, ix, board_height],
-        stroke: 'gray',
-        strokeWidth: 0.5,
-        opacity: 0.5
-    });
-    layer.add(line);
+
+
+
+
+
+
+
+
+
 }
-
-for (var iy = 1; iy < board_height; iy=iy+STEP_SIZE) {
-
-    line = new Konva.Line({
-        points: [0, iy, board_width, iy],
-        stroke: 'gray',
-        strokeWidth: 0.5,
-        opacity: 0.2
-    });
-    layer.add(line);
-}
-layer.draw();
-
-
-var Img = new Konva.Image({
-});
-
-var ImgGroup = new Konva.Group({
-    x: 0,
-    y: 0,
-    draggable: true,
-    listening: true
-});
-
-var imageObj = new Image();
-
-imageObj.src = 'images/IMG_2010.svg';
-
-imageObj.onload = function() {
-    Img.image(imageObj);
-    layer.draw();
-    document.getElementById('img_width').innerHTML = "Image board_width:   " + imageObj.board_width;
-    document.getElementById('img_height').innerHTML = "Image board_height:   " + imageObj.board_height;
-};
-
-
-layer.add(ImgGroup);
-ImgGroup.add(Img);
-
-document.getElementById('resize').addEventListener('click', function() {
-    if(!expandFlag){
-        addAnchor(ImgGroup, 0, 0, 'topLeft');
-        addAnchor(ImgGroup, imageObj.board_width, 0, 'topRight');
-        addAnchor(ImgGroup, imageObj.board_width, imageObj.board_height, 'bottomRight');
-        addAnchor(ImgGroup, 0, imageObj.board_height, 'bottomLeft');
-        expandFlag = true;
-    }
-}, false);
-
-
-
-ImgGroup.on('dragmove', function updateText() {
-    if(expandFlag){
-        document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-    }else{
-        document.getElementById('xcoordinate').innerHTML = "X:   " + ImgGroup.x();
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + ImgGroup.y();
-    }
-
-});
-
-
-// add cursor styling
-Img.on('mouseover', function() {
-    document.body.style.cursor = 'move';
-});
-Img.on('mouseout', function() {
-    document.body.style.cursor = 'default';
-});
-
-
-document.getElementById('homeXY').addEventListener('click', function() {
-    ImgGroup.x(0);
-    ImgGroup.y(0);
-
-    layer.draw();
-
-    document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x());
-    document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y());
-}, false);
-
-
-document.getElementById('up').addEventListener('click', function() {
-    ImgGroup.x(ImgGroup.x());
-    ImgGroup.y(ImgGroup.y()-1);
-
-    layer.draw();
-
-    if(expandFlag){
-        document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-    }else{
-        document.getElementById('xcoordinate').innerHTML = "X:   " + ImgGroup.x();
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + ImgGroup.y();
-    }
-}, false);
-
-document.getElementById('down').addEventListener('click', function() {
-    ImgGroup.x(ImgGroup.x());
-    ImgGroup.y(ImgGroup.y()+1);
-
-    layer.draw();
-
-    if(expandFlag){
-        document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-    }else{
-        document.getElementById('xcoordinate').innerHTML = "X:   " + ImgGroup.x();
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + ImgGroup.y();
-    }
-}, false);
-
-document.getElementById('left').addEventListener('click', function() {
-    ImgGroup.x(ImgGroup.x()-1);
-    ImgGroup.y(ImgGroup.y());
-
-    layer.draw();
-
-    if(expandFlag){
-        document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-    }else{
-        document.getElementById('xcoordinate').innerHTML = "X:   " + ImgGroup.x();
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + ImgGroup.y();
-    }
-}, false);
-
-document.getElementById('right').addEventListener('click', function() {
-    ImgGroup.x(ImgGroup.x()+1);
-    ImgGroup.y(ImgGroup.y());
-
-    layer.draw();
-
-    if(expandFlag){
-        document.getElementById('xcoordinate').innerHTML = "X:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-    }else{
-        document.getElementById('xcoordinate').innerHTML = "X:   " + ImgGroup.x();
-        document.getElementById('ycoordinate').innerHTML = "Y:   " + ImgGroup.y();
-    }
-}, false);
-
-
-
-document.getElementById('start_button').addEventListener('click', function() {
-    var r;
-    if(expandFlag){
-        if(cur_imgH !== undefined && cur_imgW !== undefined){
-            r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x()) +
-                "\nY:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y()) + ";\nYour image's size is\nwidth:   "
-                + cur_imgW + "\nheight:   " + cur_imgH +
-                ".\nYou cannot change these parameters after you click OK.")
-            if(r){
-                finalX = (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-                finalY = (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-                finalWidth = cur_imgW;
-                finalHeight = cur_imgH;
-            }
-        }else{
-            r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
-                "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-                + imageObj.board_width + "\nheight:   " + imageObj.board_height +
-                ".\nYou cannot change these parameters after you click OK.")
-            if(r){
-                finalX = (ImgGroup.x());
-                finalY = (ImgGroup.y());
-                finalWidth = imageObj.board_width;
-                finalHeight = imageObj.board_height;
-            }
-        }
-    }else{
-        r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
-            "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-            + imageObj.board_width + "\nheight:   " + imageObj.board_height +
-            ".\nYou cannot change these parameters after you click OK.")
-        if(r){
-            finalX = (ImgGroup.x());
-            finalY = (ImgGroup.y());
-            finalWidth = imageObj.board_width;
-            finalHeight = imageObj.board_height;
-        }
-    }
-
-    console.log(finalX);
-    console.log(finalY);
-    console.log(finalWidth);
-    console.log(finalHeight);
-}, false);
-
-
-
-
-document.getElementById('start_text').addEventListener('click', function() {
-    var r;
-    if(expandFlag){
-        if(cur_imgH !== undefined && cur_imgW !== undefined){
-            r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x()) +
-                "\nY:   " + (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y()) + ";\nYour image's size is\nwidth:   "
-                + cur_imgW + "\nheight:   " + cur_imgH +
-                ".\nYou cannot change these parameters after you click OK.")
-            if(r){
-                finalX = (ImgGroup.x() + ImgGroup.get('.topLeft')[0].x());
-                finalY = (ImgGroup.y() + ImgGroup.get('.topLeft')[0].y());
-                finalWidth = cur_imgW;
-                finalHeight = cur_imgH;
-            }
-        }else{
-            r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
-                "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-                + imageObj.board_width + "\nheight:   " + imageObj.board_height +
-                ".\nYou cannot change these parameters after you click OK.")
-            if(r){
-                finalX = (ImgGroup.x());
-                finalY = (ImgGroup.y());
-                finalWidth = imageObj.board_width;
-                finalHeight = imageObj.board_height;
-            }
-        }
-    }else{
-        r = confirm("Your image's topleft position is\nX:   " + (ImgGroup.x()) +
-            "\nY:   " + (ImgGroup.y()) + ";\nYour image's size is\nwidth:   "
-            + imageObj.board_width + "\nheight:   " + imageObj.board_height +
-            ".\nYou cannot change these parameters after you click OK.")
-        if(r){
-            finalX = (ImgGroup.x());
-            finalY = (ImgGroup.y());
-            finalWidth = imageObj.board_width;
-            finalHeight = imageObj.board_height;
-        }
-    }
-
-    console.log(finalX);
-    console.log(finalY);
-    console.log(finalWidth);
-    console.log(finalHeight);
-}, false);

@@ -1,6 +1,5 @@
 #InterfaceContainer{
   margin: auto;
-  overflow: hidden;
 }
 
 #PsPosition{
@@ -20,7 +19,6 @@
     background-color: maroon;
     display: flex;
     width: 100%;
-    height: 40px;
 }
 
 #PsPosition .title h2{
@@ -31,8 +29,17 @@
 
 #PsPosition .container{
   width: 100%;
-  height: 100%;
   position: relative;
   background: whitesmoke;
-  overflow: auto;
+  overflow: hidden;
+}
+
+.material-icons {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
