@@ -1,0 +1,170 @@
+@font-face {
+    font-family: MainTitleFont;
+    src: url(../scene_pics/font/quicksand/Quicksand-Regular.otf);
+}
+
+@font-face {
+    font-family: LineFont;
+    src: url(../scene_pics/font/quicksand/Quicksand-Bold.otf);
+}
+/**dialogBox**/
+#scenceContainer{
+    background: url("../scene_pics/scene1.png") no-repeat center top;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    overflow: hidden;
+    position: absolute;
+    left:0;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+}
+#dialogBox{
+    height: 20%;
+    width: 96%;
+    box-sizing: border-box;
+    text-align: center;
+    border: hidden;
+    line-height: 650%;
+    position: absolute;
+    bottom: 2%;
+    left: 2%;
+    opacity: 0.85;
+    background: linear-gradient(to right, grey, white);
+    border-radius: 20px;
+    z-index: 1;
+}
+#char_head{
+    background: url("../scene_pics/text1.jpeg");
+    height: 60px;
+    width: 110px;
+    text-align: center;
+    color: white;
+    border-radius: 6%;
+    transform: rotate(-10deg);
+    position: absolute;
+    top: 77%;
+    left: 1%;
+    z-index: 3;
+    font-family: MainTitleFont;
+    font-size: 20px;
+}
+#lasercutter-container img {
+  position: absolute;
+  top: 63%;
+  left: 15%;
+  width: 25%;
+  cursor: pointer;
+}
+
+#pc-container img {
+  position: absolute;
+  top: 53%;
+  right: 23%;
+  width: 14%;
+  cursor: pointer;
+}
+/* The typing effect */
+#lines {
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+    letter-spacing: .10em; /* Adjust as needed */
+    animation:
+            typing 2.5s steps(40, end),
+            blink-caret .75s step-end infinite;
+    color: black;
+    font-family:LineFont;
+    font-size: 20px;
+}
+
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+}
+
+#char_head .name{
+    color: white;
+    line-height: 300%;
+}
+
+/**character**/
+
+#character{
+    background: url("../scene_pics/Hans1.png");
+    height: 533.3px;
+    width: 400px;
+    position: absolute;
+    left: 0;
+    right:0;
+    bottom: 15%;
+    margin: auto;
+}
+
+#menu{
+    position: absolute;
+    left: 4%;
+    z-index: 2;
+    bottom: 2%;
+}
+#menu button{
+    font-size: 20px;
+    border-style: hidden;
+    background-color: transparent;
+    color: white;
+    font-family: MainTitleFont;
+    padding: 5px;
+}
+#menu button:hover{
+    color: lightblue;
+}
+
+
+#review{
+    background: lightgrey;
+    width: 70%;
+    height: 95%;
+    overflow-y: scroll;
+    opacity: 0.7;
+    border-radius: 5px;
+    color: black;
+    font-family: LineFont;
+    font-size: 20px;
+    position: absolute;
+    top: 3%;
+    left: 15%;
+
+}
+
+#review .reviewedLines{
+    padding: 10px;
+}
+
+#close_review{
+    z-index: 4;
+    font-size: 20px;
+    border-style: hidden;
+    background-color: transparent;
+    color: white;
+    font-family: MainTitleFont;
+    padding: 5px;
+    position: absolute;
+    right: 17%;
+    bottom: 2%;
+}
+
+#close_review:hover{
+    color: lightblue;
+}
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+   25% { transform: rotate(0deg); }
+   50% { transform: rotate(10deg); }
+   75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}

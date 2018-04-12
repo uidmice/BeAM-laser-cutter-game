@@ -54,6 +54,8 @@ $(document).ready(function(){
     var yesB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>Yes</button>");
     yesB.css("margin","25px").click(function(){
       $("#PositionPage").css("z-index","5");
+      $('#PsTab').removeClass('w3-red');
+      $('#PositionTab').addClass('w3-red');
       close_pop_up();
     })
     var NoB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>No</button>").css("margin","25px").click(function(){

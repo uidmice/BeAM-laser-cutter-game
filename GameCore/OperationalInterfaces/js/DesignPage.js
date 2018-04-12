@@ -76,15 +76,33 @@ $(document).ready(function(){
 
     $("#next").click(function(){
       save("730015648");
-      $("#DesignPage").fadeOut("slow", function () {
-      });
+      $("#DesignPage").css("display","none");
       $("#PsPosition").css("display","block");
       $("#PsTab").click(function(){
         $("#PositionPage").css("z-index","1");
+        $('#PositionTab').removeClass('w3-red');
+        $('#PsTab').addClass('w3-red');
+
       })
       $("#PositionTab").click(function(){
         $("#PositionPage").css("z-index","4");
+        $('#PositionTab').addClass('w3-red');
+        $('#PsTab').removeClass('w3-red');
       })
+
+
+
+      setHeight($("#PsPosition .title"),PsTitle);
+      setHeight($("#PsPosition .container"),screen_h-PsTitle-$("#PsPosition .title").offset().top);
+
+      setWidth($("#PositionCanvasContainer"), 0.8*screen_w);
+      setWidth($("#PositionControl"), 0.2*screen_w);
+
+      $("#PositionCanvasContainer").append($("<canvas id='canvas2' height='"+(board_height/2.5+40)+"px' width='"+(board_width/2.5+40)+"px'></canvas>"));
+      paper.setup('canvas2');
+      initPositionPage();
+
+
     })
 
     $("#new_file").click(function(){

@@ -40,6 +40,7 @@
     $(element).css("width", w+"px");
   }
 
+
   function close_pop_up(){
     var overdiv = $("#overlay");
     overdiv.fadeOut(500, function () {});
@@ -302,3 +303,4 @@ function create_color_dropdown(button, flag){
 
   return dropdown;
 }
+  

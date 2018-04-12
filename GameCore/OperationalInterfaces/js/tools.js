@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    paper.setup('canvas1');
+    paper.setup('designCanvas');
 
     pencil = new Tool();
     line = new Tool();
@@ -11,14 +11,21 @@ $(document).ready(function(){
     move = new Tool();
     text = new Tool();
     multipolygon = new Tool();
+    select = new Tool();
 
+    var mouseX, mouseY;
+
+    $( document ).on( "mousemove", function( event ) {
+    mouseX=event.pageX ;
+    mouseY=event.pageY ;
+  });
 
 
     var temp;
     var moving, p1, p2;
     var move_tool_flag = false;
     function onMouseDown(event) {
-
+        event.preventDefault();
         temp = new Path();
         moving = new Path();
   			temp.strokeColor = stroke_color;
@@ -31,6 +38,7 @@ $(document).ready(function(){
 
 
     function select_by_click(e){
+      e.preventDefault();
       var hit = project.hitTest(e.point, {
         tolerance: 4,
         fill: true,
@@ -58,6 +66,7 @@ $(document).ready(function(){
 
 
     function onKeyDown(e){
+      e.preventDefault();
       if((e.key=="delete")||(e.key=="backspace")){
         if(project.selectedItems.length>0){
           var selected = project.selectedItems;
@@ -69,15 +78,19 @@ $(document).ready(function(){
       }
     }
 
+    select.onMouseDown = select_by_click;
+
     //////////////////////////////////////
     //         pencil
     //////////////////////////////////////
     pencil.onMouseDown = onMouseDown;
     pencil.onMouseDrag = function(e){
+      e.preventDefault();
       if(temp)
       temp.add(e.point);
     }
     pencil.onMouseUp = function (e){
+      e.preventDefault();
       if(temp){
         temp.add(e.point);
         temp.guide = true;
@@ -93,12 +106,14 @@ $(document).ready(function(){
 
     line.onMouseDown=onMouseDown;
     line.onMouseDrag=function(e){
+      e.preventDefault();
       moving.removeSegments(1);
       moving.strokeColor = stroke_color;
       moving.strokeWidth = stroke_width;
       moving.add(e.point);
     }
     line.onMouseUp = function(e){
+      e.preventDefault();
       temp.add(e.point);
       temp.guide = true;
       operations.push(temp);
@@ -110,6 +125,7 @@ $(document).ready(function(){
     var multi_temp = null;
     var multi = false;
     multipolygon.onMouseDown = function (e){
+      e.preventDefault();
       if (!multi){
         if(multi_temp){
           multi_temp.remove();
@@ -131,6 +147,7 @@ $(document).ready(function(){
       }
     }
     multipolygon.onMouseMove = function(e){
+      e.preventDefault();
       if(moving){
         moving.remove();
       }
@@ -158,9 +175,11 @@ $(document).ready(function(){
     //         rectangle
     //////////////////////////////////////
     rectangle.onMouseDown = function(e){
+      e.preventDefault();
       p1 = e.point;
     }
     rectangle.onMouseDrag = function (e){
+      e.preventDefault();
       p2=e.point;
       if(e.modifiers.shift){
         var width = p2.x-p1.x;
@@ -185,6 +204,7 @@ $(document).ready(function(){
       }
     }
     rectangle.onMouseUp=function (e){
+      e.preventDefault();
       var layer = new Layer();
       layer.activate();
       var rect = new Shape.Rectangle(p1, p2);
@@ -207,9 +227,11 @@ $(document).ready(function(){
     //         ellipse
     //////////////////////////////////////
     ellipse.onMouseDown = function(e){
+      e.preventDefault();
       p1 = e.point;
     }
     ellipse.onMouseDrag = function (e){
+      e.preventDefault();
       p2=e.point;
       var width = p2.x-p1.x;
       var height = p2.y-p1.y;
@@ -239,6 +261,7 @@ $(document).ready(function(){
 
     }
     ellipse.onMouseUp = function(e){
+      e.preventDefault();
       var layer = new Layer();
       layer.activate();
       var ellipse = moving.clone();
@@ -257,6 +280,7 @@ $(document).ready(function(){
     brush.maxDistance = 4;
     brush.minDistance =1;
     brush.onMouseDown = function(e){
+      e.preventDefault();
       temp = new Path();
 	    temp.fillColor = stroke_color;
       temp.guide = true;
@@ -264,6 +288,7 @@ $(document).ready(function(){
       canvas.addChild(temp);
     };
     brush.onMouseDrag = function(e){
+      e.preventDefault();
       var step = new Point(0,0);
       step = step.add(e.delta.x/2, e.delta.y/2);
       step.angle += 90;
@@ -277,6 +302,7 @@ $(document).ready(function(){
       temp.smooth();
     }
     brush.onMouseUp = function (e){
+      e.preventDefault();
       temp.add(e.point);
       temp.closed = true;
       temp.smooth();
@@ -287,6 +313,7 @@ $(document).ready(function(){
     //         eraser
     //////////////////////////////////////
     eraser.onMouseDown = function (e){
+      e.preventDefault();
       var Alayer = project.activeLayer;
       Alayer.activate();
       temp = new Path();
@@ -309,6 +336,7 @@ $(document).ready(function(){
     //////////////////////////////////////
     move.minDistance = 5;
     move.onMouseDown = function (e){
+      e.preventDefault();
         select_by_click(e);
         var hit = project.hitTest(e.point, {
           tolerance: 4,
@@ -321,6 +349,7 @@ $(document).ready(function(){
           move_tool_flag = true;
     }
     move.onMouseDrag = function (e){
+      e.preventDefault();
       if(move_tool_flag){
         $.each(project.selectedItems, function(k, v){
           v.position.x = v.position.x + e.delta.x;
@@ -330,6 +359,7 @@ $(document).ready(function(){
       }
     }
     move.onMouseUp = function (e){
+      e.preventDefault();
       if(move_tool_flag){
         move_tool_flag=false;
       }
@@ -342,13 +372,16 @@ $(document).ready(function(){
     hasInput = false;
     var text_p;
     text.onMouseDown = function(e){
+      e.preventDefault();
         if(!hasInput){
           text_p = e.point;
           var input = document.createElement('input');
           input.type = 'text';
           input.style.position = 'fixed';
-          input.style.left = (e.point.x+toolbar_w) + 'px' ;
-          input.style.top = (e.point.y+taskbar_h+modification_h) + 'px';
+
+          input.style.left = mouseX+"px";
+          input.style.top = mouseY+"px";
+          input.style.zIndex=99;
           hasInput = true;
           input.onkeydown = Enter;
           document.body.appendChild(input);

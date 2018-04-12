@@ -1,0 +1,162 @@
+
+.DesignPage {
+  background-color: #343430;
+}
+
+#top .DesignPage {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px  solid black;
+    box-sizing: border-box;
+}
+
+#top .DesignPage  div:first-of-type{
+  margin-left: 40px;
+}
+
+#top .DesignPage #logo{
+  margin-left: 8px;
+  color: #FF8C00;
+  font-size: 35px;
+  cursor: default;
+}
+
+#top .DesignPage>div {
+  color:rgba(255,255,255, 0.65);;
+  display: flex;
+  flex-direction: row;
+  margin-left: 20px;
+  cursor: default;
+}
+#top .DesignPage .top_manu:hover{
+  color:white;
+}
+#top .DesignPage .top_manu p{
+  margin: auto;
+}
+#top .DesignPage .top_manu.selected {
+  color: white;
+}
+
+
+#top .DesignPage input{
+      margin-left: 5px;
+      margin-top: 8px;
+      height: 25px;
+      width: 75px;
+
+}
+
+#top .DesignPage label, #top .DesignPage span {
+  color: white;
+  margin-top: 10px;
+}
+#top .DesignPage label{
+  font-weight: bold;
+}
+
+#top .DesignPage span{
+  margin-left: 2px;
+}
+
+#top .DesignPage .material-icons{
+  margin-top: 4px;
+}
+
+#top .DesignPage *{
+  padding: 0;
+}
+
+
+#fill_color {
+  border: 1px solid rgba(255,255,255, 0.65);
+  border-radius: 4px;
+  width: 28px;
+  height:28px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  background: url('../images/Transparency500.png') no-repeat center center;
+}
+
+
+#stroke_color {
+  border-radius: 4px;
+  width: 28px;
+  height:28px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  border: 6px solid #FF0000;
+}
+
+
+#top .DesignPage .dropdown {
+    display: none;
+    position: fixed;
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.7);
+    z-index: 3;
+}
+
+#top .DesignPage .dropdown.show {
+    display: inline-block;
+}
+
+#top .DesignPage .dropdown div {
+  height: 20px;
+  width: 20px;
+  margin:5px;
+  border:1px solid rgba(255,255,255,0.7);
+}
+
+
+#toolBar{
+    display:flex;
+    flex-direction: column;
+    border:0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 80px;
+    background-color: #343430;
+
+}
+
+#toolBar *{
+    margin: auto;
+    font-size:40px;
+    color:rgba(255,255,255, 0.65);
+    z-index: 3;
+    cursor: pointer;
+
+}
+
+#toolBar *:hover{
+    color:white
+}
+
+#toolBar .selected {
+  color: white;
+}
+
+
+
+#DesignCanvasContainer{
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 1300px;
+  overflow: auto;
+  background-color: #464646;
+}
+
+#DesignCanvasContainer canvas{
+  background-color: #464646;
+  position: absolute;
+}
