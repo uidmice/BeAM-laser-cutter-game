@@ -1,0 +1,296 @@
+#top .PsPage.PositionPage{
+  margin: auto;
+  padding: 0;
+  background-color: maroon;
+  width: 100%;
+  height: 100%;
+}
+
+#top .PsPage.PositionPage h2{
+  color: white;
+  margin: auto;
+  font-size: 20px;
+  text-align: center;
+}
+
+#main .PsPage, #main .PositionPage{
+  background-color:whitesmoke;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#main .PsPage .colorSelection {
+    height: 100%;
+    width: 65%;
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+
+#main .PsPage .sliders {
+    background-color:whitesmoke;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 35%;
+    height: 100%;
+    top: 0;
+    left: 65%;
+
+}
+
+
+
+#main .PsPage #t_header{
+  background: black;
+  color: white;
+}
+
+
+#main .PsPage table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 90%;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#main .PsPage th, #main .PsPage td {
+    text-align: center;
+    padding: 16px;
+}
+
+#main .PsPage th:last-child{
+  padding: 0;
+}
+
+#main .PsPage tr:nth-child(even) {
+    background-color: white;
+}
+#main .PsPage .input-color {
+    position: relative;
+}
+
+#main .PsPage .color-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+#main .PsPage .input-color:hover{
+    background-color: dimgray;
+}
+
+#main .PsPage tr.input-color.PsSelect{
+  background-color: rgba(0,0,0,0.3);
+}
+
+
+#main .PsPage .slideContainer {
+    width: 100%;
+}
+
+#main .PsPage .sliderDivide{
+    display: flex;
+    flex-direction: row;
+}
+
+#main .PsPage .sliderDivide p {
+  flex-grow: 3;
+}
+
+#main .PsPage .slider{
+    -webkit-appearance: none;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    flex-grow: 7;
+    margin: auto;
+}
+
+#main .PsPage .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: lightslategray;
+    cursor: pointer;
+}
+
+#main .PsPage .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: lightslategray;
+    cursor: pointer;
+}
+
+#main .PsPage .w3-btn {
+  margin: auto;
+  display: block;
+}
+
+
+
+#main .PositionPage #PositionControl{
+  height:100%;
+  width: 20%;
+  border: 15px solid transparent;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 80%;
+  top: 0;
+}
+
+#main .PositionPage #PositionCanvasContainer{
+  height: 100%;
+  width: 80%;
+  border: 15px solid transparent;
+  overflow: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.item1{
+    margin: auto;
+    display: flex;
+    width: 98%;
+    height: 14%;
+}
+
+.item2{
+    margin: auto;
+    display: flex;
+    width: 98%;
+    height: 22%;
+}
+
+.item3{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    width: 98%;
+    height: 8%;
+}
+
+.item4{
+    margin: auto;
+    display: flex;
+    width: 98%;
+    height: 8%;
+}
+
+
+.item4 button{
+  height: 40px;
+  width:40px;
+  padding:0;
+  margin: auto;
+}
+
+.item4 .material-icons{
+  font-size: 40px;
+}
+
+.item5{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    height: 25%;
+}
+
+.item6{
+    margin: auto;
+    display: flex;
+    width: 98%;
+    height: 19%;
+    flex-direction: column;
+}
+.item6 button{
+  width: 100px;
+  margin-top: 20px;
+  margin: auto;
+}
+
+#start_button {
+    color: green;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 3px #999;
+    margin: auto;
+    font-size: 70px;
+    cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+#start_button:hover, #main .PositionPage .direction:hover{
+    background-color: rgba(255,255,255,0.3);
+}
+
+#start_button:active, #main .PositionPage .direction:active {
+  background-color: rgba(255,255,255,0.3);
+    box-shadow: 0 3px transparent;
+}
+
+#main .PositionPage .direction {
+    color: red;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px #999;
+    margin: auto;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+
+#timer{
+    background-color: black;
+    width: 90px;
+    height: 28px;
+    margin: auto;
+    color: green;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: middle;
+    display: block;
+    visibility:hidden;
+}
+
+#timer.show{
+  visibility:visible;
+}
+
+#xcoordinate{
+    margin: auto;
+}
+
+#ycoordinate{
+    margin: auto;
+}
+
+#img_width{
+    margin: auto;
+}
+
+#img_height{
+    margin: auto;
+}
+
+#main .PositionPage .w3-btn:active{
+  color: maroon;
+}

@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    paper.setup('canvas1');
+    paper.setup('designCanvas');
 
     pencil = new Tool();
     line = new Tool();
@@ -11,6 +11,7 @@ $(document).ready(function(){
     move = new Tool();
     text = new Tool();
     multipolygon = new Tool();
+    select = new Tool();
 
     var mouseX, mouseY;
 
@@ -76,6 +77,8 @@ $(document).ready(function(){
         }
       }
     }
+
+    select.onMouseDown = select_by_click;
 
     //////////////////////////////////////
     //         pencil

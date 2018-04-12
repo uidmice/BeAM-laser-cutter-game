@@ -12,6 +12,13 @@ function initPositionPage(){
     var minutes = addZero(dateToUse.getMinutes());
     var seconds = addZero(dateToUse.getSeconds());
 
+    function addZero(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
     $("#timer").html(hours+":" + minutes + ":" + seconds).toggleClass('show');
     if($(this).hasClass("w3-brown")){
       $(this).removeClass("w3-brown");
@@ -22,12 +29,7 @@ function initPositionPage(){
     }
   })
 
-  function addZero(i) {
-      if (i < 10) {
-          i = "0" + i;
-      }
-      return i;
-  }
+
 
 var board_topLeft = new Point(40,40);
 var board_size = new Size(board_width/2.5, board_height/2.5);
