@@ -1300,25 +1300,8 @@ $(document).ready(function(){
 
     var sceneWindow = {
       show: function(){
-        $("#gameContainer").css("display", "none");
-        $("#scenceContainer").show(1000, "linear",function(){
-          resizeDiv();
-        })
-        window.onresize = function(event) {resizeDiv();}
-        function resizeDiv(){
-          var vpw = $(window).width();
-          var vph = $(window).height();
-          var w = vph*1280/780;
-          if(vpw>w){
-            vpw=w;
-          }else{
-            vph = vpw*780/1280;
-          }
-          $("#scenceContainer").css({
-            "height": vph + "px",
-            "width" : vpw + "px"
-          });
-        }
+        $("#mainContainer").css("display", "none");
+        $("#scenceContainer").show(1000, "linear");
       },
       init: function(){
         if(!gameProject.saved){
@@ -1329,7 +1312,7 @@ $(document).ready(function(){
               $("#pc-container img").css("animation", "wiggle 2.5s infinite").click(function(){
                 $("#pc-container img").css("animation",'');
                 $("#scenceContainer").hide(1000, "linear",function(){
-                  $("#gameContainer").css("display", "block");
+                  $("#mainContainer").css("display", "block");
                   designWindow.show(gameMode);
                   designWindow.canvasSetUp(gameMode, gameProject.progress);
                   if(!designW_f){
@@ -1395,7 +1378,7 @@ $(document).ready(function(){
           $("#lasercutter-container img").css("animation", "wiggle 2.5s infinite").click(function(){
             $("#lasercutter-container img").css("animation",'');
             $("#scenceContainer").hide(1000, function(){
-              $("#gameContainer").css("display", "block");
+              $("#mainContainer").css("display", "block");
               if(pp_f){
                 psWindow.show();
                 if(!psW_f)
@@ -1414,25 +1397,12 @@ $(document).ready(function(){
 
     }
 
-    var thrDWindow = {
-      show: function(){
-        $("#gameContainer").hide();
-
-      },
-
-      close: function(){
-
-      }
-    }
-
-
 
     var windowControl = {
       designWindow: designWindow,
       psWindown: psWindow,
       positionWindow : positionWindow,
       sceneWindow: sceneWindow,
-      thrDWindow : thrDWindow,
       gameProject: gameProject
     };
 
@@ -1447,8 +1417,47 @@ $(document).ready(function(){
   function gameInit(){
 
     if(gameFirstStart){
+      resizeInterf();
       windowControl.sceneWindow.show();
       windowControl.sceneWindow.init();
+    }
+
+    window.onresize = function(event) {resizeInterf();}
+    function resizeInterf(){
+      var vpw = $(window).width();
+      var vph = $(window).height();
+      var w = vph*1280/800;
+      if(vpw>w){
+        vpw=w;
+      }else{
+        vph = vpw*800/1280;
+      }
+
+      if (vph<400){
+        vph = 400;
+        vpw=640;
+      }
+      $("#gameContainer").css({
+        "height": vph + "px",
+        "width" : vpw + "px"
+      });
+
+      var infw = vpw - 50;
+      var infh = vph - 100;
+      var topH = $("#top").height();
+
+      $("#screenTop").width(infw);
+      $("#screenBottom").width(infw);
+      $("#screenRight").height( infh);
+      $("#screenLeft").height( infh);
+      $("#InterfaceContainer").css({
+        "width": infw+"px",
+        "height": infh + "px"
+      });
+      $("#main").css({
+        "top": topH +"px" ,
+        "height": (infh-topH )+ "px"
+      })
     }
 
   }
