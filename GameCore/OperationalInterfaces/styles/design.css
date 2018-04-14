@@ -151,12 +151,12 @@
   top:0;
   left: 0;
   height: 100%;
-  width: 1300px;
+  width: 100%;
   overflow: auto;
   background-color: #464646;
 }
 
 #DesignCanvasContainer canvas{
-  background-color: #464646;
+  background-color: white;
   position: absolute;
 }

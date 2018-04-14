@@ -8,34 +8,35 @@ $(document).ready(function(){
     var move_to_next_task = true;
     var new_file = false;
     var pp_f = true;  //true: psWindow, false: positionWindow
-      // Yingnan Wu Editing
+    // Yingnan Wu Editing
       var fct = 0;
       var openFlag = false;
       // Yingnan Wu Editing
     var designWindow =  {
 
       show : function (gameMode) {
+        $("#scenceContainer").hide();
         $("#top .DesignPage").css('display', 'flex');
-        $("#main .DesignPage").css('display', 'block');
-        $(".PsPage").css('display', 'none');
-        $(".PositionPage").css('display', 'none');
+        $("#main .DesignPage").show();
+        $(".PsPage").hide();
+        $(".PositionPage").hide();
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#DesignTab").addClass("w3-red");
         $("#select").click();
 
           // Yingnan Wu Editing starts
           introJs().removeHints();
-          $("#dropdown").css('display', 'block');
-          $("#psGuide").css('display', 'none');
-          $("#positionGuide").css('display', 'none');
+          $("#dropdown").show();
+          $("#psGuide").hide();
+          $("#positionGuide").hide();
           // Yingnan Wu Editing ends
 
         if(gameMode==Mode.design){
           $("#toolBar").css("display", "flex");
           $("#font_size").parent().css("display", "inline-block");
         }else{
-          $("#toolBar").css("display", "none");
-          $("#font_size").parent().css("display", "none");
+          $("#toolBar").hide();
+          $("#font_size").parent().hide();
 
           if(gameMode==Mode.tutorial){
               //-----------------------------------------------------------------
@@ -266,7 +267,6 @@ $(document).ready(function(){
               });
 
               intro.start();
-
             };
           }else{
             $("#TutorialTab").css('display', "none");
@@ -290,10 +290,9 @@ $(document).ready(function(){
             gameProject.designInit();
             break;
           }
-
           move_to_next_task = false;
         }else {
-          paper.projects[2*progress].activate();
+          paper.projects[0].activate();
         }
 
       },
@@ -1297,7 +1296,6 @@ $(document).ready(function(){
         positionW_f = true;
       }
     }
-
     var sceneWindow = {
       show: function(){
         $("#mainContainer").css("display", "none");
@@ -1324,14 +1322,12 @@ $(document).ready(function(){
 
               })
             })
-
             $("#close_review").click(function(){
               $("#review").css("display", "none");
               $("#review .reviewedLines").remove();
               $(this).css("display", "none");
               $("#scenceContainer .skipable").css("display", "initial");
             })
-
             var count = 0;
             var lines;
             $.get('Lines/tutorialLines.txt', function(data){
@@ -1344,16 +1340,13 @@ $(document).ready(function(){
                   }else{
                     $("#dialogBox").empty();
                     $("#dialogBox").append('<div id="lines">' + lines[count] + '</div>');
-
                   }
                   count++;
-                  //console.log(count);
                 }else{
                   $("#skip").click();
                 }
-              });
+              }).click().click();
             });
-
             $('#toReview').click(function(){
               $("#scenceContainer .skipable").css("display", "none");
               $("#review").css("display", "block");
@@ -1367,8 +1360,6 @@ $(document).ready(function(){
                 }
               }
             })
-
-
             break;
             default:
 
@@ -1389,15 +1380,9 @@ $(document).ready(function(){
               }
             });
           });
-
         }
-
       }
-
-
     }
-
-
     var windowControl = {
       designWindow: designWindow,
       psWindown: psWindow,
@@ -1409,17 +1394,24 @@ $(document).ready(function(){
     return windowControl;
   }(gameMode))
 
-  var gameFirstStart = true;
-  var cont = true;
-
   gameInit();
 
   function gameInit(){
+    resizeInterf();
 
-    if(gameFirstStart){
-      resizeInterf();
-      windowControl.sceneWindow.show();
-      windowControl.sceneWindow.init();
+    switch (gameMode) {
+      case Mode.design:
+        windowControl.designWindow.show(Mode.design);
+        windowControl.designWindow.canvasSetUp(Mode.design, 0);
+        windowControl.designWindow.init(Mode.design);
+        break;
+      case Mode.tutorial:
+        windowControl.sceneWindow.show();
+        windowControl.sceneWindow.init();
+        break;
+      default:
+
+      break
     }
 
     window.onresize = function(event) {resizeInterf();}
