@@ -95,10 +95,9 @@
           break;
         }
         var p_shape = p.path.toShapes(true, true);
-        var color = new THREE.Color(0xC07000);
+        var color = new THREE.Color(0x996600);
         var material = new THREE.MeshLambertMaterial( {
           color: color,
-          emissive: color
         } );
         var shape3d = new THREE.ExtrudeBufferGeometry( p_shape, {
           amount: 18,
@@ -112,10 +111,6 @@
           }
         })
         var mesh = new THREE.Mesh( shape3d, material );
-        mesh.rotateZ(Math.PI);
-        mesh.rotateY(Math.PI);
-        mesh.translateX(-100);
-        mesh.translateY(-50);
         mesh.translateZ(-18);
         group.add( mesh );
       })
@@ -167,20 +162,15 @@
         et.closePath();
         var threed = SVGtransform.transformSVGPathTHREE(et.pathData).path;
         var etch_shape = threed.toShapes(true, true);
-        var color = new THREE.Color(0xC07000);
+        var color = new THREE.Color(0x996600);
         var material = new THREE.MeshLambertMaterial( {
           color: color,
-          emissive: color
         } );
         var shape3d = new THREE.ExtrudeBufferGeometry( etch_shape, {
           amount: 10,
           bevelEnabled: false
         } );
         var mesh = new THREE.Mesh( shape3d, material );
-        mesh.rotateZ(Math.PI);
-        mesh.rotateY(Math.PI);
-        mesh.translateX(-100);
-        mesh.translateY(-50);
         mesh.translateZ(-10);
         group.add( mesh );
 
@@ -199,24 +189,24 @@
 
 
       $.each(outline_shape, function(k, sh){
-        var color = new THREE.Color(0xC0A000);
+        var color = new THREE.Color(0xffeecc);
         var material = new THREE.MeshLambertMaterial( {
           color: color,
-          emissive: color
         } );
         var shape3d = new THREE.ExtrudeBufferGeometry( sh, {
           amount: 25,
           bevelEnabled: false
         } );
-
         var mesh = new THREE.Mesh( shape3d, material );
-        mesh.rotateZ(Math.PI);
-        mesh.rotateY(Math.PI);
-        mesh.translateX(-100);
-        mesh.translateY(-50);
+
         mesh.translateZ(-25);
         group.add( mesh );
       })
+
+      group.rotateZ(Math.PI);
+      group.rotateY(Math.PI);
+      group.translateX(-150);
+      group.translateY(-50);
 
 
     };
@@ -243,11 +233,11 @@
       directionalLight.position.set( 0.75, 0.75, 1.0 ).normalize();
       scene.add( directionalLight );
 
-      var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.2 );
+      var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
       scene.add( ambientLight );
 
       //
-      // 
+      //
       // var helper = new THREE.GridHelper( 400, 200 );
       // helper.rotation.x = Math.PI / 2;
       // group.add( helper );
@@ -255,6 +245,7 @@
       //
       var obj = getDesign(Mode.tutorial);
       addGeoObject( group, obj );
+
 
       //
 

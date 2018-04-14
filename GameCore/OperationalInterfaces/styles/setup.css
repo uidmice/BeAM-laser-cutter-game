@@ -4,8 +4,8 @@ body{
 
 #gameContainer{
   position: absolute;
-  width: 1300px;
-  height:750px;
+  width: 1280px;
+  height:800px;
   top:0;
   bottom: 0;
   left: 0;
@@ -26,14 +26,6 @@ body{
   z-index: 10;
 }
 
-#Display3D{
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
 
 #mainContainer {
   position:absolute;
@@ -45,7 +37,111 @@ body{
 
 #navigationBar{
   height: 40px;
+  width: 100%;
 }
+
+#screenTopLeft {
+  background: url("../images/wrecked_computer/upperleft.png");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 40px;
+  height: 25px;
+  width: 25px;
+}
+#screenTop {
+  background: url("../images/wrecked_computer/upper.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  left: 25px;
+  top: 40px;
+  height: 25px;
+}
+#screenTopRight {
+  background: url("../images/wrecked_computer/upperright.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  height: 25px;
+  width: 25px;
+}
+#screenLeft {
+  background: url("../images/wrecked_computer/left.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 65px;
+  width: 25px;
+}
+#screenRight {
+  background: url("../images/wrecked_computer/right.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 65px;
+  width: 25px;
+}
+#screenBottom {
+  background: url("../images/wrecked_computer/bottom.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  left: 25px;
+  bottom: 0;
+  height: 35px;
+}
+#screenBottomLeft {
+  background: url("../images/wrecked_computer/bottomleft.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 35px;
+  width: 25px;
+}
+#screenBottomRight {
+  background: url("../images/wrecked_computer/bottomright.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 35px;
+  width: 25px;
+}
+
+
 
 #navigationBar .w3-tab{
   -webkit-touch-callout: none; /* iOS Safari */
@@ -57,25 +153,25 @@ body{
 }
 
 #InterfaceContainer {
-  height:710px;
-  width: 100%;
   position: absolute;
-  top: 40px;
+  top: 65px;
+  left:25px;
   overflow: hidden;
 }
 
 #top{
   position: absolute;
-  height: 40px;
+  height: 6%;
   width: 100%;
+  max-height: 50px;
+  min-height: 40px;
   overflow:visible;
 }
 #main {
   position: absolute;
-  height: 670px;
+  left: 0;
   width: 100%;
-  top: 40px;
-  overflow: hidden;
+  overflow: scroll;
 }
 
 #close {
