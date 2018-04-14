@@ -24,23 +24,6 @@
   <script type="text/javascript" src="js/function.js"></script>
 </head>
 <body>
-  <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
-
-      <button id="closeLeftMenu" class="w3-bar-item w3-button w3-large">Close &times;</button>
-      <div class="w3-dropdown-click">
-          <button class="w3-button w3-block w3-left-align w3-hover-red" id="dropdown">Design Page <i class="fa fa-caret-down"></i>
-          </button>
-
-          <div class="w3-hide w3-white w3-card" id="dropdn">
-              <a href="#" class="w3-bar-item w3-button" id="general">General</a>
-              <a href="#" class="w3-bar-item w3-button" id="cutting">Cutting Hints</a>
-              <a href="#" class="w3-bar-item w3-button" id="etching">Etching Hints</a>
-              <a href="#" class="w3-bar-item w3-button" id="rastering">Raster Hints</a>
-          </div>
-      </div>
-      <a href="#" class="w3-bar-item w3-button" id="psGuide">Power and Speed</a>
-      <a href="#" class="w3-bar-item w3-button" id="positionGuide">Position Page</a>
-  </div>
   <div id='gameContainer'>
     <div id="scenceContainer">
       <div id="lasercutter-container">
@@ -77,6 +60,21 @@
       <div id="screenBottomLeft"></div>
       <div id="screenBottomRight"></div>
       <div id="InterfaceContainer">
+        <div class="w3-sidebar w3-bar-block w3-card w3-animate-fade-in" style="display:none" id="leftMenu">
+            <button id="closeLeftMenu" class="w3-bar-item w3-button w3-large">Close &times;</button>
+            <div class="w3-dropdown-click">
+                <button class="w3-button w3-block w3-left-align w3-hover-red" id="dropdown">Design Page <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-hide w3-white w3-card" id="dropdn">
+                    <a href="#" class="w3-bar-item w3-button" id="general">General</a>
+                    <a href="#" class="w3-bar-item w3-button" id="cutting">Cutting Hints</a>
+                    <a href="#" class="w3-bar-item w3-button" id="etching">Etching Hints</a>
+                    <a href="#" class="w3-bar-item w3-button" id="rastering">Raster Hints</a>
+                </div>
+            </div>
+            <a href="#" class="w3-bar-item w3-button" id="psGuide">Power and Speed</a>
+            <a href="#" class="w3-bar-item w3-button" id="positionGuide">Position Page</a>
+        </div>
         <div id="top">
           <div class="DesignPage">
             <i class="material-icons" id="logo">font_download</i>
