@@ -14,24 +14,40 @@
   <link rel="stylesheet" type= "text/css" href="styles/dialogStyleTutorial.css">
   <link href="../../intro/introjs.css" rel="stylesheet">
 
-  <script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
-  <script type="text/javascript" src="../../jquery-ui/jquery-ui.min.js"></script>
-  <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
-  <script type="text/javascript" src="../../three.js"></script>
+<script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
+<script type="text/javascript" src="../../jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
+<script type="text/javascript" src="js/three.js"></script>
 
-  <script type="text/javascript" src="js/d3-threeD.js"></script>
-  <script type="text/javascript" src="js/Project.js"></script>
-  <script type="text/javascript" src="js/OperationalWindow.js"></script>
-  <script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/d3-threeD.js"></script>
+<script type="text/javascript" src="js/Project.js"></script>
+<script type="text/javascript" src="js/OperationalWindow.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script>
+var gameMode;
+(function() {
+  var x = "<?php echo ( isset( $_GET['gameMode'] ) && $_GET['gameMode'] != '') ? $_GET['gameMode'] : '';?>";
+  switch (x) {
+    case 'tutorial':
+      gameMode = Mode.tutorial;
+      break;
+    case 'design':
+      gameMode = Mode.design;
+      break;
+    default:
+      gameMode = Mode.design;
+  }
+})();
+</script>
 </head>
 <body>
   <div id='gameContainer'>
     <div id="scenceContainer">
       <div id="lasercutter-container">
-              <img src="scene_pics/icon1.png" alt="laser cutter" >
+        <img src="scene_pics/icon1.png" alt="laser cutter" >
       </div>
       <div id="pc-container">
-              <img src="scene_pics/icon2.png" alt="laptop">
+        <img src="scene_pics/icon2.png" alt="laptop">
       </div>
       <div id="character" class="skipable"></div>
       <div id="char_head" class="skipable"></div>
@@ -62,19 +78,19 @@
       <div id="screenBottomRight"></div>
       <div id="InterfaceContainer">
         <div class="w3-sidebar w3-bar-block w3-card w3-animate-fade-in" style="display:none" id="leftMenu">
-            <button id="closeLeftMenu" class="w3-bar-item w3-button w3-large">Close &times;</button>
-            <div class="w3-dropdown-click">
-                <button class="w3-button w3-block w3-left-align w3-hover-red" id="dropdown">Design Page <i class="fa fa-caret-down"></i>
-                </button>
-                <div class="w3-hide w3-white w3-card" id="dropdn">
-                    <a href="#" class="w3-bar-item w3-button" id="general">General</a>
-                    <a href="#" class="w3-bar-item w3-button" id="cutting">Cutting Hints</a>
-                    <a href="#" class="w3-bar-item w3-button" id="etching">Etching Hints</a>
-                    <a href="#" class="w3-bar-item w3-button" id="rastering">Raster Hints</a>
-                </div>
+          <button id="closeLeftMenu" class="w3-bar-item w3-button w3-large">Close &times;</button>
+          <div class="w3-dropdown-click">
+            <button class="w3-button w3-block w3-left-align w3-hover-red" id="dropdown">Design Page <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="w3-hide w3-white w3-card" id="dropdn">
+              <a href="#" class="w3-bar-item w3-button" id="general">General</a>
+              <a href="#" class="w3-bar-item w3-button" id="cutting">Cutting Hints</a>
+              <a href="#" class="w3-bar-item w3-button" id="etching">Etching Hints</a>
+              <a href="#" class="w3-bar-item w3-button" id="rastering">Raster Hints</a>
             </div>
-            <a href="#" class="w3-bar-item w3-button" id="psGuide">Power and Speed</a>
-            <a href="#" class="w3-bar-item w3-button" id="positionGuide">Position Page</a>
+          </div>
+          <a href="#" class="w3-bar-item w3-button" id="psGuide">Power and Speed</a>
+          <a href="#" class="w3-bar-item w3-button" id="positionGuide">Position Page</a>
         </div>
         <div id="top">
           <div class="DesignPage">
@@ -135,7 +151,7 @@
             </div>
             <div id="print" class="top_manu">
               <i class="material-icons">navigate_next</i>
-              <p>Sent To Laser Cutter!</p>
+              <p>Send To Laser Cutter!</p>
             </div>
           </div>
 

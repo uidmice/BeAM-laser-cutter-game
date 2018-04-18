@@ -1,5 +1,5 @@
+var g_design = [];
 $(document).ready(function(){
-  var gameMode = Mode.tutorial;
   var windowControl = (function(gameMode){
     var gameProject = new Project(gameMode);
     var designW_f = false;
@@ -530,7 +530,7 @@ $(document).ready(function(){
           }
         })
         $("#print").click(function(){
-          gameProject.saveDesign(project.exportSVG());
+          gameProject.saveDesign(paper.project);
           sceneWindow.show();
           sceneWindow.init();
           new_file = true;
@@ -837,6 +837,9 @@ $(document).ready(function(){
             positionWindow.init();
             positionW_f = true;
           }
+
+          updateDepthInfo();
+
         });
 
         $('#PsDefaultsButton').click(function(){
@@ -871,7 +874,7 @@ $(document).ready(function(){
             }else{
               var c = parseColor(v.fillColor.toCSS());
               var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.fill.depth = Number($("#"+c+"Depth").text());
+              v.data.fill.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
               v.data.fill.darkness = (d>0 && d<2)? d: 2;
             }
 
@@ -883,13 +886,13 @@ $(document).ready(function(){
               v.data.edge.type='rastering';
               var c = parseColor(v.strokeColor.toCSS());
               var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.edge.depth = Number($("#"+c+"Depth").text());
+              v.data.edge.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
               v.data.edge.darkness = (d>0 && d<2)? d: 2;
             }else{
-              var c = parseColor(v.fillColor.toCSS());
+              var c = parseColor(v.strokeColor.toCSS());
               var d = Number($("#"+c+"Depth").text());
               v.data.edge.type = (d>0.255) ? "cutting": "etching";
-              v.data.edge.depth = d;
+              v.data.edge.depth = d>0.225 ? 0.225 : d;
               v.data.edge.darkness = 0;
             }
           })
@@ -1082,8 +1085,41 @@ $(document).ready(function(){
           psWindow.show();
         })
         $("#start_text").click(function(){
-          window.location.href = "test.html";
+          g_design.length = 0;
+          $.each(gameProject.workingCanvas.children, function(ind, shape){
+            if(shape.data.edge.type=='cutting'){
+              g_design.push(shape);
+              var t = etchShape(shape);
+              t.guide = true;
+              t.data.fill = {};
+              t.data.fill.depth = 0.255;
+              g_design.push(t);
+            }else{
+              if(shape.data.fill.depth>0){
+                g_design.push(shape);
+              }
+              if(shape.data.edge.depth>0){
+                var t = etchShape(shape);
+                t.guide = false;
+                t.data.fill = {};
+                t.data.fill.depth = shape.data.edge.depth;
+                t.data.fill.darkness = shape.data.edge.darkness;
+                g_design.push(t);
+              }
+            }
+          });
+          openModel();
+          $("#overlay").show();
+          var timer = setInterval(function(){
+            if(!windowObjectReference==null|| windowObjectReference.closed){
+              $("#overlay").hide();
+              clearInterval(timer);
+            }
+          }, 1500);
+
         })
+
+
 
         var ten = new CompoundPath({
           children: [
@@ -1162,8 +1198,6 @@ $(document).ready(function(){
 
 
         view.draw();
-
-
 
         function select_by_click(e){
           e.preventDefault();
@@ -1258,6 +1292,62 @@ $(document).ready(function(){
             mv.disy = e.point.y-noz.position.y;
             mv.start();
           }
+        }
+        function etchShape (v){
+          var et = new Path();
+          var nor, seg, temP;
+          function getOutsidePoint(p){
+            nor = v.getNormalAt(v.getOffsetOf(p));
+            temP = p.add(nor);
+            if (v.contains(temP)){
+              return p.subtract(nor);
+            }else{
+              return temP.clone();
+            }
+          }
+          var iter = v.firstSegment;
+          var seg = new Segment({
+            point: getOutsidePoint(iter.point)
+          });
+          et.add(seg);
+          while(!iter.isLast()){
+            iter = iter.next;
+            seg = new Segment({
+              point: getOutsidePoint(iter.point),
+              handleIn: iter.handleIn,
+              handleOut: iter.handleOut
+            });
+            et.add(seg);
+          }
+          iter = v.firstSegment;
+          seg = new Segment({
+            point: getOutsidePoint(iter.point)
+          });
+          et.add(seg);
+          seg = new Segment({
+            point: iter.point.clone()
+          });
+          et.add(seg);
+          iter = v.lastSegment;
+          seg = new Segment({
+            point: iter.point.clone(),
+            handleIn: iter.handleOut,
+            handleOut: iter.handleIn
+          });
+          et.add(seg);
+          while(!iter.isFirst()){
+            iter = iter.previous;
+            seg = new Segment({
+              point: iter.point.clone(),
+              handleIn: iter.handleOut,
+              handleOut: iter.handleIn
+            });
+            et.add(seg);
+          }
+          seg.clearHandles();
+          et.closePath();
+          et.clockwise = false;
+          return et;
         }
 
         $("#nozzle").click();

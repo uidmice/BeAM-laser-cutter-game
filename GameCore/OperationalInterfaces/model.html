@@ -7,224 +7,172 @@
   <script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
   <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
   <script type="text/javascript" src="js/three.js"></script>
-
   <script type="text/javascript" src="js/d3-threeD.js"></script>
   <script type="text/javascript" src="js/Project.js"></script>
   <script src="js/OrbitControls.js"></script>
-  <script src="js/stats.min.js"></script>
+  <style>
+    #modelContainer {
+      position: absolute;
+      width: 1280px;
+      height:800px;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right:0;
+      margin: auto;
+      background: url("scene_pics/scene1.png") no-repeat center top;
+      -webkit-background-size: contain;
+      -moz-background-size: contain;
+      -o-background-size: contain;
+      background-size: contain;
+      overflow: hidden;
+    }
+
+    #modelCanvasContainer {
+      position: absolute;
+      width: 50%;
+      height:50%;
+    }
+
+    #modelCloseButton {
+      position: absolute;
+      right: 10%;
+      bottom: 10%;
+    }
+
+  </style>
 </head>
 
 <body>
-
-  <div id="container"></div>
-  <div id="other"></div>
-  <div >
-    <canvas id="pa"> </canvas>
+  <div id="modelContainer">
+    <div id="modelCanvasContainer" ></div>
+    <div id="modelInfo"></div>
+    <button id="modelCloseButton" onclick="window.close()">Close</button>
   </div>
-
-
+  <div id="other" style="display:none" ><canvas width="1000" height="1000" id='pa'></canvas></div>
   <script>
+
+  window.onresize = function(event) {
+    resize();
+  }
+  function resize(){
+    var vpw = $(window).width();
+    var vph = $(window).height();
+    var w = vph*1280/800;
+    if(vpw>w){
+      vpw=w;
+    }else{
+      vph = vpw*800/1280;
+    }
+
+    if (vph<400){
+      vph = 400;
+      vpw=640;
+    }
+    $("#modelContainer").css({
+      "height": vph + "px",
+      "width" : vpw + "px"
+    });
+
+  }
+  resize();
+  var des = window.opener.g_design;
 
   $(document).ready(function(){
     paper.setup('pa');
 
     var addGeoObject = function( group, svgObject ) {
+      var pathN = svgObject.length;
+      var confirmed_area = new Path();
+      var t = new Path();
+      var woodMaterial = new THREE.MeshLambertMaterial( {
+        color: new THREE.Color(0xffeecc)
+      } );
 
       var cutting = svgObject.filter(function(e){
-        return e.func =="cutting";
-      })
-
-      var rastering = svgObject.filter(function(e){
-        return e.func =="rastering";
-      })
-
-      var etching = svgObject.filter(function(e){
-        return e.func =="etching";
-      })
-
-      var t = new Path();
-      $.each(cutting, function(k,v){
-        var p;
-        switch (v.type) {
-          case 'path':
-              p = SVGtransform.transformSVGPathPAPER(v.d);
-            break;
-          case 'circle':
-             p = SVGtransform.transformSVGCirclePAPER(v.cx, v.cy,v.r);
-          break;
+        if(e.data.edge){
+          return e.data.edge.type =="cutting";
+        }else{
+          return false;
         }
-        t = t.unite(p.path);
       })
 
+      $.each(cutting, function(k,v){
+        t = t.unite(v);
+      })
       var outline = SVGtransform.transformSVGPathTHREE(t.pathData).path;
-      var outline_shape = outline.toShapes(true, false);
-      t.bounds.topLeft = new Point(3,3);
-      t.strokeColor = 'black';
-      $.each(cutting, function(k,v){
-        var p;
-        switch (v.type) {
-          case 'path':
-              p = SVGtransform.transformSVGPathPAPER(v.d);
-            break;
-          case 'circle':
-             p = SVGtransform.transformSVGCirclePAPER(v.cx, v.cy,v.r);
-          break;
-        }
-        p = p.path;
+      var outline_shape = outline.toShapes(true, true);
 
-        $.each(t.children, function (index,shape){
-          if(shape.contains(p.segments[0].point)){
-            if(shape.getIntersections(p).length==0){
-              outline_shape[index].holes.push(SVGtransform.transformSVGPathTHREE(p.pathData).path.subPaths[0]);
-            }
-            return false;
+      $.each(svgObject, function(k,v){
+        if(!v.guide){
+          if(t.children){
+            $.each(t.children, function (index,shape){
+              if(shape.contains(v.segments[0].point) && shape.getIntersections(v)==0){
+                outline_shape[index].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
+                return false;
+              }
+            })
+          }else if(t.getIntersections(v)==0){
+            outline_shape[0].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
           }
-        })
+        }
       })
-
-      $.each(rastering, function(k,v){
-        var p, pp;
-        switch (v.type) {
-          case 'path':
-              p = SVGtransform.transformSVGPathTHREE(v.d);
-              pp = SVGtransform.transformSVGPathPAPER(v.d).path;
-            break;
-          case 'circle':
-             p = SVGtransform.transformSVGCircleTHREE(v.cx, v.cy,v.r);
-             pp = SVGtransform.transformSVGCirclePAPER(v.cx, v.cy,v.r).path;
-          break;
-        }
-        var p_shape = p.path.toShapes(true, true);
-        var color = new THREE.Color(0x996600);
-        var material = new THREE.MeshLambertMaterial( {
-          color: color,
-        } );
-        var shape3d = new THREE.ExtrudeBufferGeometry( p_shape, {
-          amount: 18,
-          bevelEnabled: false
-        } );
-
-        $.each(t.children, function (index,shape){
-          if(shape.contains(pp.segments[0].point)){
-              outline_shape[index].holes.push(p.path.subPaths[0]);
-            return false;
-          }
-        })
-        var mesh = new THREE.Mesh( shape3d, material );
-        mesh.translateZ(-18);
-        group.add( mesh );
-      })
-
-      $.each(etching, function (k,v){
-        var p;
-        switch (v.type) {
-          case 'path':
-              p = SVGtransform.transformSVGPathPAPER(v.d).path;
-            break;
-          case 'circle':
-             p = SVGtransform.transformSVGCirclePAPER(v.cx, v.cy,v.r).path;
-          break;
-        }
-
-        var et = new Path();
-        var iter = p.firstSegment;
-        var nor = p.getNormalAt(p.getOffsetOf(iter.point));
-        var seg = new Segment({
-          point: iter.point.add(nor.divide(4))
-        });
-        et.add(seg);
-        while(!iter.isLast()){
-          iter = iter.next;
-          nor = p.getNormalAt(p.getOffsetOf(iter.point));
-          seg = new Segment({
-            point: iter.point.add(nor.divide(4)),
-            handleIn: iter.handleIn,
-            handleOut: iter.handleOut
-          });
-          et.add(seg);
-        }
-        seg.clearHandles();
-        seg = new Segment({
-          point: iter.point.subtract(nor.divide(4))
-        });
-        et.add(seg);
-        while(!iter.isFirst()){
-          iter = iter.previous;
-          nor = p.getNormalAt(p.getOffsetOf(iter.point));
-          seg = new Segment({
-            point: iter.point.subtract(nor.divide(4)),
-            handleIn: iter.handleOut,
-            handleOut: iter.handleIn
-          });
-          et.add(seg);
-        }
-        seg.clearHandles();
-        et.closePath();
-        var threed = SVGtransform.transformSVGPathTHREE(et.pathData).path;
-        var etch_shape = threed.toShapes(true, true);
-        var color = new THREE.Color(0x996600);
-        var material = new THREE.MeshLambertMaterial( {
-          color: color,
-        } );
-        var shape3d = new THREE.ExtrudeBufferGeometry( etch_shape, {
-          amount: 10,
-          bevelEnabled: false
-        } );
-        var mesh = new THREE.Mesh( shape3d, material );
-        mesh.translateZ(-10);
-        group.add( mesh );
-
-
-        $.each(t.children, function (index,shape){
-          if(shape.contains(et.segments[0].point)){
-            if(shape.getIntersections(et).length==0){
-              outline_shape[index].holes.push(threed.subPaths[0]);
-            }
-            return false;
-          }
-        })
-
-
-      })
-
 
       $.each(outline_shape, function(k, sh){
-        var color = new THREE.Color(0xffeecc);
-        var material = new THREE.MeshLambertMaterial( {
-          color: color,
-        } );
         var shape3d = new THREE.ExtrudeBufferGeometry( sh, {
-          amount: 25,
+          amount: 25.5,
           bevelEnabled: false
         } );
-        var mesh = new THREE.Mesh( shape3d, material );
-
-        mesh.translateZ(-25);
+        var mesh = new THREE.Mesh( shape3d, woodMaterial );
         group.add( mesh );
       })
 
+      for ( var i = pathN-1; i >-1; i--){
+        var p = svgObject[i];
+        var tem, newpart, dep;
+        var threeData,color,material, shape3d, mesh;
+
+        if(!p.guide && p.data.fill.depth!=0){
+          dep = p.data.fill.depth*100;
+          threeData = SVGtransform.transformSVGPathTHREE(p.pathData).path.toShapes(true, true);
+          color = new THREE.Color(0x996600);
+          material = new THREE.MeshLambertMaterial( {
+            color: color,
+          } );
+          shape3d = new THREE.ExtrudeBufferGeometry( threeData, {
+            amount: 25.5-dep,
+            bevelEnabled: false
+          } );
+          mesh = new THREE.Mesh( shape3d, [material,woodMaterial]);
+          mesh.translateZ(dep);
+          group.add( mesh );
+        }
+
+      }
       group.rotateZ(Math.PI);
       group.rotateY(Math.PI);
-      group.translateX(-150);
-      group.translateY(-50);
+      group.translateX(-550);
+      group.translateY(-200);
 
 
     };
 
-    var renderer, stats, scene, camera;
+    var renderer, scene, camera, axesHelper;
 
     init();
     animate();
 
     function init() {
 
-      var container = document.getElementById( 'container' );
+      var container = document.getElementById( 'modelCanvasContainer' );
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color( 0xb0b0b0 );
 
-      camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
-      camera.position.set( 0, 0, 400 );
+      camera = new THREE.PerspectiveCamera( 50, 1280 / 800, 1, 10000 );
+      camera.position.set( 0, 0, 4000 );
+
+      axesHelper = new THREE.AxesHelper( 5 );
+      scene.add( axesHelper );
 
       var group = new THREE.Group();
       scene.add( group );
@@ -236,44 +184,26 @@
       var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
       scene.add( ambientLight );
 
-      //
-      //
-      // var helper = new THREE.GridHelper( 400, 200 );
-      // helper.rotation.x = Math.PI / 2;
-      // group.add( helper );
+      addGeoObject( group, des );
 
-      //
-      var obj = getDesign(Mode.tutorial);
-      addGeoObject( group, obj );
-
-
-      //
 
       renderer = new THREE.WebGLRenderer( { antialias: true } );
       renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( window.innerWidth, window.innerHeight );
+      renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
       container.appendChild( renderer.domElement );
 
       //
 
       var controls = new THREE.OrbitControls( camera, renderer.domElement );
-
-      //
-
-      stats = new Stats();
-      container.appendChild( stats.dom );
-
       //
 
       window.addEventListener( 'resize', onWindowResize, false );
 
     }
     function onWindowResize() {
-
-      camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
 
-      renderer.setSize( window.innerWidth, window.innerHeight );
+      renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
 
     }
 
@@ -282,7 +212,6 @@
       requestAnimationFrame( animate );
 
       render();
-      stats.update();
 
     }
 
