@@ -1,133 +1,25 @@
-/**Main Page format**/
-#container0{
-    border: dashed;
-    border-radius: 3%;
-    margin: auto;
-    width: 800px;
-    height: 500px;
-    flex-direction: row;
-    margin-top: 10%;
-
-}
-
-
-.buttons{
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    font-size: 20px;
-}
-
-button{
-    width:250px;
-    height: 60px;
-}
-
-
-@-webkit-keyframes stripe-slide {
-    0% {
-        background-position: 0% 0;
-    }
-    100% {
-        background-position: 100% 0;
-    }
-}
-@keyframes stripe-slide {
-    0% {
-        background-position: 0% 0;
-    }
-    100% {
-        background-position: 100% 0;
-    }
-}
-
-.btn {
-    overflow: visible;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    font: inherit;
-    line-height: normal;
-    cursor: pointer;
-    -moz-user-select: text;
-    display: block;
-    text-decoration: none;
-    text-transform: uppercase;
-    padding: 16px 36px 22px;
-    background-color: #fff;
-    color: #666;
-    border: 2px solid #666;
-    border-radius: 6px;
-    margin-bottom: 16px;
-    -webkit-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.btn::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-.btn--stripe {
-    overflow: hidden;
-    position: relative;
-}
-.btn--stripe:after {
-    content: "";
-    display: block;
-    height: 7px;
-    width: 100%;
-    background-image: repeating-linear-gradient(45deg, #666, #666 1px, transparent 2px, transparent 5px);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    border-top: 1px solid #666;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    background-size: 7px 7px;
-}
-.btn--stripe:hover {
-    background-color: #666;
-    color: #fff;
-    border-color: #000;
-}
-.btn--stripe:hover:after {
-    background-image: repeating-linear-gradient(45deg, #fff, #fff 1px, transparent 2px, transparent 5px);
-    border-top: 1px solid #000;
-    -webkit-animation: stripe-slide 12s infinite linear forwards;
-    animation: stripe-slide 12s infinite linear forwards;
-}
-.btn--large {
-    width: 50%;
-}
-.btn--radius {
-    border-radius: 36px;
-}
-.blocked{
-    display: none;
-}
-#image{
-    position: relative;
-    bottom: 90%;
-    left: 20%;
-}
 /**Project Page Format**/
+
+@import url('https://fonts.googleapis.com/css?family=Parisienne|Playball');
+
 #projectContainer{
     position: relative;
-    left: 10%;
+    left: 15%;
     display: flex;
     flex-direction: row;
-    transform: scale(0.7, 0.7);
-    bottom: 10%;
+    transform: scale(0.8, 0.8);
 }
 
 #first-column{
     flex: 1;
     position: relative;
+    right: 5%;
 
 }
 #second-column{
     flex: 2;
     position: relative;
+
 }
 #third-column{
     flex: 3;
@@ -139,17 +31,23 @@ button{
 #container1{
     width: 1280px;
     height: 800px;
-    background-color: rosybrown;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+    background-image: url('https://www.subtlepatterns.com/patterns/brickwall.png');
 }
 
 #projectTitle{
     position: relative;
-    top: 20px;
-    background-image: url(image/projectTitle.png);
+    background-image: url(../image/projectTitle.png);
     height: 150px;
     width: 401px;
     transform: scale(1.1, 1.1);
-    left: 30%
+    left: 35%;
+    top: 5%;
 }
 
 #titleText{
@@ -162,6 +60,9 @@ button{
 .projectButton{
     border-style: none;
     background-color: transparent;
+    font-family: 'Playball', cursive;
+    color: Blue;
+    font-size: 20px;
 }
 
 #second-1{
@@ -331,7 +232,7 @@ button{
     width: 120px;
     margin: 100px auto;
     top: 15%;
-    left: 10%;
+    left: 5%;
     bottom: 15%;
 }
 
@@ -387,11 +288,11 @@ button{
     padding: 6%;
     box-shadow: inset 0px .3em .1em rgba(0,0,0,.2); }
 
-#third-2{
+#fourth-1{
     display: inline-block;
     position: relative;
-    left: 25%;
-    top: 5%;
+    left: 10%;
+    top: 35%;
     -moz-transform:rotate(-5deg);
     -webkit-transform:rotate(-5deg);
     -ms-transform:rotate(-5deg);
@@ -399,6 +300,7 @@ button{
 }
 
 #img4 {
+    width: 300px;
     border-color: white /* for an acceptable IE result*/;
     border-width: 15px;
     -moz-border-image: url(http://tobias-reinhardt.de/img/frame.png) 15 stretch;
@@ -423,6 +325,68 @@ figcaption {
     font-size: 30px;
     padding: 10px;
 }
+
+#third-1 {
+    width: 250px;
+    height: 250px;
+    border: 15px solid white; /* gives us a white square */
+    border-radius: 50%; /* makes it a circle */
+    margin: 50px auto; /* vertical | horizontal (auto centers us horizontally)*/
+    position: relative; /*adjusts the elements position without changing layout*/
+    padding: 2rem; /* interior padding to prevent clock hands from hitting the edge*/
+    box-shadow:
+            0 0 0 4px rgba(0,0,0,0.1), /*adds outer shadow*/
+            inset 0 0 0 3px #EFEFEF, /* adds inner shadow */
+            inset 0 0 10px black, /* adds another inner shadow */
+            0 0 10px rgba(0,0,0,0.2); /* adds another outer shadow */
+    left: 20%;
+}
+
+.clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*transform: translateY(-3px);*/
+}
+
+.hand {
+    width: 50%;
+    height: 6px;
+    background: black;
+    position: absolute; /* don't leave space for the element.Position at a specified position*/
+    top: 50%; /* specifies postion between top margin edge of the element and the top edge of its containing block*/
+    transform-origin: 100%; /*defaults to 50%. 100% puts pivot on the right hand side of the x-axis*/
+    transition: all 0.1s; /* sets length of our transitions*/
+    transition-timing-function: cubic-bezier(0, 1.89, 0.58, 1); /* gives us the 'ticking' look*/
+}
+
+.hour-hand {
+    width: 35%;
+    margin-left: 25px;
+    transform: rotate(90deg);
+}
+
+.second-hand {
+    height: 3px;
+    background: white;
+}
+
+#ProjectBack{
+    position: relative;
+    border-style: hidden;
+    background-color: transparent;
+    color: black;
+    font-family: MainTitleFont;
+    font-size: 30px;
+    padding: 5px;
+    text-decoration: none;
+    top: 50%;
+    left: 15%;
+}
+#ProjectBack:hover{
+    color: lightblue;
+}
+
 
 /**Project Page Buttons**/
 #photoframe{
