@@ -1479,8 +1479,5 @@ $(document).ready(function(){
       document.getElementById("mySelectmagenta").value = "Rast/Vect";
       document.getElementById("mySelectyellow").value = "Rast/Vect";
 
-
   }
-
-
 });
