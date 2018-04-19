@@ -5,12 +5,13 @@ $(document).ready(function(){
         $("#container1").removeClass("blocked");
     });
 
-    $('#back').click(function(){
-        $("#container0").removeClass('blocked');
-        $("#container1").addClass("blocked");
+    $('#ProjectBack').click(function(){
+        $("#container1").addClass('blocked');
+        $("#container0").removeClass("blocked");
     });
+
 //display starting story page
-    $('#start').click(function(){
+    $('#tutorial').click(function(){
         $("#container0").addClass('blocked');
         $("#container2").removeClass("blocked");
     });
