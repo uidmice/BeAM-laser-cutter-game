@@ -5,120 +5,19 @@
     <title>Main Menu</title>
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="mainPageStyle.css">
+    <link rel="stylesheet" href="scenes/dialogStyleTutorial.css">
+    <link href="https://fonts.googleapis.com/css?family=Reenie+Beanie|Loved+by+the+King" rel="stylesheet" type="text/css">
 
-    <style>
-        #container{
-            border: dashed;
-            border-radius: 3%;
-            margin: auto;
-            width: 800px;
-            height: 500px;
-            display: flex;
-            flex-direction: row;
-            margin-top: 10%;
-
-        }
-
-        .buttons{
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            font-size: 20px;
-        }
-
-        button{
-            width:250px;
-            height: 60px;
-        }
-
-
-        @-webkit-keyframes stripe-slide {
-            0% {
-                background-position: 0% 0;
-            }
-            100% {
-                background-position: 100% 0;
-            }
-        }
-        @keyframes stripe-slide {
-            0% {
-                background-position: 0% 0;
-            }
-            100% {
-                background-position: 100% 0;
-            }
-        }
-
-        .btn {
-            overflow: visible;
-            margin: 0;
-            padding: 0;
-            border: 0;
-            background: transparent;
-            font: inherit;
-            line-height: normal;
-            cursor: pointer;
-            -moz-user-select: text;
-            display: block;
-            text-decoration: none;
-            text-transform: uppercase;
-            padding: 16px 36px 22px;
-            background-color: #fff;
-            color: #666;
-            border: 2px solid #666;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            -webkit-transition: all 0.5s ease;
-            transition: all 0.5s ease;
-        }
-        .btn::-moz-focus-inner {
-            padding: 0;
-            border: 0;
-        }
-        .btn--stripe {
-            overflow: hidden;
-            position: relative;
-        }
-        .btn--stripe:after {
-            content: "";
-            display: block;
-            height: 7px;
-            width: 100%;
-            background-image: repeating-linear-gradient(45deg, #666, #666 1px, transparent 2px, transparent 5px);
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-top: 1px solid #666;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            background-size: 7px 7px;
-        }
-        .btn--stripe:hover {
-            background-color: #666;
-            color: #fff;
-            border-color: #000;
-        }
-        .btn--stripe:hover:after {
-            background-image: repeating-linear-gradient(45deg, #fff, #fff 1px, transparent 2px, transparent 5px);
-            border-top: 1px solid #000;
-            -webkit-animation: stripe-slide 12s infinite linear forwards;
-            animation: stripe-slide 12s infinite linear forwards;
-        }
-        .btn--large {
-            width: 50%;
-        }
-        .btn--radius {
-            border-radius: 36px;
-        }
-
-
-    </style>
+    <script type="text/javascript" src="../../jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="mainPageChange.js"></script>
+    <script type="text/javascript" src="scenes/dialogBox.js"></script>
 
 </head>
 
 <body>
 
-<div class="w3-container container" id="container">
+<div class="w3-container container" id="container0">
 
     <div class="w3-container buttons">
         <button class="w3-button w3-round w3-section btn btn--stripe" id="start">Start</button>
@@ -136,8 +35,63 @@
 
 
     <div id="image" style="margin: auto">
-        <img src="../Images/beam_logo.png" alt="logo" width="350" id="beam_logo" style="display: block; margin: auto">
     </div>
+</div>
+
+<div id="container1" class="blocked">
+        <div id="projectTitle">
+        </div>
+        <div id="projectContainer">
+            <div id="first-column">
+            <div id="project1">
+                <img id="img1" src="image/resource3.jpg" alt="logo" width="350" id="beam_logo" style="display: block; margin: auto">
+                 <button class="projectButton" id="photoframe">Photo Frame</button>
+            </div>
+            <div id="project2">
+                <img id="img2" src="../Images/beam_logo.png" alt="logo" width="350" id="beam_logo" style="display: block; margin: auto">
+                <button class="projectButton" id="coaster">Coaster</button>
+            </div>
+            </div>
+
+            <div id="second-column">
+                <div id="second-1"></div>
+            <div id="project3">
+                 <button class="projectButton" id="box">Box</button>
+            </div>
+                <div id="second-3"></div>
+            </div>
+
+            <div id="third-column">
+            <div id="project4">
+                <img id="img3" src="../Images/beam_logo.png" alt="logo" width="350" id="beam_logo" style="display: block; margin: auto">
+                 <button class="projectButton" id="spare">Spare</button>
+            </div>
+                <div id="third-2">
+                    <img id="img4" src="image/projectTitle.png" alt=""/>
+                    <figcaption>Don't forget mommy's birthday!</figcaption>
+                </div>
+            </div>
+
+            <div id="fourth-column">
+                <div id="fourth-1">
+                </div>
+                <div id="fourth-2"></div>
+            </div>
+        </div>
+        <button class="projectButton" id="projectBack">Back</button>
+
+
+    </div>
+
+    <div id="container2" class="blocked">
+        <div id="container">
+            <div id="character"></div>
+            <div id="char_head"></div>
+            <div id="dialogBox" width="1200" height="200">
+            </div>
+            <div id="menu">
+            </div>
+        </div>
 </div>
 
 </body>
