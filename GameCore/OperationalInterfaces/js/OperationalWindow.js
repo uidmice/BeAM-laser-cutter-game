@@ -815,12 +815,29 @@ $(document).ready(function(){
             $(".PsSelect").removeClass('PsSelect');
             $(this).toggleClass('PsSelect');
             changeColor(color,power,speed);
+            disableSlider(PsSelected);
           }else{
+              disableSlider(PsSelected);
             PsSelected = null;
             $(this).toggleClass('PsSelect');
           }
-        })
+        });
 
+        function disableSlider(selectedColor){
+            var id = "mySelect"+selectedColor;
+            //console.log(id);
+            var ps_mode = document.getElementById(id).value;
+
+            if(ps_mode === "Skip"){
+                document.getElementById("powerRange").disabled = true;
+                document.getElementById("speedRange").disabled = true;
+                document.getElementById(selectedColor).style.color = "grey";
+            }else{
+                document.getElementById("powerRange").disabled = false;
+                document.getElementById("speedRange").disabled = false;
+                document.getElementById(selectedColor).style.color = "black";
+            }
+        }
 
         function changeColor(color, power,speed){
           $("#currentColor").text(color.toUpperCase()).css('color',color);
@@ -1452,11 +1469,18 @@ $(document).ready(function(){
       })
     }
 
+      // set select default to Rast/Vect
+      document.getElementById("mySelectred").value = "Rast/Vect";
+      document.getElementById("mySelectblue").value = "Rast/Vect";
+      document.getElementById("mySelectblack").value = "Rast/Vect";
+      document.getElementById("mySelectorange").value = "Rast/Vect";
+      document.getElementById("mySelectgreen").value = "Rast/Vect";
+      document.getElementById("mySelectcyan").value = "Rast/Vect";
+      document.getElementById("mySelectmagenta").value = "Rast/Vect";
+      document.getElementById("mySelectyellow").value = "Rast/Vect";
+
+
   }
-
-
-
-
 
 
 });
