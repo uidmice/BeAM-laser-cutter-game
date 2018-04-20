@@ -1,0 +1,473 @@
+/**Project Page Format**/
+
+#projectContainer{
+    position: relative;
+    transform: scale(0.7, 0.7);
+    left: 7%;
+    top: 5%;
+    height: 800px;
+}
+
+#container1{
+    width: 1280px;
+    height: 800px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+    background-image: url('https://www.subtlepatterns.com/patterns/brickwall.png');
+}
+#projectTitle {
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 20%;
+    height: 20%;
+    top: 10%;
+    content: "";
+    padding: 60px 0 0;
+    border-top: 0 solid;
+    border-right: 0 solid;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    border-left: 1px solid rgba(0,0,0,0.2);
+    -webkit-border-radius: 0 10px 200px / 0 200px 14px 250px;
+    border-radius: 0 10px 200px / 0 200px 14px 250px;
+    font: normal 34px/1.3 "Gochi Hand", Helvetica, sans-serif;
+    color: rgba(255,0,106,0.58);
+    text-align: -moz-center;
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    white-space: pre;
+    background: -webkit-repeating-linear-gradient(-90deg, rgba(129,203,188,0.5) 0, rgba(129,203,188,0.5) 0.44%, rgba(0,0,0,0) 0.44%, rgba(0,0,0,0) 22%), #fcf59b;
+    background: -moz-repeating-linear-gradient(180deg, rgba(129,203,188,0.5) 0, rgba(129,203,188,0.5) 0.44%, rgba(0,0,0,0) 0.44%, rgba(0,0,0,0) 22%), #fcf59b;
+    background: repeating-linear-gradient(180deg, rgba(129,203,188,0.5) 0, rgba(129,203,188,0.5) 0.44%, rgba(0,0,0,0) 0.44%, rgba(0,0,0,0) 22%), #fcf59b;
+    background-position: 50% 50%;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: auto auto;
+    background-size: auto auto;
+    -webkit-box-shadow: -3px 5px 12px 0 rgba(0,0,0,0.1) ;
+    box-shadow: -3px 5px 12px 0 rgba(0,0,0,0.1) ;
+    -webkit-transform: rotateZ(-4deg)   ;
+    transform: rotateZ(-4deg)   ;
+}
+
+#projectTitle::after {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    content: "";
+    top: 9px;
+    right: 0;
+    left: 122px;
+    border: none;
+    -webkit-border-radius: 30px;
+    border-radius: 30px;
+    font: normal medium/normal Arial, Helvetica, sans-serif;
+    color: rgba(0,0,0,0.9);
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    background: -webkit-radial-gradient(circle closest-side, rgba(25,119,196,1) 0, rgba(25,119,196,1) 4%, rgba(12,113,201,1) 77%, rgba(255,255,255,0) 89%, rgba(255,255,255,0) 100%), -webkit-radial-gradient(circle closest-side, rgba(0,0,0,0.4) 0, rgba(0,0,0,0.2) 81%, rgba(255,255,255,0) 92%, rgba(255,255,255,0) 100%), -webkit-radial-gradient(closest-side, rgba(64,150,238,1) 0, rgba(64,150,238,1) 100%), rgba(255,255,255,0.9);
+    background: -moz-radial-gradient(circle closest-side, rgba(25,119,196,1) 0, rgba(25,119,196,1) 4%, rgba(12,113,201,1) 77%, rgba(255,255,255,0) 89%, rgba(255,255,255,0) 100%), -moz-radial-gradient(circle closest-side, rgba(0,0,0,0.4) 0, rgba(0,0,0,0.2) 81%, rgba(255,255,255,0) 92%, rgba(255,255,255,0) 100%), -moz-radial-gradient(closest-side, rgba(64,150,238,1) 0, rgba(64,150,238,1) 100%), rgba(255,255,255,0.9);
+    background: radial-gradient(circle closest-side, rgba(25,119,196,1) 0, rgba(25,119,196,1) 4%, rgba(12,113,201,1) 77%, rgba(255,255,255,0) 89%, rgba(255,255,255,0) 100%), radial-gradient(circle closest-side, rgba(0,0,0,0.4) 0, rgba(0,0,0,0.2) 81%, rgba(255,255,255,0) 92%, rgba(255,255,255,0) 100%), radial-gradient(closest-side, rgba(64,150,238,1) 0, rgba(64,150,238,1) 100%), rgba(255,255,255,0.9);
+    background-repeat: no-repeat;
+    background-position: 96% -4%, 71% 43%, 50% 50%;
+    -webkit-background-origin: padding-box;
+    background-origin: padding-box;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    -webkit-background-size: 20px 20px, 20px 20px, auto auto;
+    background-size: 20px 20px, 20px 20px, auto auto;
+    -webkit-box-shadow: -4px 8px 5px 1px rgba(0,0,0,0.2) ;
+    box-shadow: -4px 8px 5px 1px rgba(0,0,0,0.2) ;
+    text-shadow: none;
+}
+
+#TitleText{
+    position: relative;
+    right: 14%;
+    bottom: 170%;
+    font-size: 40px;
+
+}
+
+.projectButton{
+    border-style: none;
+    background-color: transparent;
+    font-family: 'Reenie Beanie', cursive;
+    color: Blue;
+    font-size: 40px;
+}
+
+#first-2{
+    height: 18%;
+    width: 12%;
+    border: 8px solid #ccc;
+    border-bottom: 8px solid #f9f9f9;
+    border-right: 8px solid #f9f9f9;
+    overflow: auto; background: #f5f5f5 url(../image/lenoir.jpeg) no-repeat 50% 50%;
+    background-size: cover;
+    position: absolute;
+    top: 35%;
+    right: 93%;
+
+}
+#second-3{
+    height: 36%;
+    width: 24%;
+    border: 8px solid #ccc;
+    border-bottom: 8px solid #f9f9f9;
+    border-right: 8px solid #f9f9f9;
+    overflow: auto; background: #f5f5f5 url(../../OperationalInterfaces/scene_pics/Hans1.png) no-repeat ;
+    background-size: cover;
+    position: absolute;
+    left: 40%;
+    top: 57%;
+}
+
+#project1 {
+    position: absolute;
+    display: block;
+    height: 24%;
+    top: 2%;
+}
+
+#project1:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 132%;
+    height: 132%;
+    top: -16%;
+    left: -16%;
+    background-color: #f8f8f8;
+    z-index: -1;
+    box-shadow:
+            inset 0px 10px .5em rgba(0,0,0,.25),
+            inset .1em 0px .1em rgba(0,0,0,.1),
+            inset -0.1em 0px .1em rgba(0,0,0,.05),
+            0 .3em .2em #fff;
+    background-image: -moz-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -webkit-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -o-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -ms-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%)
+}
+
+#project1:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 145%;
+    height: 145%;
+    top: -22.5%;
+    left: -22.5%;
+    background: #f8f8f8;
+    z-index: -2;
+    box-shadow:
+            0px 1em 2em -1em rgba(0,0,0,.4),
+            0px 2em 2em -1em rgba(0,0,0,.3),
+            0px 3em 2em -1em rgba(0,0,0,.2),
+            0px 4em 1.5em -1em rgba(0,0,0,.15),
+            0px 2em 4em .5em rgba(0,0,0,.1),
+            inset 0 .2em .1em #fff;
+}
+
+
+
+#img1 #img2{
+    background: #fff;
+    position: relative;
+    display: block;
+    width: auto;
+    height: 88%;
+    padding: 6%;
+    box-shadow: inset 0px .3em .1em rgba(0,0,0,.2); }
+
+
+#project2 {
+    position: absolute;
+    display: block;
+    height: 25%;
+    top: 62%;
+
+
+}
+
+#project2:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 132%;
+    height: 132%;
+    top: -16%;
+    left: -16%;
+    background-color: #f8f8f8;
+    z-index: -1;
+    box-shadow:
+            inset 0px 10px .5em rgba(0,0,0,.25),
+            inset .1em 0px .1em rgba(0,0,0,.1),
+            inset -0.1em 0px .1em rgba(0,0,0,.05),
+            0 .3em .2em #fff;
+    background-image: -moz-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -webkit-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -o-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -ms-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%)
+}
+
+#project2:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 145%;
+    height: 145%;
+    top: -22.5%;
+    left: -22.5%;
+    background: #f8f8f8;
+    z-index: -2;
+    box-shadow:
+            0px 1em 2em -1em rgba(0,0,0,.4),
+            0px 2em 2em -1em rgba(0,0,0,.3),
+            0px 3em 2em -1em rgba(0,0,0,.2),
+            0px 4em 1.5em -1em rgba(0,0,0,.15),
+            0px 2em 4em .5em rgba(0,0,0,.1),
+            inset 0 .2em .1em #fff;
+}
+
+
+
+
+
+#project4 {
+    position: absolute;
+    display: block;
+    width: 20%;
+    left: 70%;
+    height: 40%;
+    bottom: 55%;
+}
+
+#project4:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 132%;
+    height: 132%;
+    top: -16%;
+    left: -16%;
+    background-color: #f8f8f8;
+    z-index: -1;
+    box-shadow:
+            inset 0px 10px .5em rgba(0,0,0,.25),
+            inset .1em 0px .1em rgba(0,0,0,.1),
+            inset -0.1em 0px .1em rgba(0,0,0,.05),
+            0 .3em .2em #fff;
+    background-image: -moz-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -webkit-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -o-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -ms-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%)
+}
+
+#project4:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 145%;
+    height: 145%;
+    top: -22.5%;
+    left: -22.5%;
+    background: #f8f8f8;
+    z-index: -2;
+    box-shadow:
+            0px 1em 2em -1em rgba(0,0,0,.4),
+            0px 2em 2em -1em rgba(0,0,0,.3),
+            0px 3em 2em -1em rgba(0,0,0,.2),
+            0px 4em 1.5em -1em rgba(0,0,0,.15),
+            0px 2em 4em .5em rgba(0,0,0,.1),
+            inset 0 .2em .1em #fff;
+}
+
+#project3 {
+    position: absolute;
+    display: block;
+    width: 18%;
+    height: 30%;;
+    left: 40%;
+    top: 3%;
+}
+
+#project3:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 132%;
+    height: 132%;
+    top: -16%;
+    left: -16%;
+    background-color: #f8f8f8;
+    z-index: -1;
+    box-shadow:
+            inset 0px 10px .5em rgba(0,0,0,.25),
+            inset .1em 0px .1em rgba(0,0,0,.1),
+            inset -0.1em 0px .1em rgba(0,0,0,.05),
+            0 .3em .2em #fff;
+    background-image: -moz-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -webkit-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -o-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: -ms-radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%);
+    background-image: radial-gradient(50% 50%, circle farthest-corner, #ffffff, #f8f8f8 100%)
+}
+
+#project3:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 145%;
+    height: 145%;
+    top: -22.5%;
+    left: -22.5%;
+    background: #f8f8f8;
+    z-index: -2;
+    box-shadow:
+            0px 1em 2em -1em rgba(0,0,0,.4),
+            0px 2em 2em -1em rgba(0,0,0,.3),
+            0px 3em 2em -1em rgba(0,0,0,.2),
+            0px 4em 1.5em -1em rgba(0,0,0,.15),
+            0px 2em 4em .5em rgba(0,0,0,.1),
+            inset 0 .2em .1em #fff;
+}
+
+
+#img3 #img4 {
+    background: #fff;
+    position: relative;
+    display: block;
+    width: 88%;
+    height: auto;
+    padding: 6%;
+    box-shadow: inset 0px .3em .1em rgba(0,0,0,.2); }
+
+#fourth-1{
+    display: inline-block;
+    position: absolute;
+    left: 25%;
+    top: 35%;
+    -moz-transform:rotate(10deg);
+    -webkit-transform:rotate(10deg);
+    -ms-transform:rotate(10deg);
+    transform:rotate(10deg);
+}
+
+#img5 {
+    width: 300px;
+    border-color: white /* for an acceptable IE result*/;
+    border-width: 15px;
+    -moz-border-image: url(http://tobias-reinhardt.de/img/frame.png) 15 stretch;
+    border-image: url(http://tobias-reinhardt.de/img/frame.png) 15 stretch;
+    border-style: solid;
+    margin: auto;
+}
+
+#img4.hasCaption {
+    padding-bottom: 50px;
+}
+
+figcaption {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 16px;
+    background-color: white;
+    text-align: center;
+    color: blue;
+    font-family: 'Reenie Beanie', cursive;
+    font-size: 30px;
+    padding: 10px;
+}
+
+#third-3 {
+    width: 20%;
+    height: 32%;
+    border: 15px solid white; /* gives us a white square */
+    border-radius: 50%; /* makes it a circle */
+    position: absolute; /*adjusts the elements position without changing layout*/
+    padding: 2rem; /* interior padding to prevent clock hands from hitting the edge*/
+    box-shadow:
+            0 0 0 4px rgba(0,0,0,0.1), /*adds outer shadow*/
+            inset 0 0 0 3px #EFEFEF, /* adds inner shadow */
+            inset 0 0 10px black, /* adds another inner shadow */
+            0 0 10px rgba(0,0,0,0.2); /* adds another outer shadow */
+    left: 70%;
+    top: 60%;
+
+}
+
+.clock-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*transform: translateY(-3px);*/
+}
+
+.hand {
+    width: 50%;
+    height: 6px;
+    background: black;
+    position: absolute; /* don't leave space for the element.Position at a specified position*/
+    top: 50%; /* specifies postion between top margin edge of the element and the top edge of its containing block*/
+    transform-origin: 100%; /*defaults to 50%. 100% puts pivot on the right hand side of the x-axis*/
+    transition: all 0.1s; /* sets length of our transitions*/
+    transition-timing-function: cubic-bezier(0, 1.89, 0.58, 1); /* gives us the 'ticking' look*/
+}
+
+.hour-hand {
+    width: 35%;
+    margin-left: 25px;
+    transform: rotate(90deg);
+}
+
+.second-hand {
+    height: 3px;
+    background: white;
+}
+
+#ProjectBack{
+    position: absolute;
+    border-style: hidden;
+    background-color: transparent;
+    color: black;
+    font-family: MainTitleFont;
+    font-size: 30px;
+    padding: 5px;
+    text-decoration: none;
+    top: 52%;
+    left: 33%;
+    -moz-transform:rotate(10deg);
+    -webkit-transform:rotate(10deg);
+    -ms-transform:rotate(10deg);
+    transform:rotate(10deg);
+
+
+}
+#ProjectBack:hover{
+    color: blue;
+}
+
+
+
+
+/**Project Page Buttons**/
+#photoframe{
+    position: relative;
+    top: 20%;
+}
