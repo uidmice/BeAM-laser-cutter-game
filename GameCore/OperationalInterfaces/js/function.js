@@ -171,8 +171,6 @@ var parseStyles = function(svg) {
   }
 
 };
-
-
 function parseColor(c){
   switch (c) {
     case "rgb(255,165,0)":
@@ -195,4 +193,15 @@ function parseColor(c){
     return "yellow";
 
   }
+}
+
+var windowObjectReference = null; // global variable
+
+function openModel() {
+  if(windowObjectReference == null || windowObjectReference.closed) {
+    windowObjectReference = window.open('model.html', '_blank',
+           "resizable,scrollbars,status");
+  } else {
+    windowObjectReference.focus();
+  };
 }
