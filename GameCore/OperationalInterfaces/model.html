@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>three.js webgl - geometry - extrude shapes from geodata</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
+  <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
+  <script type="text/javascript" src="js/three.js"></script>
+  <script type="text/javascript" src="js/d3-threeD.js"></script>
+  <script type="text/javascript" src="js/Project.js"></script>
+  <script src="js/OrbitControls.js"></script>
+  <style>
+    #modelContainer {
+      position: absolute;
+      width: 1280px;
+      height:800px;
+      top:0;
+      bottom: 0;
+      left: 0;
+      right:0;
+      margin: auto;
+      background: url("scene_pics/scene1.png") no-repeat center top;
+      -webkit-background-size: contain;
+      -moz-background-size: contain;
+      -o-background-size: contain;
+      background-size: contain;
+      overflow: hidden;
+    }
+
+    #modelCanvasContainer {
+      position: absolute;
+      width: 50%;
+      height:50%;
+    }
+
+    #modelCloseButton {
+      position: absolute;
+      right: 10%;
+      bottom: 10%;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="modelContainer">
+    <div id="modelCanvasContainer" ></div>
+    <div id="modelInfo"></div>
+    <button id="modelCloseButton" onclick="window.close()">Close</button>
+  </div>
+  <div id="other" style="display:none" ><canvas width="1000" height="1000" id='pa'></canvas></div>
+  <script>
+
+  window.onresize = function(event) {
+    resize();
+  }
+  function resize(){
+    var vpw = $(window).width();
+    var vph = $(window).height();
+    var w = vph*1280/800;
+    if(vpw>w){
+      vpw=w;
+    }else{
+      vph = vpw*800/1280;
+    }
+
+    if (vph<400){
+      vph = 400;
+      vpw=640;
+    }
+    $("#modelContainer").css({
+      "height": vph + "px",
+      "width" : vpw + "px"
+    });
+
+  }
+  resize();
+  var des = window.opener.g_design;
+
+  $(document).ready(function(){
+    paper.setup('pa');
+
+    var addGeoObject = function( group, svgObject ) {
+      var pathN = svgObject.length;
+      var confirmed_area = new Path();
+      var t = new Path();
+      var woodMaterial = new THREE.MeshLambertMaterial( {
+        color: new THREE.Color(0xffeecc)
+      } );
+
+      var cutting = svgObject.filter(function(e){
+        if(e.data.edge){
+          return e.data.edge.type =="cutting";
+        }else{
+          return false;
+        }
+      })
+
+      $.each(cutting, function(k,v){
+        t = t.unite(v);
+      })
+      var outline = SVGtransform.transformSVGPathTHREE(t.pathData).path;
+      var outline_shape = outline.toShapes(true, true);
+
+      $.each(svgObject, function(k,v){
+        if(!v.guide){
+          if(t.children){
+            $.each(t.children, function (index,shape){
+              if(shape.contains(v.segments[0].point) && shape.getIntersections(v)==0){
+                outline_shape[index].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
+                return false;
+              }
+            })
+          }else if(t.getIntersections(v)==0){
+            outline_shape[0].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
+          }
+        }
+      })
+
+      $.each(outline_shape, function(k, sh){
+        var shape3d = new THREE.ExtrudeBufferGeometry( sh, {
+          amount: 25.5,
+          bevelEnabled: false
+        } );
+        var mesh = new THREE.Mesh( shape3d, woodMaterial );
+        group.add( mesh );
+      })
+
+      for ( var i = pathN-1; i >-1; i--){
+        var p = svgObject[i];
+        var tem, newpart, dep;
+        var threeData,color,material, shape3d, mesh;
+
+        if(!p.guide && p.data.fill.depth!=0){
+          dep = p.data.fill.depth*100;
+          threeData = SVGtransform.transformSVGPathTHREE(p.pathData).path.toShapes(true, true);
+          color = new THREE.Color(0x996600);
+          material = new THREE.MeshLambertMaterial( {
+            color: color,
+          } );
+          shape3d = new THREE.ExtrudeBufferGeometry( threeData, {
+            amount: 25.5-dep,
+            bevelEnabled: false
+          } );
+          mesh = new THREE.Mesh( shape3d, [material,woodMaterial]);
+          mesh.translateZ(dep);
+          group.add( mesh );
+        }
+
+      }
+      group.rotateZ(Math.PI);
+      group.rotateY(Math.PI);
+      group.translateX(-550);
+      group.translateY(-200);
+
+
+    };
+
+    var renderer, scene, camera, axesHelper;
+
+    init();
+    animate();
+
+    function init() {
+
+      var container = document.getElementById( 'modelCanvasContainer' );
+
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera( 50, 1280 / 800, 1, 10000 );
+      camera.position.set( 0, 0, 4000 );
+
+      axesHelper = new THREE.AxesHelper( 5 );
+      scene.add( axesHelper );
+
+      var group = new THREE.Group();
+      scene.add( group );
+
+      var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
+      directionalLight.position.set( 0.75, 0.75, 1.0 ).normalize();
+      scene.add( directionalLight );
+
+      var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
+      scene.add( ambientLight );
+
+      addGeoObject( group, des );
+
+
+      renderer = new THREE.WebGLRenderer( { antialias: true } );
+      renderer.setPixelRatio( window.devicePixelRatio );
+      renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
+      container.appendChild( renderer.domElement );
+
+      //
+
+      var controls = new THREE.OrbitControls( camera, renderer.domElement );
+      //
+
+      window.addEventListener( 'resize', onWindowResize, false );
+
+    }
+    function onWindowResize() {
+      camera.updateProjectionMatrix();
+
+      renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
+
+    }
+
+    function animate() {
+
+      requestAnimationFrame( animate );
+
+      render();
+
+    }
+
+    function render() {
+
+      renderer.render( scene, camera );
+
+    }
+
+  })
+
+
+
+  </script>
+
+</body>
+</html>

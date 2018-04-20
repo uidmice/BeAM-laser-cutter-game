@@ -460,6 +460,7 @@ function d3threeD( exports ) {
         if ( x !== firstX || y !== firstY ) {
           path.lineTo( firstX, firstY );
         }
+        path.closePath();
         break;
 
         // - lines!
