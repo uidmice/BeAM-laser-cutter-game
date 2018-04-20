@@ -1,5 +1,5 @@
+var g_design = [];
 $(document).ready(function(){
-  var gameMode = Mode.tutorial;
   var windowControl = (function(gameMode){
     var gameProject = new Project(gameMode);
     var designW_f = false;
@@ -9,13 +9,14 @@ $(document).ready(function(){
     var new_file = false;
     var pp_f = true;  //true: psWindow, false: positionWindow
     // Yingnan Wu Editing
-      var fct = 0;
-      var openFlag = false;
-      // Yingnan Wu Editing
+    var fct = 0;
+    var openFlag = false;
+    // Yingnan Wu Editing
     var designWindow =  {
 
       show : function (gameMode) {
         $("#scenceContainer").hide();
+        $("#gameContainer").show();
         $("#top .DesignPage").css('display', 'flex');
         $("#main .DesignPage").show();
         $(".PsPage").hide();
@@ -24,12 +25,12 @@ $(document).ready(function(){
         $("#DesignTab").addClass("w3-red");
         $("#select").click();
 
-          // Yingnan Wu Editing starts
-          introJs().removeHints();
-          $("#dropdown").show();
-          $("#psGuide").hide();
-          $("#positionGuide").hide();
-          // Yingnan Wu Editing ends
+        // Yingnan Wu Editing starts
+        introJs().removeHints();
+        $("#dropdown").show();
+        $("#psGuide").hide();
+        $("#positionGuide").hide();
+        // Yingnan Wu Editing ends
 
         if(gameMode==Mode.design){
           $("#toolBar").css("display", "flex");
@@ -39,20 +40,20 @@ $(document).ready(function(){
           $("#font_size").parent().hide();
 
           if(gameMode==Mode.tutorial){
-              //-----------------------------------------------------------------
+            //-----------------------------------------------------------------
             $("#TutorialTab").click(function(){
-                if(!openFlag){
-                    document.getElementById("leftMenu").style.display = "block";
-                    openFlag=true;
-                }else{
-                    closeLeftMenu();
-                }
-                //-----------------------------------------------------------------
+              if(!openFlag){
+                $("#leftMenu").show("slide");
+                openFlag=true;
+              }else{
+                closeLeftMenu();
+              }
+              //-----------------------------------------------------------------
             });
 
             function closeLeftMenu() {
-              document.getElementById("leftMenu").style.display = "none";
-                openFlag=false;
+              $("#leftMenu").hide("slide");
+              openFlag=false;
             }
 
             $("#closeLeftMenu").click(closeLeftMenu);
@@ -67,8 +68,6 @@ $(document).ready(function(){
                 x.previousElementSibling.className.replace(" w3-red", "");
               }
             })
-
-
             // fct 1: cutting; fct 2: etching; fct 3: raster; else:
 
             document.getElementById("cutting").onclick = function() {
@@ -132,7 +131,6 @@ $(document).ready(function(){
             document.getElementById("rastering").onclick = function() {
               fct = 3;
               closeLeftMenu();
-
               intro = introJs();
               intro.removeHints();
               intro.setOptions({
@@ -158,10 +156,8 @@ $(document).ready(function(){
             document.getElementById("general").onclick = function() {
               fct = 0;
               closeLeftMenu();
-
               intro = introJs();
               intro.removeHints();
-
               intro.setOptions({
                 steps: [
                   {
@@ -372,7 +368,6 @@ $(document).ready(function(){
           $(".selected").removeClass('selected');
           $("#select").addClass('selected');
           select.activate();
-
         }).click();
         $("#undo").click(function(){
           if(operation_l>0){
@@ -401,7 +396,6 @@ $(document).ready(function(){
               }
             })
             operations[operation_i]=null;
-
           }
         })
         $("#fill_color").click(function(){
@@ -411,55 +405,54 @@ $(document).ready(function(){
             left: $("#fill_color").offset().left
           });
         })
-          // Yingnan Wu Editing starts
+        // Yingnan Wu Editing starts
         $("#fill_color_dropdown div").click(function(){
-            var c = $(this).css('background-color');
+          var c = $(this).css('background-color');
+          if(fct === 0){
+            change_menu_fill_color();
+          }
+          if(fct === 1 && c === "rgb(255, 0, 0)"){
+            change_menu_fill_color();
+          }
+          if(fct === 2 && c === "rgb(0, 0, 255)"){
+            change_menu_fill_color();
+          }
+          if(fct === 3 && c === "rgb(0, 0, 0)"){
+            change_menu_fill_color();
+          }
 
-            if(fct === 0){
-                change_menu_fill_color();
+          function change_menu_fill_color(){
+            if(project.selectedItems.length!=0){
+              var op = [];
+              $.each(project.selectedItems, function(k,v){
+                op.push({
+                  id: v.id,
+                  copy: v.clone({insert: false})
+                })
+              })
+              addOp(new Operation(0, op));
             }
-            if(fct === 1 && c === "rgb(255, 0, 0)"){
-                change_menu_fill_color();
-            }
-            if(fct === 2 && c === "rgb(0, 0, 255)"){
-                change_menu_fill_color();
-            }
-            if(fct === 3 && c === "rgb(0, 0, 0)"){
-                change_menu_fill_color();
-            }
-
-            function change_menu_fill_color(){
-                if(project.selectedItems.length!=0){
-                    var op = [];
-                    $.each(project.selectedItems, function(k,v){
-                        op.push({
-                            id: v.id,
-                            copy: v.clone({insert: false})
-                        })
-                    })
-                    addOp(new Operation(0, op));
+            if (c=="rgba(0, 0, 0, 0)"){
+              $("#fill_color").css({
+                "background": "url('images/Transparency500.png') no-repeat center center",
+              });
+              $.each(project.selectedItems, function(k, v){
+                if(v.fillColor){
+                  v.fillColor.alpha = 0;
                 }
-                if (c=="rgba(0, 0, 0, 0)"){
-                    $("#fill_color").css({
-                        "background": "url('images/Transparency500.png') no-repeat center center",
-                    });
-                    $.each(project.selectedItems, function(k, v){
-                        if(v.fillColor){
-                            v.fillColor.alpha = 0;
-                        }
-                    })
-                }else{
-                    $("#fill_color").css("background",c);
-                    $.each(project.selectedItems, function(k, v){
-                        v.fillColor = new Color(c);
-                        v.fillColor.alpha = 1;
-                    })
-                }
-                $("#fill_color_dropdown").removeClass('show');
+              })
+            }else{
+              $("#fill_color").css("background",c);
+              $.each(project.selectedItems, function(k, v){
+                v.fillColor = new Color(c);
+                v.fillColor.alpha = 1;
+              })
             }
+            $("#fill_color_dropdown").removeClass('show');
+          }
 
         })
-          // Yingnan Wu Editing ends
+        // Yingnan Wu Editing ends
         $("#stroke_color").click(function(){
           $("#stroke_color_dropdown").toggleClass('show');
           $("#stroke_color_dropdown").offset({
@@ -467,58 +460,57 @@ $(document).ready(function(){
             left: $("#stroke_color").offset().left
           });
         })
-          // Yingnan Wu Editing starts
+        // Yingnan Wu Editing starts
         $("#stroke_color_dropdown div").click(function(){
-            var c = $(this).css('background-color');
-            //console.log(c);
+          var c = $(this).css('background-color');
+          //console.log(c);
+          if(fct === 0){
+            change_menu_stroke_color();
+          }
+          if(fct === 1 && c === "rgb(255, 0, 0)"){
+            change_menu_stroke_color();
+          }
+          if(fct === 2 && c === "rgb(0, 0, 255)"){
+            change_menu_stroke_color();
+          }
+          if(fct === 3 && c === "rgb(0, 0, 0)"){
+            change_menu_stroke_color();
+          }
 
-            if(fct === 0){
-                change_menu_stroke_color();
-            }
-            if(fct === 1 && c === "rgb(255, 0, 0)"){
-                change_menu_stroke_color();
-            }
-            if(fct === 2 && c === "rgb(0, 0, 255)"){
-                change_menu_stroke_color();
-            }
-            if(fct === 3 && c === "rgb(0, 0, 0)"){
-                change_menu_stroke_color();
-            }
 
-
-            function change_menu_stroke_color() {
-                if(project.selectedItems.length!=0){
-                    var op = [];
-                    $.each(project.selectedItems, function(k,v){
-                        op.push({
-                            id: v.id,
-                            copy: v.clone({insert: false})
-                        })
-                    })
-                    addOp(new Operation(0, op));
-                }
-                if (c==="rgba(0, 0, 0, 0)"){
-                    $("#stroke_color").css({
-                        "background": "url('images/Transparency500_1.png') no-repeat left top",
-                        "background-size": "250px",
-                        "border": "1px solid rgba(255,255,255, 0.65)"
-                    });
-                    $.each(project.selectedItems, function(k, v){
-                        v.strokeColor.alpha = 0;
-                    })
-                    $("#stroke_color").removeClass();
-                    $("#stroke_color").addClass(c);
-                }else{
-                    $("#stroke_color").css("border","6px solid "+c).css("background","white");
-                    $.each(project.selectedItems, function(k, v){
-                        v.strokeColor = new Color(c);
-                        v.strokeColor.alpha = 1;
-                    })
-                }
-                $("#stroke_color_dropdown").removeClass('show');
+          function change_menu_stroke_color() {
+            if(project.selectedItems.length!=0){
+              var op = [];
+              $.each(project.selectedItems, function(k,v){
+                op.push({
+                  id: v.id,
+                  copy: v.clone({insert: false})
+                })
+              })
+              addOp(new Operation(0, op));
             }
+            if (c==="rgba(0, 0, 0, 0)"){
+              $("#stroke_color").css({
+                "background": "url('images/Transparency500_1.png') no-repeat left top",
+                "background-size": "250px",
+                "border": "1px solid rgba(255,255,255, 0.65)"
+              });
+              $.each(project.selectedItems, function(k, v){
+                v.strokeColor.alpha = 0;
+              })
+              $("#stroke_color").removeClass();
+              $("#stroke_color").addClass(c);
+            }else{
+              $("#stroke_color").css("border","6px solid "+c).css("background","white");
+              $.each(project.selectedItems, function(k, v){
+                v.strokeColor = new Color(c);
+                v.strokeColor.alpha = 1;
+              })
+            }
+            $("#stroke_color_dropdown").removeClass('show');
+          }
         })
-          // Yingnan Wu Editing ends
+        // Yingnan Wu Editing ends
         $("#stroke_width").change(function(){
           if(project.selectedItems.length!=0){
             var op = [];
@@ -537,20 +529,18 @@ $(document).ready(function(){
             })
           }
         })
-        $("#done").click(function(){
-          gameProject.saveDesign(project.exportSVG());
+        $("#print").click(function(){
+          gameProject.saveDesign(paper.project);
           sceneWindow.show();
           sceneWindow.init();
           new_file = true;
-
-            // -----------------------------Yingnan Wu Editing starts-----------------------------
-            introJs().removeHints();
-            // -----------------------------Yingnan Wu Editing ends-----------------------------
+          // -----------------------------Yingnan Wu Editing starts-----------------------------
+          introJs().removeHints();
+          // -----------------------------Yingnan Wu Editing ends-----------------------------
         })
         $("#close").click(function(){
           sceneWindow.show();
         })
-
         if(gameMode==Mode.design){
           pencil = new Tool();
           line = new Tool();
@@ -770,23 +760,23 @@ $(document).ready(function(){
     };
     var psWindow = {
       show : function(){
-        $(".PositionPage").css('display', 'none');
-        $(".DesignPage").css('display', 'none');
-        $(".PsPage").css('display', 'block');
+        $(".PositionPage").hide();
+        $(".DesignPage").hide();
+        $(".PsPage").show("fade");
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#PsTab").addClass("w3-red");
         pp_f = true;
 
-          // Yingnan Wu Editing starts
-          introJs().removeHints();
-          $("#dropdown").css('display', 'none');
-          $("#general").css('display', 'none');
-          $("#cutting").css('display', 'none');
-          $("#etching").css('display', 'none');
-          $("#rastering").css('display', 'none');
-          $("#psGuide").css('display', 'block');
-          $("#positionGuide").css('display', 'none');
-          // Yingnan Wu Editing ends
+        // Yingnan Wu Editing starts
+        introJs().removeHints();
+        $("#dropdown").css('display', 'none');
+        $("#general").css('display', 'none');
+        $("#cutting").css('display', 'none');
+        $("#etching").css('display', 'none');
+        $("#rastering").css('display', 'none');
+        $("#psGuide").css('display', 'block');
+        $("#positionGuide").css('display', 'none');
+        // Yingnan Wu Editing ends
 
       },
       init : function(){
@@ -847,27 +837,9 @@ $(document).ready(function(){
             positionWindow.init();
             positionW_f = true;
           }
-          //   updateDepthInfo();
-          // var OK_win = $("<div></div>");
-          // OK_win.html("<p>Did you set power and speed correctly by color?</p>");
-          // var yesB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>Yes</button>");
-          // yesB.css("margin","25px").click(function(){
-          //   positionWindow.show();
-          //   positionWindow.setUpCanvas();
-          //   if(!positionW_f){
-          //     positionWindow.init();
-          //     positionW_f = true;
-          //   }
-          //   updateDepthInfo();
-          //   close_pop_up();
-          // })
-          // var NoB = $("<button class='w3-button w3-white w3-border w3-border w3-round-large'>No</button>").css("margin","25px").click(function(){
-          //   close_pop_up();
-          // });
-          //
-          // OK_win.append(yesB).append(NoB);
-          //
-          // pop_up_window("Make sure before you go!", OK_win, "170px","400px");
+
+          updateDepthInfo();
+
         });
 
         $('#PsDefaultsButton').click(function(){
@@ -902,7 +874,7 @@ $(document).ready(function(){
             }else{
               var c = parseColor(v.fillColor.toCSS());
               var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.fill.depth = Number($("#"+c+"Depth").text());
+              v.data.fill.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
               v.data.fill.darkness = (d>0 && d<2)? d: 2;
             }
 
@@ -914,13 +886,13 @@ $(document).ready(function(){
               v.data.edge.type='rastering';
               var c = parseColor(v.strokeColor.toCSS());
               var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.edge.depth = Number($("#"+c+"Depth").text());
+              v.data.edge.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
               v.data.edge.darkness = (d>0 && d<2)? d: 2;
             }else{
-              var c = parseColor(v.fillColor.toCSS());
+              var c = parseColor(v.strokeColor.toCSS());
               var d = Number($("#"+c+"Depth").text());
               v.data.edge.type = (d>0.255) ? "cutting": "etching";
-              v.data.edge.depth = d;
+              v.data.edge.depth = d>0.225 ? 0.225 : d;
               v.data.edge.darkness = 0;
             }
           })
@@ -954,99 +926,99 @@ $(document).ready(function(){
     }
     var positionWindow = {
       show : function(){
-        $(".PsPage").css('display', 'none');
-        $(".DesignPage").css('display', 'none');
-        $(".PositionPage").css('display', 'block');
+        $(".PsPage").hide();
+        $(".DesignPage").hide();
+        $(".PositionPage").show("fade");
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#PositionTab").addClass("w3-red");
         pp_f = false;
         $("#nozzle").click();
 
-          // Yingnan Wu Editing starts
-          introJs().removeHints();
-          $("#dropdown").css('display', 'none');
-          $("#general").css('display', 'none');
-          $("#cutting").css('display', 'none');
-          $("#etching").css('display', 'none');
-          $("#rastering").css('display', 'none');
-          $("#psGuide").css('display', 'none');
-          $("#positionGuide").css('display', 'block');
-          // Yingnan Wu Editing ends
+        // Yingnan Wu Editing starts
+        introJs().removeHints();
+        $("#dropdown").css('display', 'none');
+        $("#general").css('display', 'none');
+        $("#cutting").css('display', 'none');
+        $("#etching").css('display', 'none');
+        $("#rastering").css('display', 'none');
+        $("#psGuide").css('display', 'none');
+        $("#positionGuide").css('display', 'block');
+        // Yingnan Wu Editing ends
       },
-        setUpCanvas: function(){
-          $("#PositionCanvasContainer").append($("<canvas id='positionCanvas' height='"+(2400/2.5+40)+"px' width='"+(3600/2.5+40)+"px'></canvas>"));
+      setUpCanvas: function(){
+        $("#PositionCanvasContainer").append($("<canvas id='positionCanvas' height='"+(2400/2.5+40)+"px' width='"+(3600/2.5+40)+"px'></canvas>"));
 
-          if(paper.projects.length<2*(gameProject.progress+1)){
-            paper.setup('positionCanvas');
+        if(paper.projects.length<2*(gameProject.progress+1)){
+          paper.setup('positionCanvas');
 
-            var board_topLeft = new Point(40,40);
-            var board_size = new Size(3600/2.5, 2400/2.5);
-            var stage = new Shape.Rectangle(board_topLeft,board_size);
-            stage.fillColor='white';
-            stage.guide=true;
+          var board_topLeft = new Point(40,40);
+          var board_size = new Size(3600/2.5, 2400/2.5);
+          var stage = new Shape.Rectangle(board_topLeft,board_size);
+          stage.fillColor='white';
+          stage.guide=true;
 
-            var ruler=new Path();
-            ruler.add(project.view.bounds.topLeft);
-            ruler.add(project.view.bounds.topRight);
+          var ruler=new Path();
+          ruler.add(project.view.bounds.topLeft);
+          ruler.add(project.view.bounds.topRight);
 
-            ruler.add(stage.bounds.topRight);
-            ruler.add(stage.bounds.topLeft);
-            ruler.add(stage.bounds.bottomLeft);
-            ruler.add(project.view.bounds.bottomLeft);
-            ruler.closed = true;
-            ruler.fillColor='black';
-            ruler.guide = true;
+          ruler.add(stage.bounds.topRight);
+          ruler.add(stage.bounds.topLeft);
+          ruler.add(stage.bounds.bottomLeft);
+          ruler.add(project.view.bounds.bottomLeft);
+          ruler.closed = true;
+          ruler.fillColor='black';
+          ruler.guide = true;
 
-            var grader1 = new Path();
-            var grader2 = new Path();
-            var grader3 = new Path();
-            var grader4 = new Path();
-            grader1.add(new Point(0,0), new Point(0,25));
-            grader2.add(new Point(20, 5), new Point(20, 25));
-            grader3.add(new Point(0,0), new Point(25,0));
-            grader4.add(new Point(5, 20), new Point(25, 20));
-            var twoGrader = new Group(grader1, grader2);
-            var twoGrader2 = new Group(grader4, grader3);
-            twoGrader.strokeWidth=1;
-            twoGrader.strokeColor = 'white';
-            twoGrader2.strokeWidth=1;
-            twoGrader2.strokeColor = 'white';
+          var grader1 = new Path();
+          var grader2 = new Path();
+          var grader3 = new Path();
+          var grader4 = new Path();
+          grader1.add(new Point(0,0), new Point(0,25));
+          grader2.add(new Point(20, 5), new Point(20, 25));
+          grader3.add(new Point(0,0), new Point(25,0));
+          grader4.add(new Point(5, 20), new Point(25, 20));
+          var twoGrader = new Group(grader1, grader2);
+          var twoGrader2 = new Group(grader4, grader3);
+          twoGrader.strokeWidth=1;
+          twoGrader.strokeColor = 'white';
+          twoGrader2.strokeWidth=1;
+          twoGrader2.strokeColor = 'white';
 
-            var graders_v = new Symbol(twoGrader);
-            var graders_h = new Symbol(twoGrader2);
+          var graders_v = new Symbol(twoGrader);
+          var graders_h = new Symbol(twoGrader2);
 
 
-            for (i = 0; i<36; i++){
-              graders_v.place(new Point(i*100/2.5+40+100/10, 40-12.5));
-              var text =new PointText(new Point(i*100/2.5+40-2, 14));
-              text.fillColor='white';
-              text.content = i;
-            }
-
-            for (i = 0; i<24; i++){
-              graders_h.place(new Point(40-12.5,i*100/2.5+40+100/10));
-              var text =new PointText(new Point( 5,i*100/2.5+43));
-              text.fillColor='white';
-              text.content = i;
-              text.rotate(270);
-            }
-
-          }else {
-            paper.projects[2*gameProject.progress+1].activate();
+          for (i = 0; i<36; i++){
+            graders_v.place(new Point(i*100/2.5+40+100/10, 40-12.5));
+            var text =new PointText(new Point(i*100/2.5+40-2, 14));
+            text.fillColor='white';
+            text.content = i;
           }
 
-          if(new_file){
-            $.each(project.getItems({class: Raster}), function(k,v){
-              v.remove();
-            });
-            var pic = project.importSVG(gameProject.saved);
-            var item = pic.rasterize(100);
-            pic.remove();
-            item.scale(0.4);
-            new_file = false;
-
+          for (i = 0; i<24; i++){
+            graders_h.place(new Point(40-12.5,i*100/2.5+40+100/10));
+            var text =new PointText(new Point( 5,i*100/2.5+43));
+            text.fillColor='white';
+            text.content = i;
+            text.rotate(270);
           }
-        },
+
+        }else {
+          paper.projects[2*gameProject.progress+1].activate();
+        }
+
+        if(new_file){
+          $.each(project.getItems({class: Raster}), function(k,v){
+            v.remove();
+          });
+          var pic = project.importSVG(gameProject.saved);
+          var item = pic.rasterize(100);
+          pic.remove();
+          item.scale(0.4);
+          new_file = false;
+
+        }
+      },
       init : function(){
         $("#timer_btn").click(function(){
           var total_time_sec = 4080; //68 min
@@ -1113,8 +1085,41 @@ $(document).ready(function(){
           psWindow.show();
         })
         $("#start_text").click(function(){
-          window.location.href = "test.html";
+          g_design.length = 0;
+          $.each(gameProject.workingCanvas.children, function(ind, shape){
+            if(shape.data.edge.type=='cutting'){
+              g_design.push(shape);
+              var t = etchShape(shape);
+              t.guide = true;
+              t.data.fill = {};
+              t.data.fill.depth = 0.255;
+              g_design.push(t);
+            }else{
+              if(shape.data.fill.depth>0){
+                g_design.push(shape);
+              }
+              if(shape.data.edge.depth>0){
+                var t = etchShape(shape);
+                t.guide = false;
+                t.data.fill = {};
+                t.data.fill.depth = shape.data.edge.depth;
+                t.data.fill.darkness = shape.data.edge.darkness;
+                g_design.push(t);
+              }
+            }
+          });
+          openModel();
+          $("#overlay").show();
+          var timer = setInterval(function(){
+            if(!windowObjectReference==null|| windowObjectReference.closed){
+              $("#overlay").hide();
+              clearInterval(timer);
+            }
+          }, 1500);
+
         })
+
+
 
         var ten = new CompoundPath({
           children: [
@@ -1193,8 +1198,6 @@ $(document).ready(function(){
 
 
         view.draw();
-
-
 
         function select_by_click(e){
           e.preventDefault();
@@ -1290,6 +1293,62 @@ $(document).ready(function(){
             mv.start();
           }
         }
+        function etchShape (v){
+          var et = new Path();
+          var nor, seg, temP;
+          function getOutsidePoint(p){
+            nor = v.getNormalAt(v.getOffsetOf(p));
+            temP = p.add(nor);
+            if (v.contains(temP)){
+              return p.subtract(nor);
+            }else{
+              return temP.clone();
+            }
+          }
+          var iter = v.firstSegment;
+          var seg = new Segment({
+            point: getOutsidePoint(iter.point)
+          });
+          et.add(seg);
+          while(!iter.isLast()){
+            iter = iter.next;
+            seg = new Segment({
+              point: getOutsidePoint(iter.point),
+              handleIn: iter.handleIn,
+              handleOut: iter.handleOut
+            });
+            et.add(seg);
+          }
+          iter = v.firstSegment;
+          seg = new Segment({
+            point: getOutsidePoint(iter.point)
+          });
+          et.add(seg);
+          seg = new Segment({
+            point: iter.point.clone()
+          });
+          et.add(seg);
+          iter = v.lastSegment;
+          seg = new Segment({
+            point: iter.point.clone(),
+            handleIn: iter.handleOut,
+            handleOut: iter.handleIn
+          });
+          et.add(seg);
+          while(!iter.isFirst()){
+            iter = iter.previous;
+            seg = new Segment({
+              point: iter.point.clone(),
+              handleIn: iter.handleOut,
+              handleOut: iter.handleIn
+            });
+            et.add(seg);
+          }
+          seg.clearHandles();
+          et.closePath();
+          et.clockwise = false;
+          return et;
+        }
 
         $("#nozzle").click();
 
@@ -1298,19 +1357,19 @@ $(document).ready(function(){
     }
     var sceneWindow = {
       show: function(){
-        $("#mainContainer").css("display", "none");
-        $("#scenceContainer").show(1000, "linear");
+        $("#mainContainer").hide();
+        $("#scenceContainer").show("fold", 1000);
       },
       init: function(){
         if(!gameProject.saved){
           switch (gameMode) {
             case Mode.tutorial:
             $("#skip").click(function(){
-              $("#scenceContainer .skipable").css("display", "none");
+              $("#scenceContainer .skipable").hide();
               $("#pc-container img").css("animation", "wiggle 2.5s infinite").click(function(){
                 $("#pc-container img").css("animation",'');
-                $("#scenceContainer").hide(1000, "linear",function(){
-                  $("#mainContainer").css("display", "block");
+                $("#scenceContainer").hide("fade", 1000,function(){
+                  $("#mainContainer").show("fade");
                   designWindow.show(gameMode);
                   designWindow.canvasSetUp(gameMode, gameProject.progress);
                   if(!designW_f){
@@ -1368,8 +1427,8 @@ $(document).ready(function(){
           $("#scenceContainer .skipable").css("display", "none");
           $("#lasercutter-container img").css("animation", "wiggle 2.5s infinite").click(function(){
             $("#lasercutter-container img").css("animation",'');
-            $("#scenceContainer").hide(1000, function(){
-              $("#mainContainer").css("display", "block");
+            $("#scenceContainer").hide("fade", 1000, function(){
+              $("#mainContainer").show("puff");
               if(pp_f){
                 psWindow.show();
                 if(!psW_f)
@@ -1401,14 +1460,14 @@ $(document).ready(function(){
 
     switch (gameMode) {
       case Mode.design:
-        windowControl.designWindow.show(Mode.design);
-        windowControl.designWindow.canvasSetUp(Mode.design, 0);
-        windowControl.designWindow.init(Mode.design);
-        break;
+      windowControl.designWindow.show(Mode.design);
+      windowControl.designWindow.canvasSetUp(Mode.design, 0);
+      windowControl.designWindow.init(Mode.design);
+      break;
       case Mode.tutorial:
-        windowControl.sceneWindow.show();
-        windowControl.sceneWindow.init();
-        break;
+      windowControl.sceneWindow.show();
+      windowControl.sceneWindow.init();
+      break;
       default:
 
       break
