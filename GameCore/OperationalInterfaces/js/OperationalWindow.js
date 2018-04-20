@@ -13,7 +13,6 @@ $(document).ready(function(){
     var openFlag = false;
     // Yingnan Wu Editing
     var designWindow =  {
-
       show : function (gameMode) {
         $("#scenceContainer").hide();
         $("#gameContainer").show();
@@ -1116,11 +1115,7 @@ $(document).ready(function(){
               clearInterval(timer);
             }
           }, 1500);
-
         })
-
-
-
         var ten = new CompoundPath({
           children: [
             new Path.Line(new Point(70,90), new Point(110,90)),
@@ -1136,7 +1131,6 @@ $(document).ready(function(){
           guide: true
         });
         var noz = new Group(ten, cir);
-
         var blk = new Blink();
         var mv = new Move();
         var nozzle_moving = false;

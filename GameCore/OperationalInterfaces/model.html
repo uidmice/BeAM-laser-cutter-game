@@ -32,6 +32,8 @@
       position: absolute;
       width: 50%;
       height:50%;
+      top: 25%;
+      left: 10%;
     }
 
     #modelCloseButton {
@@ -169,7 +171,7 @@
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera( 50, 1280 / 800, 1, 10000 );
-      camera.position.set( 0, 0, 4000 );
+      camera.position.set( 0, 0, 500 );
 
       axesHelper = new THREE.AxesHelper( 5 );
       scene.add( axesHelper );
@@ -187,9 +189,13 @@
       addGeoObject( group, des );
 
 
-      renderer = new THREE.WebGLRenderer( { antialias: true } );
+      renderer = new THREE.WebGLRenderer( {
+        antialias: true,
+        alpha: true
+      } );
       renderer.setPixelRatio( window.devicePixelRatio );
       renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
+      renderer.setClearColor( 0x000000, 0 );
       container.appendChild( renderer.domElement );
 
       //
