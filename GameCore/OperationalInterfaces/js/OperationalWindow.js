@@ -947,7 +947,7 @@ $(document).ready(function(){
       show : function(){
         $(".PositionPage").hide();
         $(".DesignPage").hide();
-        $(".PsPage").show("fade");
+        $(".PsPage").show();
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#PsTab").addClass("w3-red");
         pp_f = true;
@@ -1638,23 +1638,22 @@ $(document).ready(function(){
                   if(!designW_f){
                     move_to_next_task = false;
                   }
-
                 });
 
               })
             })
             $("#close_review").click(function(){
-              $("#review").css("display", "none");
+              $("#review").hide();
               $("#review .reviewedLines").remove();
-              $(this).css("display", "none");
-              $("#scenceContainer .skipable").css("display", "initial");
+              $(this).hide();
+              $("#scenceContainer .skipable").show();
             })
             var count = 0;
             var lines;
             $.get('Lines/tutorialLines.txt', function(data){
               lines = data.split("\n");
               $("#dialogBox").click(function () {
-                if(count < lines.length) {
+                if(count < lines.length-1) {
                   if (count == 0) {
                     $("#char_head").empty();
                     $("#char_head").append('<div class="name">Hans</div>');

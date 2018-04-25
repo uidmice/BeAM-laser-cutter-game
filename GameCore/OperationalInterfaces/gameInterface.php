@@ -35,8 +35,8 @@ var gameMode;
     case 'design':
       gameMode = Mode.design;
       break;
-    default:
-      gameMode = Mode.design;
+    case 'p1':
+      gameMode = Mode.project1;
   }
 })();
 </script>
