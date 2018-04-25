@@ -20,6 +20,7 @@
 <script type="text/javascript" src="js/three.js"></script>
 
 <script type="text/javascript" src="js/d3-threeD.js"></script>
+<script type="text/javascript" src="js/offset.js"></script>
 <script type="text/javascript" src="js/Project.js"></script>
 <script type="text/javascript" src="js/OperationalWindow.js"></script>
 <script type="text/javascript" src="js/function.js"></script>
@@ -150,8 +151,8 @@ var gameMode;
               <span>pt</span>
             </div>
             <div id="print" class="top_manu">
-              <i class="material-icons">navigate_next</i>
-              <p>Send To Laser Cutter!</p>
+              <i class="material-icons">print</i>
+              <p>Print</p>
             </div>
           </div>
 
@@ -194,7 +195,12 @@ var gameMode;
                   <td>
                     Red
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                    <select id="mySelectred">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
+                  </td>
                   <th><span id="redPower">50</span>%</th>
                   <th><span id="redSpeed">60</span>%</th>
                   <th><span id="redDepth">0.028</span>''</th>
@@ -206,7 +212,12 @@ var gameMode;
                   <td>
                     Blue
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectblue">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="bluePower">50</span>%</th>
                   <th><span id="blueSpeed">60</span>%</th>
                   <th><span id="blueDepth">0.028</span>''</th>
@@ -218,7 +229,12 @@ var gameMode;
                   <td>
                     Black
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectblack">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="blackPower">50</span>%</th>
                   <th><span id="blackSpeed">60</span>%</th>
                   <th><span id="blackDepth">0.028</span>''</th>
@@ -230,7 +246,12 @@ var gameMode;
                   <td>
                     Orange
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectorange">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="orangePower">50</span>%</th>
                   <th><span id="orangeSpeed">60</span>%</th>
                   <th><span id="orangeDepth">0.028</span>''</th>
@@ -242,7 +263,12 @@ var gameMode;
                   <td>
                     Green
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectgreen">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="greenPower">50</span>%</th>
                   <th><span id="greenSpeed">60</span>%</th>
                   <th><span id="greenDepth">0.028</span>''</th>
@@ -254,7 +280,12 @@ var gameMode;
                   <td>
                     Cyan
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectcyan">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="cyanPower">50</span>%</th>
                   <th><span id="cyanSpeed">60</span>%</th>
                   <th><span id="cyanDepth">0.028</span>''</th>
@@ -266,7 +297,12 @@ var gameMode;
                   <td>
                     Magenta
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectmagenta">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="magentaPower">50</span>%</th>
                   <th><span id="magentaSpeed">60</span>%</th>
                   <th><span id="magentaDepth">0.028</span>''</th>
@@ -278,7 +314,12 @@ var gameMode;
                   <td>
                     Yellow
                   </td>
-                  <td>Rast/Vect</td>
+                  <td>
+                      <select id="mySelectyellow">
+                          <option value="Rast/Vect">Rast/Vect</option>
+                          <option value="Skip">Skip</option>
+                      </select>
+                  </td>
                   <th><span id="yellowPower">50</span>%</th>
                   <th><span id="yellowSpeed">60</span>%</th>
                   <th><span id="yellowDepth">0.028</span>''</th>
