@@ -32,6 +32,8 @@
       position: absolute;
       width: 50%;
       height:50%;
+      top: 25%;
+      left: 10%;
     }
 
     #modelCloseButton {
@@ -44,12 +46,12 @@
 </head>
 
 <body>
-  <div id="modelContainer">
+  <div id="modelContainer" >
     <div id="modelCanvasContainer" ></div>
     <div id="modelInfo"></div>
     <button id="modelCloseButton" onclick="window.close()">Close</button>
   </div>
-  <div id="other" style="display:none" ><canvas width="1000" height="1000" id='pa'></canvas></div>
+  <div id="other" style="display: none"><canvas width="1000" height="1000" id='pa'></canvas></div>
   <script>
 
   window.onresize = function(event) {
@@ -104,21 +106,24 @@
       var outline_shape = outline.toShapes(true, true);
 
       $.each(svgObject, function(k,v){
-        if(!v.guide){
-          if(t.children){
-            $.each(t.children, function (index,shape){
-              if(shape.contains(v.segments[0].point) && shape.getIntersections(v)==0){
-                outline_shape[index].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
-                return false;
-              }
-            })
-          }else if(t.getIntersections(v)==0){
-            outline_shape[0].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
-          }
+        if(t.children){
+          $.each(t.children, function (index,shape){
+            if(shape.contains(v.segments[0].point) && shape.getIntersections(v)==0){
+              outline_shape[index].holes.push(SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths[0]);
+              return false;
+            }
+          })
+        }else if(t.getIntersections(v)==0){
+          var paths = SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths;
+          $.each(paths, function(v, path){
+            outline_shape[0].holes.push(path);
+            console.log(path);
+          })
         }
       })
 
       $.each(outline_shape, function(k, sh){
+        console.log(sh.holes.length);
         var shape3d = new THREE.ExtrudeBufferGeometry( sh, {
           amount: 25.5,
           bevelEnabled: false
@@ -126,15 +131,22 @@
         var mesh = new THREE.Mesh( shape3d, woodMaterial );
         group.add( mesh );
       })
+      // $.each(outline_shape, function(k, sh){
+      //   var shape3d = new THREE.ShapeBufferGeometry( sh);
+      //   var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      //   var mesh = new THREE.Mesh( shape3d, material );
+      //   group.add( mesh );
+      // })
 
-      for ( var i = pathN-1; i >-1; i--){
+      for ( var i = pathN-1; i >pathN-2; i--){
         var p = svgObject[i];
         var tem, newpart, dep;
         var threeData,color,material, shape3d, mesh;
-
-        if(!p.guide && p.data.fill.depth!=0){
+        if(p.data.fill.depth!=0){
+          newpart = p.subtract(confirmed_area);
+          confirmed_area = confirmed_area.unite(p);
           dep = p.data.fill.depth*100;
-          threeData = SVGtransform.transformSVGPathTHREE(p.pathData).path.toShapes(true, true);
+          threeData = SVGtransform.transformSVGPathTHREE(newpart.pathData).path.toShapes(true, false);
           color = new THREE.Color(0x996600);
           material = new THREE.MeshLambertMaterial( {
             color: color,
@@ -143,21 +155,22 @@
             amount: 25.5-dep,
             bevelEnabled: false
           } );
-          mesh = new THREE.Mesh( shape3d, [material,woodMaterial]);
+          mesh = new THREE.Mesh( shape3d, [material,woodMaterial,woodMaterial, woodMaterial]);
           mesh.translateZ(dep);
           group.add( mesh );
         }
 
       }
+
       group.rotateZ(Math.PI);
       group.rotateY(Math.PI);
-      group.translateX(-550);
-      group.translateY(-200);
+      group.translateX(-(t.bounds.x+t.bounds.width/2));
+      group.translateY(-(t.bounds.y+t.bounds.height/2));
 
 
     };
 
-    var renderer, scene, camera, axesHelper;
+    var renderer, scene, camera;
 
     init();
     animate();
@@ -169,7 +182,7 @@
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera( 50, 1280 / 800, 1, 10000 );
-      camera.position.set( 0, 0, 4000 );
+      camera.position.set( 0, 0, 500 );
 
       axesHelper = new THREE.AxesHelper( 5 );
       scene.add( axesHelper );
@@ -187,9 +200,13 @@
       addGeoObject( group, des );
 
 
-      renderer = new THREE.WebGLRenderer( { antialias: true } );
+      renderer = new THREE.WebGLRenderer( {
+        antialias: true,
+        alpha: true
+      } );
       renderer.setPixelRatio( window.devicePixelRatio );
       renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
+      renderer.setClearColor( 0x000000, 0 );
       container.appendChild( renderer.domElement );
 
       //

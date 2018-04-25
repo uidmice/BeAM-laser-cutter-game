@@ -20,6 +20,7 @@
 <script type="text/javascript" src="js/three.js"></script>
 
 <script type="text/javascript" src="js/d3-threeD.js"></script>
+<script type="text/javascript" src="js/offset.js"></script>
 <script type="text/javascript" src="js/Project.js"></script>
 <script type="text/javascript" src="js/OperationalWindow.js"></script>
 <script type="text/javascript" src="js/function.js"></script>
@@ -34,8 +35,8 @@ var gameMode;
     case 'design':
       gameMode = Mode.design;
       break;
-    default:
-      gameMode = Mode.design;
+    case 'p1':
+      gameMode = Mode.project1;
   }
 })();
 </script>
@@ -150,12 +151,8 @@ var gameMode;
               <span>pt</span>
             </div>
             <div id="print" class="top_manu">
-              <i class="material-icons">navigate_next</i>
-<<<<<<< HEAD:GameCore/OperationalInterfaces/index_new.html
-              <p>Done</p>
-=======
-              <p>Send To Laser Cutter!</p>
->>>>>>> b6f728faf47dfa86758f73e24512ad7474fac023:GameCore/OperationalInterfaces/gameInterface.php
+              <i class="material-icons">print</i>
+              <p>Print</p>
             </div>
           </div>
 

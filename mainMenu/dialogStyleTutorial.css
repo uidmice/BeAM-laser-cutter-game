@@ -9,7 +9,7 @@
 }
 /**dialogBox**/
 #container2{
-    background: url("pics/scene2.png") no-repeat center top;
+    background: url("pics/scene2_m.png") no-repeat center top;
     -webkit-background-size: contain;
     -moz-background-size: contain;
     -o-background-size: contain;
@@ -20,10 +20,7 @@
     top: 0;
     right: 0;
     left: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-
+    margin: auto;
 }
 #dialogBox{
     height: 20%;
@@ -55,21 +52,7 @@
     font-family: MainTitleFont;
     font-size: 20px;
 }
-#lasercutter-container img {
-  position: absolute;
-  top: 63%;
-  left: 15%;
-  width: 25%;
-  cursor: pointer;
-}
 
-#pc-container img {
-  position: absolute;
-  top: 53%;
-  right: 23%;
-  width: 14%;
-  cursor: pointer;
-}
 /* The typing effect */
 #lines {
     overflow: hidden; /* Ensures the content is not revealed until the animation */
@@ -164,58 +147,6 @@
     color: lightblue;
 }
 
-@keyframes wiggle {
-    0% { transform: rotate(0deg); }
-   25% { transform: rotate(0deg); }
-   50% { transform: rotate(10deg); }
-   75% { transform: rotate(-10deg); }
-  100% { transform: rotate(0deg); }
-}
-
-/**To be Modified**/
-
-#back{
-    position: relative;
-    z-index: 1;
-    top: 35px;
-    left: 795px;
-    font-size: 20px;
-    border-style: hidden;
-    background-color: transparent;
-    color: white;
-    font-family: MainTitleFont;
-    padding: 5px;
-}
-
-
-#continue{
-    position: relative;
-    border-style: hidden;
-    background-color: transparent;
-    color: white;
-    font-family: MainTitleFont;
-    font-size: 20px;
-    padding: 5px;
-    text-decoration: none;
-    -webkit-animation: flash linear 1s infinite;
-    animation: flash linear 1s infinite;
-}
-
-#skip{
-    position: relative;
-    border-style: hidden;
-    background-color: transparent;
-    color: white;
-    font-family: MainTitleFont;
-    font-size: 20px;
-    padding: 5px;
-    text-decoration: none;
-}
-
-#continue, #skip:hover{
-    color: lightblue;
-}
-
 /* Flash class and keyframe animation */
 @-webkit-keyframes flash {
     0% { opacity: 1; }
@@ -227,4 +158,3 @@
     50% { opacity: .1; }
     100% { opacity: 1; }
 }
-
