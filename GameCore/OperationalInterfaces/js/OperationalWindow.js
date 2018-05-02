@@ -2,6 +2,7 @@ var g_design = [];
 $(document).ready(function(){
   var windowControl = (function(gameMode){
     var gameProject = new Project(gameMode);
+    window.gp = gameProject;
     var designW_f = false;
     var psW_f = false;
     var positionW_f = false;
@@ -67,6 +68,7 @@ $(document).ready(function(){
         if(gameMode==Mode.design){
           $("#toolBar").css("display", "flex");
           $("#font_size").parent().css("display", "inline-block");
+          $("#TutorialTab").hide();
         }else{
           $("#toolBar").hide();
           $("#font_size").parent().hide();
@@ -296,8 +298,9 @@ $(document).ready(function(){
 
               intro.start();
             };
+            $("#TutorialTab").click();
           }else{
-            $("#TutorialTab").css('display', "none");
+            $("#TutorialTab").hide();
           }
         }
       },
@@ -402,6 +405,7 @@ $(document).ready(function(){
           select.activate();
         }).click();
         $("#undo").click(function(){
+          console.log(operation_l);
           if(operation_l>0){
             operation_l-=1;
             operation_i = (operation_i-1)>-1?operation_i-1:19;
@@ -410,6 +414,7 @@ $(document).ready(function(){
               var t = project.getItem({
                 id: copy.id
               });
+              console.log(t);
               if(ops.type==0){
                 $.each(operations, function(k,op){
                   if(op){
@@ -464,6 +469,7 @@ $(document).ready(function(){
               })
               addOp(new Operation(0, op));
             }
+
             if (c=="rgba(0, 0, 0, 0)"){
               $("#fill_color").css({
                 "background": "url('images/Transparency500.png') no-repeat center center",
@@ -603,6 +609,7 @@ $(document).ready(function(){
               del();
             }
           }
+          select.onKeyDown = onKeyDown;
           function del(){
             var selected;
             var op = [];
@@ -678,9 +685,9 @@ $(document).ready(function(){
               var op = [];
               op.push({
                 id: temp.id,
-                copy: null
+                copy: temp
               });
-              addOp(1, op);
+              addOp(new Operation(1, op));
             }
           });
           line = new Tool({
@@ -702,7 +709,7 @@ $(document).ready(function(){
                 id: temp.id,
                 copy: null
               });
-              addOp(1, op);
+              addOp(new Operation(1, op));
             }
           });
           multipolygon = new Tool({
@@ -749,7 +756,7 @@ $(document).ready(function(){
                   id: temp.id,
                   copy: null
                 });
-                addOp(1, op);
+                addOp(new Operation(1, op));
                 gameProject.workingCanvas.addChild(temp);
                 multi_temp.remove();
                 multi = false;
@@ -799,9 +806,8 @@ $(document).ready(function(){
                 id: temp.id,
                 copy: null
               });
-              addOp(1, op);
+              addOp(new Operation(1, op));
               gameProject.workingCanvas.addChild(temp);
-              console.log(temp);
               moving.remove();
             }
           });
@@ -840,7 +846,7 @@ $(document).ready(function(){
                 id: temp.id,
                 copy: null
               });
-              addOp(1, op);
+              addOp(new Operation(1, op));
               gameProject.workingCanvas.addChild(temp);
               moving.remove();
             }
@@ -879,7 +885,7 @@ $(document).ready(function(){
                     id: text.id,
                     copy: null
                   });
-                  addOp(1, op);
+                  addOp(new Operation(1, op));
 
                 }
               }
@@ -1256,6 +1262,10 @@ $(document).ready(function(){
         $("#start_text").click(function(){
           updateDepthInfo();
           g_design.length = 0;
+          gameProject.saveDesign(paper.projects[0]);
+          // $.each(gameProject.workingCanvas.children, function(k,v){
+          //   g_design.push(v);
+          // })
           $.each(gameProject.workingCanvas.children, function(ind, shape){
             if(shape.data.fill.depth>0){
               g_design.push(shape);
@@ -1265,6 +1275,8 @@ $(document).ready(function(){
               t.data.fill.depth = shape.data.edge.depth;
               t.data.fill.darkness = shape.data.edge.darkness;
               g_design.push(t);
+              console.log(t.area);
+
             }else{
               if(shape.data.edge.type=='cutting'){
                 g_design.push(shape);
@@ -1279,6 +1291,7 @@ $(document).ready(function(){
               clearInterval(timer);
             }
           }, 500);
+
         })
         var ten = new CompoundPath({
           children: [
@@ -1305,13 +1318,13 @@ $(document).ready(function(){
           { cir.remove();
             cir = new  Path.Circle({
               center: ten.position,
-              radius:30-that.counter/4,
+              radius:30-that.counter,
               strokeColor: 'black',
               guide: true
             });
             noz.addChild(cir);
 
-            if(that.counter <= 80){
+            if(that.counter <= 20){
               that.counter += 1;
             }else{
               that.counter = 0;
@@ -1446,8 +1459,8 @@ $(document).ready(function(){
 
         nozzle.onMouseDown = function(e){
           if(!nozzle_moving && e.point.x>40 && e.point.y>40){
-            mv.disx = e.point.x-noz.position.x;
-            mv.disy = e.point.y-noz.position.y;
+            mv.disx = Math.floor(e.point.x-noz.position.x);
+            mv.disy = Math.floor(e.point.y-noz.position.y);
             mv.start();
           }
         }
@@ -1580,7 +1593,7 @@ $(document).ready(function(){
 
           if(v.closed){
             var first = new Segment({
-              point:v.getPointAt(2),
+              point:v.getPointAt(1),
               handleOut: v.firstSegment.handleOut
             });
             var last = new Segment({
@@ -1591,23 +1604,56 @@ $(document).ready(function(){
             v.add(last);
             v.removeSegment(0);
             v.insert(0,first);
-
           }
 
-          outerPath = OffsetUtils.offsetPath(v, offset, true);
-          innerPath = OffsetUtils.offsetPath(v, -offset, true);
+          var d1 = OffsetUtils.offsetPath(v, offset, true);
+          var d2 = OffsetUtils.offsetPath(v, -offset, true);
+
+          if(v.name=='M'){
+            console.log(d1);
+            console.log(d2);
+          }
+
+          innerPath = new Path(d1);
+          outerPath = new Path(d2);
+
 
           outerPath.reverse();
           res = outerPath.join(innerPath);
 
+
+
           res.closePath();
           res = res.unite(res);
+          res.reorient(false,true);
 
-          if(res.className == "CompoundPath"){
-            console.log('com');
+          while(res.className == "CompoundPath"){
+            var r = res.lastChild.clone();
+            var t = res.firstChild.clone();
+            r.reorient(false,false);
+            t.reorient(false,true);
+            r.splitAt(1);
+            var ta = r.getTangentAt(1);
+            r.lastSegment.clearHandles();
 
-          }else{
-            res.clockwise = true;
+            var p = t.getNearestLocation(r.firstSegment.point);
+            t.splitAt(p);
+            var ta2 = t.getTangentAt(t.length-1);
+            t.firstSegment.clearHandles();
+
+            r.join(t);
+
+            var sg =  r.lastSegment.point.add(ta.divide(4));
+            var sg2 = r.firstSegment.point.add(ta2.divide(4));
+            r.removeSegment(r.segments.length-1);
+            r.add(sg);
+
+            r.removeSegment(0);
+            r.insert(0,sg2);
+            r.reorient(false,true);
+            r.closePath();
+            res.remove();
+            var res = r;
           }
 
           return res;
@@ -1622,6 +1668,9 @@ $(document).ready(function(){
       show: function(){
         $("#mainContainer").hide();
         $("#scenceContainer").show("fold", 1000);
+        $("#backToMainPage").click(function(){
+          window.location.href = '/index.html';
+        })
       },
       init: function(){
         if(!gameProject.saved){
@@ -1672,7 +1721,6 @@ $(document).ready(function(){
               $("#review").css("display", "block");
               $("#close_review").css("display", "initial");
               for (var i = 0; i < count; i++){
-                console.log(lines[i]);
                 if(lines[i] == "Hans"){
                   $('#review').append('<div class="reviewedLines">'+'[Hans]:'+'</div>');
                 }else{
@@ -1691,6 +1739,7 @@ $(document).ready(function(){
                 move_to_next_task = false;
               }
             }).click();
+            $("#scenceContainer .skipable").hide();
           }
         }else {
           $("#scenceContainer .skipable").css("display", "none");
@@ -1725,7 +1774,7 @@ $(document).ready(function(){
   gameInit();
 
   function gameInit(){
-    resizeInterf();
+
 
     switch (gameMode) {
       case Mode.design:
@@ -1736,9 +1785,10 @@ $(document).ready(function(){
       windowControl.sceneWindow.init();
       break;
       default:
-
-      break
+      windowControl.sceneWindow.init();
+      break;
     }
+    resizeInterf();
 
     window.onresize = function(event) {resizeInterf();}
     function resizeInterf(){

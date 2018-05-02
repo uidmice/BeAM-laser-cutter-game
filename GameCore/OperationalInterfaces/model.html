@@ -9,6 +9,8 @@
   <script type="text/javascript" src="js/three.js"></script>
   <script type="text/javascript" src="js/d3-threeD.js"></script>
   <script type="text/javascript" src="js/Project.js"></script>
+  <script type="text/javascript" src="js/offset.js"></script>
+
   <script src="js/OrbitControls.js"></script>
   <style>
     #modelContainer {
@@ -57,6 +59,64 @@
   window.onresize = function(event) {
     resize();
   }
+  function etchShape3 (v) {
+    var outerPath, innerPath, res;
+    var offset = 0.5;
+
+    if(v.closed){
+      var first = new Segment({
+        point:v.getPointAt(1),
+        handleOut: v.firstSegment.handleOut
+      });
+      var last = new Segment({
+        point:v.firstSegment.point.clone(),
+        handleIn: v.firstSegment.handleIn
+      })
+      v.closed = false;
+      v.add(last);
+      v.removeSegment(0);
+      v.insert(0,first);
+
+    }
+
+    outerPath = OffsetUtils.offsetPath(v, offset, true);
+    innerPath = OffsetUtils.offsetPath(v, -offset, true);
+
+    outerPath.reverse();
+    res = outerPath.join(innerPath);
+
+    res.closePath();
+    res = res.unite(res);
+    res.reorient(false,true);
+    if(res.className == "CompoundPath"){
+      var r = res.lastChild.clone();
+      r.splitAt(1);
+      var ta = r.getTangentAt(1);
+      r.lastSegment.clearHandles();
+      var t = res.firstChild.clone();
+      t.reorient(false,true);
+      var p = t.getNearestLocation(r.firstSegment.point);
+      t.splitAt(p);
+      t.firstSegment.clearHandles();
+
+      r.join(t);
+
+      var sg =  r.lastSegment.point.add(ta);
+      var sg2 = r.firstSegment.point.add(ta);
+      r.removeSegment(r.segments.length-1);
+      r.add(sg);
+
+      r.removeSegment(0);
+      r.insert(0,sg2);
+      r.reorient(false,true);
+      r.closePath();
+      res.remove();
+
+      res = r;
+    }
+
+    return res;
+  }
   function resize(){
     var vpw = $(window).width();
     var vph = $(window).height();
@@ -80,8 +140,26 @@
   resize();
   var des = window.opener.g_design;
 
+
   $(document).ready(function(){
     paper.setup('pa');
+
+    function getDesign(designgroup){
+      var re = [];
+      $.each(designgroup, function(ind, shape){
+        console.log(ind );
+        if(shape.visible && shape.data.fill.depth==0 && shape.data.edge.depth>0 && shape.data.edge.type!='cutting'){
+          var t = etchShape3(shape);
+          t.data.fill = {};
+          t.data.fill.depth = shape.data.edge.depth;
+          t.data.fill.darkness = shape.data.edge.darkness;
+          re.push(t);
+        }else if (shape.visible){
+          re.push(shape);
+        }
+      });
+      return re;
+    }
 
     var addGeoObject = function( group, svgObject ) {
       var pathN = svgObject.length;
@@ -117,13 +195,11 @@
           var paths = SVGtransform.transformSVGPathTHREE(v.pathData).path.subPaths;
           $.each(paths, function(v, path){
             outline_shape[0].holes.push(path);
-            console.log(path);
           })
         }
       })
 
       $.each(outline_shape, function(k, sh){
-        console.log(sh.holes.length);
         var shape3d = new THREE.ExtrudeBufferGeometry( sh, {
           amount: 25.5,
           bevelEnabled: false
@@ -138,15 +214,18 @@
       //   group.add( mesh );
       // })
 
-      for ( var i = pathN-1; i >pathN-2; i--){
+      for ( var i = pathN-1; i >-1; i--){
         var p = svgObject[i];
         var tem, newpart, dep;
         var threeData,color,material, shape3d, mesh;
         if(p.data.fill.depth!=0){
           newpart = p.subtract(confirmed_area);
           confirmed_area = confirmed_area.unite(p);
+          console.log(i+":  confirmed_area:" +confirmed_area.area + "    newpart:" +newpart.area);
           dep = p.data.fill.depth*100;
-          threeData = SVGtransform.transformSVGPathTHREE(newpart.pathData).path.toShapes(true, false);
+          threeData = SVGtransform.transformSVGPathTHREE(p.pathData).path.toShapes(true, true);
+          console.log(p.area);
+
           color = new THREE.Color(0x996600);
           material = new THREE.MeshLambertMaterial( {
             color: color,
@@ -196,6 +275,8 @@
 
       var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
       scene.add( ambientLight );
+
+      //var geo = getDesign(des);
 
       addGeoObject( group, des );
 
