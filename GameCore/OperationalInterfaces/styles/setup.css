@@ -166,6 +166,7 @@ body{
   max-height: 50px;
   min-height: 40px;
   overflow:visible;
+  z-index: 5;
 }
 #main {
   position: absolute;
@@ -207,6 +208,13 @@ body{
 	}
 #close:hover { cursor: pointer; }
 #close:hover::before, #close:hover::after { display: block; }
+
+#backToMainPage {
+  position: absolute;
+  right: 2%;
+  bottom: 5%;
+  
+}
 
 
 .material-icons {

@@ -66,6 +66,16 @@ $(document).ready(function(){
     $("#new_design").click(function(){
       sendPHP("gameMode", "design");
     })
+    $("#project1").click(function(){
+      sendPHP("gameMode", "p1");
+    })
+    $("#project2").click(function(){
+      sendPHP("gameMode", "p2");
+    })
+    $("#project3").click(function(){
+      sendPHP("gameMode", "p3");
+    })
+
 
 
 });
