@@ -47,6 +47,28 @@ function paperUtil( exports ) {
 
   }
 
+  exports.transformRect = function transformRect ( x, y, width , height, options, name){
+    var path = new Path.Rectangle(new Point(x, y), new Point(x+width, y+height));
+    if(options){
+      if(options.strokeColor){
+        path.strokeColor = options.strokeColor
+      }
+
+      if(options.fillColor){
+        path.fillColor = options.fillColor;
+      }
+
+      if(options.strokeWidth){
+        path.strokeWidth = options.strokeWidth;
+      }
+    }
+    if(name){
+      path.name = name;
+    }
+    return  path;
+
+  }
+
 
 }
 
