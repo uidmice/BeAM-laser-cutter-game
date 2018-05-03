@@ -316,7 +316,6 @@ $(document).ready(function(){
             break;
             default:
             var cur = gameProject.designGraphs[gameProject.progress];
-            console.log(gameProject.progress);
             gameProject.setUpCanvas(cur.size.w, cur.size.h);
             gameProject.designInit();
             if(!designW_f){
@@ -352,14 +351,12 @@ $(document).ready(function(){
         }
         function select_by_click(e){
           e.preventDefault();
-          console.log('hit');
           var hit = paper.project.hitTest(e.point, {
             tolerance: 4,
             guides: false,
             fill: true,
             bounds: true,
             stroke: true
-
           });
           if(!e.modifiers.shift){
             paper.project.deselectAll();
@@ -372,7 +369,6 @@ $(document).ready(function(){
             }
           }
           if (hit){
-            console.log('hit!');
             if(hit.item.hasFill()){
               $("#fill_color").css('background', hit.item.fillColor.toCSS());
             }else {
@@ -390,7 +386,6 @@ $(document).ready(function(){
               $("#stroke_color").css("border","6px solid "+hit.item.strokeColor.toCSS()).css("background","white");
             }
             $("#stroke_width").val(hit.item.strokeWidth/1000);
-
             if(hit.item.className=="PointText" && gameMode==Mode.design){
               $("#font_size").val(hit.item.fontSize);
             }

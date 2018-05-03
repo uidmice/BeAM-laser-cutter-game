@@ -28,105 +28,105 @@
     </div>
   </div>
 
-<div id="container1" class="blocked">
-  <div id="projectTitle">
-    <div id="TitleText">
-      Hans'
-      Projects
-    </div>
-  </div>
-  <div id="projectContainer">
-    <div id="project1">
-      <img id="img1" src="mainMenu/image/south.jpeg" alt="logo" width="300"  style="display: block; margin: auto">
-      <button class="projectButton" id="photoframe">Photo Frame</button>
-    </div>
-    <div id="project2">
-      <img id="img2" src="mainMenu/image/genome.jpeg" alt="logo" width="300" style="display: block; margin: auto">
-      <button class="projectButton" id="coaster">Coaster</button>
-    </div>
-    <div id="first-2"></div>
-    <div id="project3">
-      <img id="img3" src="mainMenu/image/lenoir.jpeg" alt="logo" width="170" style="display: block; margin: auto">
-      <button class="projectButton" id="puzzle">Puzzle</button>
-    </div>
-    <div id="second-3"></div>
-    <div id="third-3">
-      <div class="clock-face">
-        <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
+  <div id="container1" class="blocked">
+    <div id="projectTitle">
+      <div id="TitleText">
+        Hans'
+        Projects
       </div>
     </div>
-    <div id="project4">
-      <img id="img4" src="mainMenu/image/beam_logo.png" alt="logo" width="250" style="display: block; margin: auto">
-      <button class="projectButton" id="spare">???</button>
+    <div id="projectContainer">
+      <div id="project1">
+        <img id="img1" src="mainMenu/image/south.jpeg" alt="logo" width="300"  style="display: block; margin: auto">
+        <button class="projectButton" id="photoframe">Photo Frame</button>
+      </div>
+      <div id="project2">
+        <img id="img2" src="mainMenu/image/genome.jpeg" alt="logo" width="300" style="display: block; margin: auto">
+        <button class="projectButton" id="coaster">Coaster</button>
+      </div>
+      <div id="first-2"></div>
+      <div id="project3">
+        <img id="img3" src="mainMenu/image/lenoir.jpeg" alt="logo" width="170" style="display: block; margin: auto">
+        <button class="projectButton" id="puzzle">Puzzle</button>
+      </div>
+      <div id="second-3"></div>
+      <div id="third-3">
+        <div class="clock-face">
+          <div class="hand hour-hand"></div>
+          <div class="hand min-hand"></div>
+          <div class="hand second-hand"></div>
+        </div>
+      </div>
+      <div id="project4">
+        <img id="img4" src="mainMenu/image/beam_logo.png" alt="logo" width="250" style="display: block; margin: auto">
+        <button class="projectButton" id="spare">???</button>
+      </div>
+      <div id="fourth-1">
+        <img id="img5" src="mainMenu/image/genome.jpeg" alt=""/>
+        <figcaption>Don't forget mommy's birthday!</figcaption>
+      </div>
+      <button class="" id="ProjectBack">Back</button>
     </div>
-    <div id="fourth-1">
-      <img id="img5" src="mainMenu/image/genome.jpeg" alt=""/>
-      <figcaption>Don't forget mommy's birthday!</figcaption>
-    </div>
-    <button class="" id="ProjectBack">Back</button>
   </div>
-</div>
 
-<div id="container2" class="blocked">
-  <div id="container">
-    <div id="character" class="skipable"></div>
-    <div id="char_head" class="skipable"></div>
-    <div id="dialogBox" class="skipable"></div>
-    <div id="review" style="display: none">
-    </div>
-    <button id="close_review" style="display: none">back</button>
-    <div id="menu" class="skipable">
-      <button type="button" id="skip">Skip</button>
-      <button type="button" id="toReview"  >Review</button>
+  <div id="container2" class="blocked">
+    <div id="container">
+      <div id="character" class="skipable"></div>
+      <div id="char_head" class="skipable"></div>
+      <div id="dialogBox" class="skipable"></div>
+      <div id="review" style="display: none">
+      </div>
+      <button id="close_review" style="display: none">back</button>
+      <div id="menu" class="skipable">
+        <button type="button" id="skip">Skip</button>
+        <button type="button" id="toReview"  >Review</button>
+      </div>
     </div>
   </div>
-</div>
-<script>
-function sendPHP(k,s){
-  var form = document.createElement('form');
-  form.style.visibility = 'hidden';
-  form.method = 'GET'; // forms by default use GET query strings
-  form.action = 'GameCore/OperationalInterfaces/gameInterface.php';
-  var input = document.createElement('input');
-  input.name = k;
-  input.value = s;
-  form.appendChild(input);
-  document.body.appendChild(form);
-  form.submit();
-}
-
-function resizeW(){
-  var vpw = $(window).width();
-  var vph = $(window).height();
-  var w = vph*1280/800;
-  if(vpw>w){
-    vpw=w;
-  }else{
-    vph = vpw*800/1280;
+  <script>
+  function sendPHP(k,s){
+    var form = document.createElement('form');
+    form.style.visibility = 'hidden';
+    form.method = 'GET'; // forms by default use GET query strings
+    form.action = 'GameCore/OperationalInterfaces/gameInterface.php';
+    var input = document.createElement('input');
+    input.name = k;
+    input.value = s;
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
   }
 
-  if (vph<400){
-    vph = 400;
-    vpw=640;
-  }
-  $("#container0").css({
-    "height": vph + "px",
-    "width" : vpw + "px"
-  });
-  $("#container1").css({
-    "height": vph + "px",
-    "width" : vpw + "px"
-  });
-  $("#container2").css({
-    "height": vph + "px",
-    "width" : vpw + "px"
-  });
-}
+  function resizeW(){
+    var vpw = $(window).width();
+    var vph = $(window).height();
+    var w = vph*1280/800;
+    if(vpw>w){
+      vpw=w;
+    }else{
+      vph = vpw*800/1280;
+    }
 
-window.onresize = function(event) {resizeW();}
-resizeW();
+    if (vph<400){
+      vph = 400;
+      vpw=640;
+    }
+    $("#container0").css({
+      "height": vph + "px",
+      "width" : vpw + "px"
+    });
+    $("#container1").css({
+      "height": vph + "px",
+      "width" : vpw + "px"
+    });
+    $("#container2").css({
+      "height": vph + "px",
+      "width" : vpw + "px"
+    });
+  }
+
+  window.onresize = function(event) {resizeW();}
+  resizeW();
 </script>
 
 
