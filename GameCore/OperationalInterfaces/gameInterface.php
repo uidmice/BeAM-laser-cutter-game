@@ -14,30 +14,38 @@
   <link rel="stylesheet" type= "text/css" href="styles/dialogStyleTutorial.css">
   <link href="../../intro/introjs.css" rel="stylesheet">
 
-<script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
-<script type="text/javascript" src="../../jquery-ui/jquery-ui.min.js"></script>
-<script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
-<script type="text/javascript" src="js/three.js"></script>
+  <script type="text/javascript" src="../../jquery-ui/external/jquery.js"></script>
+  <script type="text/javascript" src="../../jquery-ui/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="../../paperjs/dist/paper-full.js"></script>
 
-<script type="text/javascript" src="js/d3-threeD.js"></script>
-<script type="text/javascript" src="js/Project.js"></script>
-<script type="text/javascript" src="js/OperationalWindow.js"></script>
-<script type="text/javascript" src="js/function.js"></script>
-<script>
-var gameMode;
-(function() {
-  var x = "<?php echo ( isset( $_GET['gameMode'] ) && $_GET['gameMode'] != '') ? $_GET['gameMode'] : '';?>";
-  switch (x) {
-    case 'tutorial':
+  <script type="text/javascript" src="js/paperUtil.js"></script>
+  <script type="text/javascript" src="js/offset.js"></script>
+  <script type="text/javascript" src="js/Project.js"></script>
+  <script type="text/javascript" src="js/OperationalWindow.js"></script>
+  <script type="text/javascript" src="js/function.js"></script>
+  <script>
+  var gameMode;
+  (function() {
+    var x = "<?php echo ( isset( $_GET['gameMode'] ) && $_GET['gameMode'] != '') ? $_GET['gameMode'] : '';?>";
+    switch (x) {
+      case 'tutorial':
       gameMode = Mode.tutorial;
       break;
-    case 'design':
+      case 'design':
       gameMode = Mode.design;
       break;
-    default:
-      gameMode = Mode.design;
-  }
-})();
+      case 'p1':
+      gameMode = Mode.project1;
+      break;
+      case 'p2':
+      gameMode = Mode.project2;
+      break;
+      case 'p3':
+      gameMode = Mode.project3;
+      break;
+
+    }
+  })();
 </script>
 </head>
 <body>
@@ -59,6 +67,9 @@ var gameMode;
         <button type="button" id="skip">Skip</button>
         <button type="button" id="toReview"  >Review</button>
       </div>
+      <div id="backToMainPage">
+        <button class="w3-button w3-red">return</button>
+      </div>
     </div>
     <div id='overlay'></div>
     <div id="mainContainer">
@@ -66,7 +77,7 @@ var gameMode;
         <span id="DesignTab" class="w3-bar-item w3-tab " >Design</span>
         <span id="PsTab" class="w3-bar-item w3-tab " >Manual Control</span>
         <span id="PositionTab" class="w3-bar-item w3-tab">Viewer</span>
-        <button class="w3-button w3-left w3-hover-red" id="TutorialTab">Tutorial</button>
+        <button class="w3-button w3-left w3-hover-red" id="TutorialTab">Help</button>
       </div>
       <div id="screenTop"></div>
       <div id="screenTopLeft"></div>
@@ -150,12 +161,8 @@ var gameMode;
               <span>pt</span>
             </div>
             <div id="print" class="top_manu">
-              <i class="material-icons">navigate_next</i>
-<<<<<<< HEAD:GameCore/OperationalInterfaces/index_new.html
-              <p>Done</p>
-=======
-              <p>Send To Laser Cutter!</p>
->>>>>>> b6f728faf47dfa86758f73e24512ad7474fac023:GameCore/OperationalInterfaces/gameInterface.php
+              <i class="material-icons">print</i>
+              <p>Print</p>
             </div>
           </div>
 
@@ -216,10 +223,10 @@ var gameMode;
                     Blue
                   </td>
                   <td>
-                      <select id="mySelectblue">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectblue">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="bluePower">50</span>%</th>
                   <th><span id="blueSpeed">60</span>%</th>
@@ -233,10 +240,10 @@ var gameMode;
                     Black
                   </td>
                   <td>
-                      <select id="mySelectblack">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectblack">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="blackPower">50</span>%</th>
                   <th><span id="blackSpeed">60</span>%</th>
@@ -250,10 +257,10 @@ var gameMode;
                     Orange
                   </td>
                   <td>
-                      <select id="mySelectorange">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectorange">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="orangePower">50</span>%</th>
                   <th><span id="orangeSpeed">60</span>%</th>
@@ -267,10 +274,10 @@ var gameMode;
                     Green
                   </td>
                   <td>
-                      <select id="mySelectgreen">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectgreen">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="greenPower">50</span>%</th>
                   <th><span id="greenSpeed">60</span>%</th>
@@ -284,10 +291,10 @@ var gameMode;
                     Cyan
                   </td>
                   <td>
-                      <select id="mySelectcyan">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectcyan">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="cyanPower">50</span>%</th>
                   <th><span id="cyanSpeed">60</span>%</th>
@@ -301,10 +308,10 @@ var gameMode;
                     Magenta
                   </td>
                   <td>
-                      <select id="mySelectmagenta">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectmagenta">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="magentaPower">50</span>%</th>
                   <th><span id="magentaSpeed">60</span>%</th>
@@ -318,10 +325,10 @@ var gameMode;
                     Yellow
                   </td>
                   <td>
-                      <select id="mySelectyellow">
-                          <option value="Rast/Vect">Rast/Vect</option>
-                          <option value="Skip">Skip</option>
-                      </select>
+                    <select id="mySelectyellow">
+                      <option value="Rast/Vect">Rast/Vect</option>
+                      <option value="Skip">Skip</option>
+                    </select>
                   </td>
                   <th><span id="yellowPower">50</span>%</th>
                   <th><span id="yellowSpeed">60</span>%</th>
@@ -398,7 +405,6 @@ var gameMode;
                 <button class="w3-btn w3-red  w3-round w3-small w3-ripple" id="start_text" >Start</button>
                 <button class="w3-btn w3-red  w3-round w3-small w3-ripple" id="back">Back</button>
               </div>
-
             </div>
           </div>
         </div>

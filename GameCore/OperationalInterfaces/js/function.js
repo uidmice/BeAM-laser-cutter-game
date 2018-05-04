@@ -38,8 +38,7 @@ function close_pop_up(){
   overdiv.empty();
 }
 
-
-function create_new_file(currentProject){
+function create_new_file(currentProject, init_function){
   var create_new_file_win = $("<div></div>");
   create_new_file_win.html('<label for="height">Height:</label><input id="height" type="number" name="height" step="0.5" min="1" max="24" value="5" required><span class="validity"></span><select style="margin-left: 40px"><option>Inches</option><option>Points</option></select><br/><label for="width">Width:</label><input id="width" type="number" name="width" step="0.5" min="1" max="36" value="5" required><span class="validity"><br/></span><label for="mode">Color Mode:</label><select name="mode"><option>CYMK</option><option>RGB</option></select><br>');
   var txtCSS = {
@@ -59,6 +58,7 @@ function create_new_file(currentProject){
     "margin-top": "20px"
 
   }
+
   create_new_file_win.css("text-align","left");
   create_new_file_win.find("label").css(txtCSS);
   create_new_file_win.find("input").css(inputCSS);
@@ -91,15 +91,13 @@ function create_new_file(currentProject){
     }
     currentProject.setUpCanvas(w, h);
     close_pop_up();
+    init_function();
   });
 
   create_new_file_win.append(sbmt);
-
-
   pop_up_window("New File", create_new_file_win,"250px","400px");
+
 }
-
-
 var downloadSVG = function(svg) {
   parseStyles(svg);
 

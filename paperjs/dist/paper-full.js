@@ -9864,8 +9864,11 @@ PathItem.inject(new function() {
 
 	function traceBoolean(path1, path2, operation, options) {
 		if (options && (options.trace == false || options.stroke) &&
-				/^(subtract|intersect)$/.test(operation))
-			return splitBoolean(path1, path2, operation);
+				/^(subtract|intersect)$/.test(operation)){
+
+  			return splitBoolean(path1, path2, operation);
+        }
+
 		var _path1 = preparePath(path1, true),
 			_path2 = path2 && path1 !== path2 && preparePath(path2, true),
 			operator = operators[operation];
@@ -9915,6 +9918,8 @@ PathItem.inject(new function() {
 						return !!operator[w];
 					});
 		}
+
+    console.log('c');
 
 		return createResult(paths, true, path1, path2, options);
 	}

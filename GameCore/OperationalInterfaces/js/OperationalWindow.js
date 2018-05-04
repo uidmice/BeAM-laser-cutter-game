@@ -2,6 +2,7 @@ var g_design = [];
 $(document).ready(function(){
   var windowControl = (function(gameMode){
     var gameProject = new Project(gameMode);
+    window.gp = gameProject;
     var designW_f = false;
     var psW_f = false;
     var positionW_f = false;
@@ -11,9 +12,41 @@ $(document).ready(function(){
     // Yingnan Wu Editing
     var fct = 0;
     var openFlag = false;
+    function updateDepthInfo(){
+      $.each(gameProject.workingCanvas.children, function(k, v){
+        v.data.edge = {};
+        v.data.fill = {};
+        if(!v.hasFill()){
+          v.data.fill.depth=0;
+          v.data.fill.darkness = 0;
+        }else{
+          var c = parseColor(v.fillColor.toCSS());
+          var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
+          v.data.fill.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
+          v.data.fill.darkness = (d>0 && d<2)? d: 2;
+        }
+
+        if(!v.hasStroke()){
+          v.data.edge.type='etching';
+          v.data.edge.depth = 0;
+          v.data.edge.darkness = 0;
+        }else if(v.strokeWidth>1  ){
+          v.data.edge.type='rastering';
+          var c = parseColor(v.strokeColor.toCSS());
+          var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
+          v.data.edge.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
+          v.data.edge.darkness = (d>0 && d<2)? d: 2;
+        }else{
+          var c = parseColor(v.strokeColor.toCSS());
+          var d = Number($("#"+c+"Depth").text());
+          v.data.edge.type = (d>0.255) ? "cutting": "etching";
+          v.data.edge.depth = d>0.225 ? 0.225 : d;
+          v.data.edge.darkness = 0;
+        }
+      })
+    }
     // Yingnan Wu Editing
     var designWindow =  {
-
       show : function (gameMode) {
         $("#scenceContainer").hide();
         $("#gameContainer").show();
@@ -35,12 +68,12 @@ $(document).ready(function(){
         if(gameMode==Mode.design){
           $("#toolBar").css("display", "flex");
           $("#font_size").parent().css("display", "inline-block");
+          $("#TutorialTab").hide();
         }else{
           $("#toolBar").hide();
           $("#font_size").parent().hide();
 
           if(gameMode==Mode.tutorial){
-            //-----------------------------------------------------------------
             $("#TutorialTab").click(function(){
               if(!openFlag){
                 $("#leftMenu").show("slide");
@@ -48,7 +81,6 @@ $(document).ready(function(){
               }else{
                 closeLeftMenu();
               }
-              //-----------------------------------------------------------------
             });
 
             function closeLeftMenu() {
@@ -240,26 +272,29 @@ $(document).ready(function(){
 
               intro.start();
             };
+            $("#TutorialTab").click();
           }else{
-            $("#TutorialTab").css('display', "none");
+            $("#TutorialTab").hide();
           }
         }
       },
 
-      canvasSetUp: function(gameMode, progress){
+      canvasSetUp: function(init_function){
         if(move_to_next_task){
           switch (gameMode) {
             case Mode.design:
             $("#new_file").click(function(){
-              create_new_file(gameProject);
+              create_new_file(gameProject, init_function);
             });
             $("#new_file").click();
             break;
-
             default:
-            var cur = gameProject.designGraphs[progress];
+            var cur = gameProject.designGraphs[gameProject.progress];
             gameProject.setUpCanvas(cur.size.w, cur.size.h);
             gameProject.designInit();
+            if(!designW_f){
+              init_function();
+            }
             break;
           }
           move_to_next_task = false;
@@ -269,7 +304,7 @@ $(document).ready(function(){
 
       },
 
-      init: function(gameMode){
+      init: function(){
         var Operation = function(type, copys){
           this.type = type;
           this.copys = copys;
@@ -292,15 +327,10 @@ $(document).ready(function(){
           e.preventDefault();
           var hit = paper.project.hitTest(e.point, {
             tolerance: 4,
-            fill: true,
-            bounds:true,
-            stoke: true,
-            segments: true,
-            curves: true,
             guides: false,
-            matches: function(item){
-              return ((item.clipMask ==false))
-            }
+            fill: true,
+            bounds: true,
+            stroke: true
           });
           if(!e.modifiers.shift){
             paper.project.deselectAll();
@@ -313,7 +343,6 @@ $(document).ready(function(){
             }
           }
           if (hit){
-            console.log(hit.item.id);
             if(hit.item.hasFill()){
               $("#fill_color").css('background', hit.item.fillColor.toCSS());
             }else {
@@ -331,13 +360,12 @@ $(document).ready(function(){
               $("#stroke_color").css("border","6px solid "+hit.item.strokeColor.toCSS()).css("background","white");
             }
             $("#stroke_width").val(hit.item.strokeWidth/1000);
-
             if(hit.item.className=="PointText" && gameMode==Mode.design){
               $("#font_size").val(hit.item.fontSize);
             }
           }
         }
-        select = new paper.Tool();
+        select = new Tool();
         select.onMouseDown = select_by_click;
         $("#select").click(function(){
           paper.project.deselectAll();
@@ -346,6 +374,7 @@ $(document).ready(function(){
           select.activate();
         }).click();
         $("#undo").click(function(){
+          console.log(operation_l);
           if(operation_l>0){
             operation_l-=1;
             operation_i = (operation_i-1)>-1?operation_i-1:19;
@@ -354,6 +383,7 @@ $(document).ready(function(){
               var t = project.getItem({
                 id: copy.id
               });
+              console.log(t);
               if(ops.type==0){
                 $.each(operations, function(k,op){
                   if(op){
@@ -408,6 +438,7 @@ $(document).ready(function(){
               })
               addOp(new Operation(0, op));
             }
+
             if (c=="rgba(0, 0, 0, 0)"){
               $("#fill_color").css({
                 "background": "url('images/Transparency500.png') no-repeat center center",
@@ -424,6 +455,8 @@ $(document).ready(function(){
                 v.fillColor.alpha = 1;
               })
             }
+            $("#fill_color").removeClass();
+            $("#fill_color").addClass(c);
             $("#fill_color_dropdown").removeClass('show');
           }
 
@@ -474,8 +507,6 @@ $(document).ready(function(){
               $.each(project.selectedItems, function(k, v){
                 v.strokeColor.alpha = 0;
               })
-              $("#stroke_color").removeClass();
-              $("#stroke_color").addClass(c);
             }else{
               $("#stroke_color").css("border","6px solid "+c).css("background","white");
               $.each(project.selectedItems, function(k, v){
@@ -483,6 +514,8 @@ $(document).ready(function(){
                 v.strokeColor.alpha = 1;
               })
             }
+            $("#stroke_color").removeClass();
+            $("#stroke_color").addClass(c);
             $("#stroke_color_dropdown").removeClass('show');
           }
         })
@@ -518,25 +551,17 @@ $(document).ready(function(){
           sceneWindow.show();
         })
         if(gameMode==Mode.design){
-          pencil = new Tool();
-          line = new Tool();
-          rectangle = new Tool();
-          ellipse = new Tool();
-          brush = new Tool();
-          eraser = new Tool();
-          move = new Tool();
-          text = new Tool();
-          multipolygon = new Tool();
-
           var mouseX, mouseY;
           $( document ).on("mousemove",function(event){
             mouseX=event.pageX ;
             mouseY=event.pageY ;
           });
-
-          var temp;
+          var temp, text_p;
           var moving, p1, p2;
           var move_tool_flag = false;
+          var multi_temp = null;
+          var multi = false;
+          var hasInput = false;
           function onMouseDown(event) {
             event.preventDefault();
             temp = new Path();
@@ -550,145 +575,298 @@ $(document).ready(function(){
           function onKeyDown(e){
             e.preventDefault();
             if((e.key=="delete")||(e.key=="backspace")){
-              if(project.selectedItems.length>0){
-                var selected = project.selectedItems;
-                var l = selected.length;
-                for (var i = l-1; i>=0; i--){
-                  selected[i].remove();
-                }
-              }
+              del();
             }
           }
-
-          pencil.onMouseDown = onMouseDown;
-          pencil.onMouseDrag = function(e){
-            e.preventDefault();
-            if(temp)
-            temp.add(e.point);
+          select.onKeyDown = onKeyDown;
+          function del(){
+            var selected;
+            var op = [];
+            if (selected = project.selectedItems){
+              $.each(project.selectedItems, function(k,v){
+                v.visible = false;
+                v.selected = false;
+                op.push({
+                  id: v.id,
+                  copy: v
+                })
+              })
+              addOp(new Operation(-1, op));
+            }
+            $("#move").click();
           }
-          pencil.onMouseUp = function (e){
-            e.preventDefault();
-            if(temp){
+
+          move = new Tool({
+            minDistance: 5,
+            onMouseDown: function(e){
+              e.preventDefault();
+              select_by_click(e);
+              var hit = project.hitTest(e.point, {
+                tolerance: 4,
+                fill: true,
+                stoke: true,
+                segments: true,
+                curves: true
+              });
+              if(hit){
+                var op = [];
+                $.each(project.selectedItems, function(k,v){
+                  op.push({
+                    id: v.id,
+                    copy: v.clone({insert: false})
+                  })
+                })
+                addOp(new Operation(0, op));
+              }
+              move_tool_flag = true;
+            },
+            onMouseDrag: function (e){
+              e.preventDefault();
+              if(move_tool_flag){
+                $.each(project.selectedItems, function(k, v){
+                  v.position.x = v.position.x + e.delta.x;
+                  v.position.y = v.position.y + e.delta.y;
+                })
+              }
+            },
+            onMouseUp: function (e){
+              e.preventDefault();
+              if(move_tool_flag){
+                move_tool_flag=false;
+              }
+            },
+            onKeyDown: onKeyDown
+          });
+          pencil = new Tool({
+            onMouseDown: onMouseDown,
+            onMouseDrag: function(e){
+              e.preventDefault();
+              if(temp)
+              temp.add(e.point);
+            },
+            onMouseUp: function(e){
+              e.preventDefault();
+              if(temp){
+                temp.add(e.point);
+                temp.guide = false;
+                temp.simplify();
+                moving.remove();
+              }
+              var op = [];
+              op.push({
+                id: temp.id,
+                copy: temp
+              });
+              addOp(new Operation(1, op));
+            }
+          });
+          line = new Tool({
+            onMouseDown: onMouseDown,
+            onMouseDrag: function(e){
+              e.preventDefault();
+              moving.removeSegments(1);
+              moving.strokeColor = new Color($("#stroke_color").attr('class'));
+              moving.strokeWidth = $("#stroke_width").val()*1000;
+              moving.add(e.point);
+            },
+            onMouseUp: function(e){
+              e.preventDefault();
               temp.add(e.point);
               temp.guide = false;
               moving.remove();
+              var op = [];
+              op.push({
+                id: temp.id,
+                copy: null
+              });
+              addOp(new Operation(1, op));
             }
-
-          };
-
-          line.onMouseDown=onMouseDown;
-          line.onMouseDrag=function(e){
-            e.preventDefault();
-            moving.removeSegments(1);
-            moving.strokeColor = new Color($("#stroke_color").attr('class'));
-            moving.strokeWidth = $("#stroke_width").val()*1000;
-            moving.add(e.point);
-          }
-          line.onMouseUp = function(e){
-            e.preventDefault();
-            temp.add(e.point);
-            temp.guide = false;
-            moving.remove();
-          }
-
-          var multi_temp = null;
-          var multi = false;
-          multipolygon.onMouseDown = function (e){
-            e.preventDefault();
-            if (!multi){
-              if(multi_temp){
-                multi_temp.remove();
+          });
+          multipolygon = new Tool({
+            onMouseDown: function (e){
+              e.preventDefault();
+              if (!multi){
+                if(multi_temp){
+                  multi_temp.remove();
+                }
+                multi_temp = new Path();
+                multi_temp.guide=false;
+                multi_temp.strokeColor = new Color($("#stroke_color").attr('class'));
+                multi_temp.strokeWidth = $("#stroke_width").val()*1000;
+                multi = true;
               }
-              multi_temp = new Path();
-              multi_temp.guide=false;
-              multi_temp.strokeColor = new Color($("#stroke_color").attr('class'));
-              multi_temp.strokeWidth = $("#stroke_width").val()*1000;
-              multi = true;
-            }
-            if(moving){
-              moving.remove();
-            }
-            multi_temp.add(e.point);
-            p1=e.point;
-
-            if(e.modifiers.shift){
-              this.deactivate();
-            }
-          }
-          multipolygon.onMouseMove = function(e){
-            e.preventDefault();
-            if(moving){
-              moving.remove();
-            }
-            if(multi){
-              moving = new Path();
-              moving.strokeColor =new Color($("#stroke_color").attr('class'));
-              moving.strokeWidth = $("#stroke_width").val()*1000;
-              moving.add(p1);
-              moving.add(e.point);
-
-            }
-          }
-          multipolygon.deactivate = function(){
-            if(multi){
-              gameProject.workingCanvas.addChild(multi_temp.clone());
-              multi_temp.remove();
-              multi = false;
               if(moving){
                 moving.remove();
               }
-            }
+              multi_temp.add(e.point);
+              p1=e.point;
 
-          }
-
-          rectangle.onMouseDown = function(e){
-            e.preventDefault();
-            p1 = e.point;
-          }
-          rectangle.onMouseDrag = function (e){
-            e.preventDefault();
-            p2=e.point;
-            if(e.modifiers.shift){
-              var width = p2.x-p1.x;
-              var height = p2.y-p1.y;
-
-              if(Math.abs(width)<Math.abs(height)){
-                height = height * Math.abs(width)/Math.abs(height);
-              }else{
-                width = width *Math.abs(height)/Math.abs(width);
+              if(e.modifiers.shift){
+                this.deactivate();
               }
-
-              p2 = new Point(p1.x+width, p1.y+height);
+            },
+            onMouseMove: function(e){
+              e.preventDefault();
+              if(moving){
+                moving.remove();
+              }
+              if(multi){
+                moving = new Path();
+                moving.strokeColor =new Color($("#stroke_color").attr('class'));
+                moving.strokeWidth = $("#stroke_width").val()*1000;
+                moving.add(p1);
+                moving.add(e.point);
+              }
+            },
+            deactivate: function(){
+              if(multi){
+                temp = multi_temp.clone();
+                var op = [];
+                op.push({
+                  id: temp.id,
+                  copy: null
+                });
+                addOp(new Operation(1, op));
+                gameProject.workingCanvas.addChild(temp);
+                multi_temp.remove();
+                multi = false;
+                if(moving){
+                  moving.remove();
+                }
+              }
             }
-            if(moving){
+          });
+          rectangle = new Tool({
+            onMouseDown: function(e){
+              e.preventDefault();
+              p1 = e.point;
+            },
+            onMouseDrag: function (e){
+              e.preventDefault();
+              p2=e.point;
+              if(e.modifiers.shift){
+                var width = p2.x-p1.x;
+                var height = p2.y-p1.y;
+
+                if(Math.abs(width)<Math.abs(height)){
+                  height = height * Math.abs(width)/Math.abs(height);
+                }else{
+                  width = width *Math.abs(height)/Math.abs(width);
+                }
+
+                p2 = new Point(p1.x+width, p1.y+height);
+              }
+              if(moving){
+                moving.remove();
+              }
+              moving = new Path.Rectangle(p1, p2);
+              moving.strokeColor = new Color($("#stroke_color").attr('class'));
+              moving.fillColor = new Color($("#fill_color").attr('class'));
+              moving.strokeWidth = $("#stroke_width").val()*1000;
+            },
+            onMouseUp: function (e){
+              e.preventDefault();
+              temp = new Path.Rectangle(p1, p2);
+              temp.strokeColor = new Color($("#stroke_color").attr('class'));
+              temp.strokeWidth = $("#stroke_width").val()*1000;
+              temp.fillColor = new Color($("#fill_color").attr('class'));
+              temp.guide = false;
+              var op = [];
+              op.push({
+                id: temp.id,
+                copy: null
+              });
+              addOp(new Operation(1, op));
+              gameProject.workingCanvas.addChild(temp);
               moving.remove();
             }
-            moving = new Shape.Rectangle(p1, p2);
-            moving.strokeColor = stroke_color;
-            moving.strokeWidth = stroke_width;
-            if(fill_color){
-              moving.fillColor = fill_color;
+          });
+          ellipse = new Tool({
+            onMouseDown: function(e){
+              e.preventDefault();
+              p1 = e.point;
+            },
+            onMouseDrag: function (e){
+              e.preventDefault();
+              p2=e.point;
+              var width = p2.x-p1.x;
+              var height = p2.y-p1.y;
+              if(e.modifiers.shift){
+                if(Math.abs(width)<Math.abs(height)){
+                  height = width;
+                }else{
+                  width = height;
+                }
+              }
+              var rect = new Rectangle(new Point(p1.x+width, p1.y+height), new Point(p1.x-width, p1.y-height));
+              if(moving){
+                moving.remove();
+              }
+              moving = new Path.Ellipse(rect);
+              moving.strokeColor = new Color($("#stroke_color").attr('class'));
+              moving.fillColor = new Color($("#fill_color").attr('class'));
+              moving.strokeWidth = $("#stroke_width").val()*1000;
+            },
+            onMouseUp: function(e){
+              e.preventDefault();
+              temp = moving.clone();
+              temp.guide = false;
+              var op = [];
+              op.push({
+                id: temp.id,
+                copy: null
+              });
+              addOp(new Operation(1, op));
+              gameProject.workingCanvas.addChild(temp);
+              moving.remove();
             }
-          }
-          rectangle.onMouseUp=function (e){
-            e.preventDefault();
-            var layer = new Layer();
-            layer.activate();
-            var rect = new Shape.Rectangle(p1, p2);
-            rect.strokeColor = stroke_color;
-            rect.strokeWidth = stroke_width;
-            if(fill_color){
-              rect.fillColor = fill_color
-            }else{
-              rect.fillColor = "black";
-              rect.fillColor.alpha=0.001;
-            }
-            rect.guide = true;
-            canvas.addChild(rect);
-            operations.push(rect);
-            moving.remove();
-          }
+          });
+          text = new Tool({
+            onMouseDown: function(e){
+              e.preventDefault();
+              if(!hasInput){
+                text_p = e.point;
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.style.position = 'fixed';
+                input.style.left = mouseX+"px";
+                input.style.top = mouseY+"px";
+                input.style.zIndex=99;
+                hasInput = true;
+                input.onkeydown = Enter;
+                document.body.appendChild(input);
+                input.focus();
+              }
+              function Enter(a){
+                var keyCode = a.keyCode;
+                if (keyCode === 13) {
+                  var content = this.value.toString();
+                  var text = new PointText(text_p);
+                  text.strokeColor = Color($("#stroke_color").attr('class'));
+                  text.fillColor = Color($("#fill_color").attr('class'));
+                  text.content = content;
+                  text.bounds.topLeft = text_p;
+                  text.guide = false;
+                  gameProject.workingCanvas.addChild(text);
+                  document.body.removeChild(this);
+                  hasInput = false;
+                  var op = [];
+                  op.push({
+                    id: text.id,
+                    copy: null
+                  });
+                  addOp(new Operation(1, op));
 
+                }
+              }
+            }
+          });
+          $("#move").click(function(){
+            multipolygon.deactivate();
+            move.activate();
+            $(".selected").removeClass("selected");
+            $("#move").addClass("selected");
+          });
           $("#pencil").click(function(){
             project.deselectAll();
             multipolygon.deactivate();
@@ -710,11 +888,23 @@ $(document).ready(function(){
             $(".selected").removeClass("selected");
             $("#multipolygon").addClass("selected");
           });
+          $("#rectangle").click(function(){
+            project.deselectAll();
+            multipolygon.deactivate();
+            rectangle.activate();
+            $(".selected").removeClass("selected");
+            $("#rectangle").addClass("selected");
+          });
+          $("#ellipse").click(function(){
+            project.deselectAll();
+            multipolygon.deactivate();
+            ellipse.activate();
+            $(".selected").removeClass("selected");
+            $("#ellipse").addClass("selected");
+          });
           $("#delete").click(function(){
             multipolygon.deactivate();
             del();
-            $(".selected").removeClass("selected");
-            $("#move").addClass("selected");
           });
           $("#text").click(function(){
             multipolygon.deactivate();
@@ -723,12 +913,7 @@ $(document).ready(function(){
             $(".selected").removeClass("selected");
             $("#text").addClass("selected");
           });
-
-
-
-
         }
-
         designW_f = true;
 
 
@@ -738,7 +923,7 @@ $(document).ready(function(){
       show : function(){
         $(".PositionPage").hide();
         $(".DesignPage").hide();
-        $(".PsPage").show("fade");
+        $(".PsPage").show();
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#PsTab").addClass("w3-red");
         pp_f = true;
@@ -783,26 +968,26 @@ $(document).ready(function(){
             changeColor(color,power,speed);
             disableSlider(PsSelected);
           }else{
-              disableSlider(PsSelected);
+            disableSlider(PsSelected);
             PsSelected = null;
             $(this).toggleClass('PsSelect');
           }
         });
 
         function disableSlider(selectedColor){
-            var id = "mySelect"+selectedColor;
-            //console.log(id);
-            var ps_mode = document.getElementById(id).value;
+          var id = "mySelect"+selectedColor;
+          //console.log(id);
+          var ps_mode = document.getElementById(id).value;
 
-            if(ps_mode === "Skip"){
-                document.getElementById("powerRange").disabled = true;
-                document.getElementById("speedRange").disabled = true;
-                document.getElementById(selectedColor).style.color = "grey";
-            }else{
-                document.getElementById("powerRange").disabled = false;
-                document.getElementById("speedRange").disabled = false;
-                document.getElementById(selectedColor).style.color = "black";
-            }
+          if(ps_mode === "Skip"){
+            document.getElementById("powerRange").disabled = true;
+            document.getElementById("speedRange").disabled = true;
+            document.getElementById(selectedColor).style.color = "grey";
+          }else{
+            document.getElementById("powerRange").disabled = false;
+            document.getElementById("speedRange").disabled = false;
+            document.getElementById(selectedColor).style.color = "black";
+          }
         }
 
         function changeColor(color, power,speed){
@@ -857,40 +1042,6 @@ $(document).ready(function(){
           $(".input-color").find('span[id*="Depth"]').html("0.028");
         }
 
-        function updateDepthInfo(){
-          $.each(gameProject.workingCanvas.children, function(k, v){
-            v.data.edge = {};
-            v.data.fill = {};
-            if(!v.hasFill()){
-              v.data.fill.depth=0;
-              v.data.fill.darkness = 0;
-            }else{
-              var c = parseColor(v.fillColor.toCSS());
-              var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.fill.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
-              v.data.fill.darkness = (d>0 && d<2)? d: 2;
-            }
-
-            if(!v.hasStroke()){
-              v.data.edge.type='etching';
-              v.data.edge.depth = 0;
-              v.data.edge.darkness = 0;
-            }else if(v.strokeWidth>1  ){
-              v.data.edge.type='rastering';
-              var c = parseColor(v.strokeColor.toCSS());
-              var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-              v.data.edge.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
-              v.data.edge.darkness = (d>0 && d<2)? d: 2;
-            }else{
-              var c = parseColor(v.strokeColor.toCSS());
-              var d = Number($("#"+c+"Depth").text());
-              v.data.edge.type = (d>0.255) ? "cutting": "etching";
-              v.data.edge.depth = d>0.225 ? 0.225 : d;
-              v.data.edge.darkness = 0;
-            }
-          })
-        }
-
         function checkSetting(){
           $.each(gameProject.cutting, function(k, v){
             if (v.data.edge.type!='cutting'){
@@ -941,7 +1092,7 @@ $(document).ready(function(){
       setUpCanvas: function(){
         $("#PositionCanvasContainer").append($("<canvas id='positionCanvas' height='"+(2400/2.5+40)+"px' width='"+(3600/2.5+40)+"px'></canvas>"));
 
-        if(paper.projects.length<2*(gameProject.progress+1)){
+        if(paper.projects.length<2){
           paper.setup('positionCanvas');
 
           var board_topLeft = new Point(40,40);
@@ -997,16 +1148,17 @@ $(document).ready(function(){
           }
 
         }else {
-          paper.projects[2*gameProject.progress+1].activate();
+          paper.projects[1].activate();
         }
 
         if(new_file){
           $.each(project.getItems({class: Raster}), function(k,v){
             v.remove();
           });
-          var pic = project.importSVG(gameProject.saved);
+          var pic = gameProject.workingCanvas.clone();
           var item = pic.rasterize(100);
           pic.remove();
+          paper.project.activeLayer.addChild(item);
           item.scale(0.4);
           new_file = false;
 
@@ -1078,28 +1230,46 @@ $(document).ready(function(){
           psWindow.show();
         })
         $("#start_text").click(function(){
+          updateDepthInfo();
           g_design.length = 0;
+          gameProject.saveDesign(paper.projects[0]);
+          // $.each(gameProject.workingCanvas.children, function(k,v){
+          //   g_design.push(v);
+          // })
           $.each(gameProject.workingCanvas.children, function(ind, shape){
-            if(shape.data.edge.type=='cutting'){
-              g_design.push(shape);
-              var t = etchShape(shape);
-              t.guide = true;
-              t.data.fill = {};
-              t.data.fill.depth = 0.255;
-              g_design.push(t);
-            }else{
+            if (shape.visible){
               if(shape.data.fill.depth>0){
+                shape.reorient(false, true);
                 g_design.push(shape);
-              }
-              if(shape.data.edge.depth>0){
-                var t = etchShape(shape);
-                t.guide = false;
+              }else if(shape.data.edge.depth>0 && shape.data.edge.type!='cutting'){
+                var t = etchShape3(shape);
                 t.data.fill = {};
                 t.data.fill.depth = shape.data.edge.depth;
                 t.data.fill.darkness = shape.data.edge.darkness;
+                if(shape.name){
+                  t.name = shape.name;
+                }
                 g_design.push(t);
+
+              }else{
+                if(shape.data.edge.type=='cutting'){
+                  if (shape.closed){
+                    g_design.push(shape);
+                  }else {
+                    var t = etchShape3(shape);
+                    t.data.fill = {};
+                    t.data.fill.depth = 10;
+                    if(shape.name){
+                      t.name = shape.name;
+                    }
+                    g_design.push(t);
+                  }
+
+
+                }
               }
             }
+
           });
           openModel();
           $("#overlay").show();
@@ -1108,12 +1278,9 @@ $(document).ready(function(){
               $("#overlay").hide();
               clearInterval(timer);
             }
-          }, 1500);
+          }, 500);
 
         })
-
-
-
         var ten = new CompoundPath({
           children: [
             new Path.Line(new Point(70,90), new Point(110,90)),
@@ -1129,7 +1296,6 @@ $(document).ready(function(){
           guide: true
         });
         var noz = new Group(ten, cir);
-
         var blk = new Blink();
         var mv = new Move();
         var nozzle_moving = false;
@@ -1140,13 +1306,13 @@ $(document).ready(function(){
           { cir.remove();
             cir = new  Path.Circle({
               center: ten.position,
-              radius:30-that.counter/4,
+              radius:30-that.counter,
               strokeColor: 'black',
               guide: true
             });
             noz.addChild(cir);
 
-            if(that.counter <= 80){
+            if(that.counter <= 20){
               that.counter += 1;
             }else{
               that.counter = 0;
@@ -1228,6 +1394,7 @@ $(document).ready(function(){
         function limit_position(item){
           if(item.bounds.topLeft.x<40){
             item.bounds.topLeft.x=40;
+
           }
           if(item.bounds.topLeft.y<40){
             item.bounds.topLeft.y=40;
@@ -1281,8 +1448,8 @@ $(document).ready(function(){
 
         nozzle.onMouseDown = function(e){
           if(!nozzle_moving && e.point.x>40 && e.point.y>40){
-            mv.disx = e.point.x-noz.position.x;
-            mv.disy = e.point.y-noz.position.y;
+            mv.disx = Math.floor(e.point.x-noz.position.x);
+            mv.disy = Math.floor(e.point.y-noz.position.y);
             mv.start();
           }
         }
@@ -1298,49 +1465,203 @@ $(document).ready(function(){
               return temP.clone();
             }
           }
+
+          if(v.closed){
+            var first = new Segment({
+              point:v.firstSegment.point.clone(),
+              handleOut: v.firstSegment.handleOut
+            });
+            var last = new Segment({
+              point:v.firstSegment.point.clone(),
+              handleIn: v.firstSegment.handleIn
+            })
+            v.closed = false;
+            v.add(last);
+            v.removeSegment(0);
+            v.insert(0,first);
+
+          }
           var iter = v.firstSegment;
           var seg = new Segment({
-            point: getOutsidePoint(iter.point)
+            point: getOutsidePoint(iter.point),
+            handleIn: iter.handleIn,
+            handleOut: iter.handleOut
           });
           et.add(seg);
           while(!iter.isLast()){
             iter = iter.next;
             seg = new Segment({
-              point: getOutsidePoint(iter.point),
+              point:getOutsidePoint(iter.point),
               handleIn: iter.handleIn,
               handleOut: iter.handleOut
             });
             et.add(seg);
           }
-          iter = v.firstSegment;
-          seg = new Segment({
-            point: getOutsidePoint(iter.point)
-          });
-          et.add(seg);
-          seg = new Segment({
-            point: iter.point.clone()
-          });
-          et.add(seg);
-          iter = v.lastSegment;
-          seg = new Segment({
-            point: iter.point.clone(),
-            handleIn: iter.handleOut,
-            handleOut: iter.handleIn
-          });
-          et.add(seg);
+          v.reverse();
+          et.join(v.clone());
+          et.clockwise = false;
+          return et;
+        }
+
+        function etchShape2 (v){
+          var segFirst,segLast;
+          var n, n1,n2,temP;
+          if(v.closed){
+            var first = new Segment({
+              point:v.firstSegment.point.clone(),
+              handleOut: v.firstSegment.handleOut
+            });
+            var last = new Segment({
+              point:v.firstSegment.point.clone(),
+              handleIn: v.firstSegment.handleIn
+            })
+            v.closed = false;
+            v.add(last);
+            v.removeSegment(0);
+            v.insert(0,first);
+
+            n1 = v.getNormalAt(0);
+            n2 = v.getNormalAt(v.length);
+            n = n1.add(n2).divide(2);
+
+            segFirst =new Segment({
+              point: first.point.add(n),
+              handleIn: first.handleOut
+            });
+            segLast =new Segment({
+              point: last.point.add(n),
+              handleOut: last.handleIn
+            })
+          }else{
+            n1 = v.getNormalAt(0);
+            n2 = v.getNormalAt(v.length);
+            segFirst =new Segment({
+              point: v.firstSegment.point.add(n1),
+              handleIn: v.firstSegment.handleOut
+            });
+            segLast =new Segment({
+              point: v.lastSegment.point.add(n2),
+              handleOut: v.lastSegment.handleIn
+            })
+          }
+
+          var et = new Path();
+          et.add(segLast);
+          var iter = v.lastSegment.previous;
           while(!iter.isFirst()){
-            iter = iter.previous;
-            seg = new Segment({
-              point: iter.point.clone(),
+            n = getNormalOutside(iter);
+            segLast = new Segment({
+              point: iter.point.add(n),
               handleIn: iter.handleOut,
               handleOut: iter.handleIn
-            });
-            et.add(seg);
+            })
+            et.add(segLast);
+            iter = iter.previous;
           }
-          seg.clearHandles();
+
+          et.add(segFirst);
+          et.smooth({
+            type: 'catmull-rom'
+          });
+          et.join(v.clone());
           et.closePath();
           et.clockwise = false;
           return et;
+
+          function getNormalOutside(segment){
+            var offset = v.getOffsetOf(segment.point);
+            n1 = v.getNormalAt(offset);
+            n2 = v.getNormalAt(offset-0.1);
+            return n1.add(n2).divide(2);
+          }
+        }
+
+        function etchShape3 (v) {
+          var outerPath, innerPath, res;
+          var offset = 0.5;
+
+          if(v.closed){
+            var last = new Segment({
+              point:v.firstSegment.point.clone(),
+              handleIn: v.firstSegment.handleIn
+            })
+
+            if(v.firstCurve.length<1){
+              v.closed = false;
+              v.add(last);
+              v.removeSegment(0);
+            }else{
+              var first = new Segment({
+                point:v.getPointAt(1),
+                handleOut: v.firstSegment.handleOut
+              });
+              v.closed = false;
+              v.add(last);
+              v.removeSegment(0);
+              v.insert(0,first);
+            }
+
+          }
+
+          var d1 = OffsetUtils.offsetPath(v, offset, true);
+          var d2 = OffsetUtils.offsetPath(v, -offset, true);
+
+
+          innerPath = new Path(d1);
+          outerPath = new Path(d2);
+
+
+          outerPath.reverse();
+          res = outerPath.join(innerPath);
+
+
+
+          res.closePath();
+          res = res.unite(res);
+          res.reorient(false,true);
+
+          while(res.className == "CompoundPath"){
+            var r = res.lastChild.clone();
+            var t = res.firstChild.clone();
+            r.reorient(false,false);
+            t.reorient(false,true);
+
+            var ta = r.getTangentAt(1);
+            r.splitAt(1);
+            r.reorient(false,false);
+            r.lastSegment.clearHandles();
+
+            var p = t.getNearestLocation(r.firstSegment.point);
+            var ta2 = t.getTangentAt(p.offset);
+            t.splitAt(p);
+            t.reorient(false,true);
+            t.firstSegment.clearHandles();
+
+            r.join(t);
+
+            if(r.lastCurve.length<0.3){
+              r.removeSegment(r.segments.length-1);
+            }else {
+              var sg2 = r.lastSegment.point.subtract(ta2.divide(4));
+              r.removeSegment(r.segments.length-1);
+              r.add(sg2);
+            }
+
+            if(r.firstCurve.length<0.3){
+              r.removeSegment(0);
+            }else {
+              var sg =  r.firstSegment.point.add(ta.divide(4));
+              r.removeSegment(r.segments.length-1);
+              r.removeSegment(0);
+              r.insert(0,sg);
+            }
+            r.reorient(false,true);
+            r.closePath();
+            res.remove();
+            var res = r;
+          }
+
+          return res;
         }
 
         $("#nozzle").click();
@@ -1352,6 +1673,9 @@ $(document).ready(function(){
       show: function(){
         $("#mainContainer").hide();
         $("#scenceContainer").show("fold", 1000);
+        $("#backToMainPage").click(function(){
+          window.location.href = '/index.html';
+        })
       },
       init: function(){
         if(!gameProject.saved){
@@ -1364,28 +1688,25 @@ $(document).ready(function(){
                 $("#scenceContainer").hide("fade", 1000,function(){
                   $("#mainContainer").show("fade");
                   designWindow.show(gameMode);
-                  designWindow.canvasSetUp(gameMode, gameProject.progress);
+                  designWindow.canvasSetUp(designWindow.init);
                   if(!designW_f){
-                    designWindow.init(gameMode);
                     move_to_next_task = false;
                   }
-
                 });
-
               })
             })
             $("#close_review").click(function(){
-              $("#review").css("display", "none");
+              $("#review").hide();
               $("#review .reviewedLines").remove();
-              $(this).css("display", "none");
-              $("#scenceContainer .skipable").css("display", "initial");
+              $(this).hide();
+              $("#scenceContainer .skipable").show();
             })
             var count = 0;
             var lines;
             $.get('Lines/tutorialLines.txt', function(data){
               lines = data.split("\n");
               $("#dialogBox").click(function () {
-                if(count < lines.length) {
+                if(count < lines.length-1) {
                   if (count == 0) {
                     $("#char_head").empty();
                     $("#char_head").append('<div class="name">Hans</div>');
@@ -1404,7 +1725,6 @@ $(document).ready(function(){
               $("#review").css("display", "block");
               $("#close_review").css("display", "initial");
               for (var i = 0; i < count; i++){
-                console.log(lines[i]);
                 if(lines[i] == "Hans"){
                   $('#review').append('<div class="reviewedLines">'+'[Hans]:'+'</div>');
                 }else{
@@ -1414,7 +1734,16 @@ $(document).ready(function(){
             })
             break;
             default:
-
+            $("#pc-container img").click(function(){
+              $("#scenceContainer").hide();
+              $("#mainContainer").show();
+              designWindow.show(gameMode);
+              designWindow.canvasSetUp(designWindow.init);
+              if(!designW_f){
+                move_to_next_task = false;
+              }
+            }).click();
+            $("#scenceContainer .skipable").hide();
           }
         }else {
           $("#scenceContainer .skipable").css("display", "none");
@@ -1449,22 +1778,21 @@ $(document).ready(function(){
   gameInit();
 
   function gameInit(){
-    resizeInterf();
+
 
     switch (gameMode) {
       case Mode.design:
-      windowControl.designWindow.show(Mode.design);
-      windowControl.designWindow.canvasSetUp(Mode.design, 0);
-      windowControl.designWindow.init(Mode.design);
+      windowControl.sceneWindow.init();
       break;
       case Mode.tutorial:
       windowControl.sceneWindow.show();
       windowControl.sceneWindow.init();
       break;
       default:
-
-      break
+      windowControl.sceneWindow.init();
+      break;
     }
+    resizeInterf();
 
     window.onresize = function(event) {resizeInterf();}
     function resizeInterf(){
@@ -1504,15 +1832,15 @@ $(document).ready(function(){
       })
     }
 
-      // set select default to Rast/Vect
-      document.getElementById("mySelectred").value = "Rast/Vect";
-      document.getElementById("mySelectblue").value = "Rast/Vect";
-      document.getElementById("mySelectblack").value = "Rast/Vect";
-      document.getElementById("mySelectorange").value = "Rast/Vect";
-      document.getElementById("mySelectgreen").value = "Rast/Vect";
-      document.getElementById("mySelectcyan").value = "Rast/Vect";
-      document.getElementById("mySelectmagenta").value = "Rast/Vect";
-      document.getElementById("mySelectyellow").value = "Rast/Vect";
+    // set select default to Rast/Vect
+    document.getElementById("mySelectred").value = "Rast/Vect";
+    document.getElementById("mySelectblue").value = "Rast/Vect";
+    document.getElementById("mySelectblack").value = "Rast/Vect";
+    document.getElementById("mySelectorange").value = "Rast/Vect";
+    document.getElementById("mySelectgreen").value = "Rast/Vect";
+    document.getElementById("mySelectcyan").value = "Rast/Vect";
+    document.getElementById("mySelectmagenta").value = "Rast/Vect";
+    document.getElementById("mySelectyellow").value = "Rast/Vect";
 
   }
 });

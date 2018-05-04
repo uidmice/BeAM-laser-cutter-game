@@ -26,7 +26,7 @@
     box-sizing: border-box;
     width: 20%;
     height: 20%;
-    top: 10%;
+    top: 5%;
     content: "";
     padding: 60px 0 0;
     border-top: 0 solid;
@@ -92,9 +92,9 @@
 }
 
 #TitleText{
-    position: relative;
+    position:relative;
+    bottom: 200%;
     right: 14%;
-    bottom: 170%;
     font-size: 40px;
 
 }
@@ -113,7 +113,7 @@
     border: 8px solid #ccc;
     border-bottom: 8px solid #f9f9f9;
     border-right: 8px solid #f9f9f9;
-    overflow: auto; background: #f5f5f5 url(../image/lenoir.jpeg) no-repeat 50% 50%;
+    overflow: auto; background: #f5f5f5 url(image/lenoir.jpeg) no-repeat 50% 50%;
     background-size: cover;
     position: absolute;
     top: 35%;
@@ -126,7 +126,8 @@
     border: 8px solid #ccc;
     border-bottom: 8px solid #f9f9f9;
     border-right: 8px solid #f9f9f9;
-    overflow: auto; background: #f5f5f5 url(../../OperationalInterfaces/scene_pics/Hans1.png) no-repeat ;
+    overflow: auto;
+    background: #f5f5f5 url(../GameCore/OperationalInterfaces/scene_pics/Hans1.png) no-repeat ;
     background-size: cover;
     position: absolute;
     left: 40%;
@@ -450,8 +451,8 @@ figcaption {
     font-size: 30px;
     padding: 5px;
     text-decoration: none;
-    top: 52%;
-    left: 33%;
+    top: 51%;
+    left: 42%;
     -moz-transform:rotate(10deg);
     -webkit-transform:rotate(10deg);
     -ms-transform:rotate(10deg);
