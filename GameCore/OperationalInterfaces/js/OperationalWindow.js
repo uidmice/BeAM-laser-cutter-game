@@ -296,7 +296,7 @@ $(document).ready(function(){
 
               intro.start();
             };
-            $("#TutorialTab").click();
+
           }else{
             $("#TutorialTab").hide();
           }
@@ -938,6 +938,17 @@ $(document).ready(function(){
             $("#text").addClass("selected");
           });
         }
+
+        if(gameMode==Mode.tutorial){
+          $("#overlay").show();
+          $('#interfaceIntro').show();
+          $("#interfaceIntro").append('<div id="lines">Ok, let\'s learn how to design first.</div>');
+          $("#interfaceIntro").click(function(){
+            $("#interfaceIntro").empty().hide();
+            $("#overlay").hide();
+            $("#TutorialTab").click();
+          })
+        }
         designW_f = true;
 
 
@@ -1087,6 +1098,16 @@ $(document).ready(function(){
           })
 
           return true;
+        }
+
+        if(gameMode==Mode.tutorial){
+          $("#overlay").show();
+          $('#interfaceIntro').show();
+          $("#interfaceIntro").append('<div id="lines">Here is where I set power and speed of the laser cutter for different colors...</div>');
+          $("#interfaceIntro").click(function(){
+            $("#interfaceIntro").empty().hide();
+            $("#overlay").hide();
+          })
         }
 
         psW_f = true;
@@ -1689,6 +1710,16 @@ $(document).ready(function(){
         }
 
         $("#nozzle").click();
+
+        if(gameMode==Mode.tutorial){
+          $("#overlay").show();
+          $('#interfaceIntro').show();
+          $("#interfaceIntro").append('<div id="lines">Here is where I set position...</div>');
+          $("#interfaceIntro").click(function(){
+            $("#interfaceIntro").empty().hide();
+            $("#overlay").hide();
+          })
+        }
 
         positionW_f = true;
       }
