@@ -79,100 +79,12 @@
     });
 
   }
-  function cutShape (v) {
-    var outerPath, innerPath, res;
-    var offset = 0.5;
-
-    if(v.closed){
-      var last = new Segment({
-        point:v.firstSegment.point.clone(),
-        handleIn: v.firstSegment.handleIn
-      })
-
-      if(v.firstCurve.length<1){
-        v.closed = false;
-        v.add(last);
-        v.removeSegment(0);
-      }else{
-        var first = new Segment({
-          point:v.getPointAt(1),
-          handleOut: v.firstSegment.handleOut
-        });
-        v.closed = false;
-        v.add(last);
-        v.removeSegment(0);
-        v.insert(0,first);
-      }
-
-    }
-
-    var d1 = OffsetUtils.offsetPath(v, offset, true);
-    var d2 = OffsetUtils.offsetPath(v, -offset, true);
-
-
-    innerPath = new Path(d1);
-    outerPath = new Path(d2);
-
-
-    outerPath.reverse();
-    res = outerPath.join(innerPath);
-
-
-
-    res.closePath();
-    res = res.unite(res);
-    res.reorient(false,true);
-
-    while(res.className == "CompoundPath"){
-      var r = res.lastChild.clone();
-      var t = res.firstChild.clone();
-      r.reorient(false,false);
-      t.reorient(false,true);
-
-      var ta = r.getTangentAt(1);
-      r.splitAt(1);
-      r.reorient(false,false);
-      r.lastSegment.clearHandles();
-
-      var p = t.getNearestLocation(r.firstSegment.point);
-      var ta2 = t.getTangentAt(p.offset);
-      t.splitAt(p);
-      t.reorient(false,true);
-      t.firstSegment.clearHandles();
-
-      r.join(t);
-
-      if(r.lastCurve.length<0.3){
-        r.removeSegment(r.segments.length-1);
-      }else {
-        var sg2 = r.lastSegment.point.subtract(ta2.divide(4));
-        r.removeSegment(r.segments.length-1);
-        r.add(sg2);
-      }
-
-      if(r.firstCurve.length<0.3){
-        r.removeSegment(0);
-      }else {
-        var sg =  r.firstSegment.point.add(ta.divide(4));
-        r.removeSegment(r.segments.length-1);
-        r.removeSegment(0);
-        r.insert(0,sg);
-      }
-      r.reorient(false,true);
-      r.closePath();
-      res.remove();
-      var res = r;
-    }
-
-    return res;
-  }
   resize();
   var des = window.opener.g_design;
 
 
   $(document).ready(function(){
     paper.setup('pa');
-
 
     var addGeoObject = function( group, svgObject ) {
       var pathN = svgObject.length;
@@ -204,60 +116,33 @@
       }else if (nPieces==1){
         confirmed_area = new Path();
         for ( var i = pathN-1; i >-1; i--){
-          if(svgObject[i].data.edge && svgObject[i].data.edge.type=='cutting'){
-            if(svgObject[i].getIntersections(t)==0){
-              confirmed_area = confirmed_area.unite(svgObject[i]);
-            }else if (svgObject[i].area < t.area){
-              var inter1 = svgObject[i].intersect(t);
-              var inter2 = svgObject[i].exclude(t);
-              console.log(inter1.pathData);
-              console.log(inter2.pathData);
-              var insideCurve = inter1.intersect(inter2, {trace: false});
-
-              if(insideCurve.children){
-                $.each(insideCurve.children, function(k, v){
-                  var et = cutShape(v);
-                  confirmed_area = confirmed_area.unite(et);
-                })
-              }else {
-                var et = cutShape(insideCurve);
-                confirmed_area = confirmed_area.unite(et);
-              }
+          var p = svgObject[i].intersect(t);
+          if(p.area!=0 && svgObject[i].data.edge && svgObject[i].data.edge.type!='cutting'){
+            if(p.intersect(confirmed_area).area==0){
+              newpart = p;
+            }else{
+              newpart = p.subtract(confirmed_area);
             }
-          }else{
-            var p = svgObject[i].intersect(t);
+
+            confirmed_area = confirmed_area.unite(p);
             dep = svgObject[i].data.fill.depth*100;
-            if(p.area && dep){
-              if(p.intersect(confirmed_area).area==0){
-                newpart = p;
-              }else{
-                newpart = p.subtract(confirmed_area);
-              }
+            if(dep!=0){
+              var threeData,color,material, shape3d, mesh;
+              threeData = SVGtransform.transformSVGPathTHREE(newpart.pathData).path.toShapes(true, false);
+              color = new THREE.Color(0x996600);
+              material = new THREE.MeshLambertMaterial( {
+                color: color,
+              } );
+              shape3d = new THREE.ExtrudeBufferGeometry( threeData, {
+                amount: 25.5-dep,
+                bevelEnabled: false
+              } );
+              mesh = new THREE.Mesh( shape3d, [material,woodMaterial,woodMaterial, woodMaterial]);
+              mesh.translateZ(dep);
+              group.add( mesh );
 
-              confirmed_area = confirmed_area.unite(p);
-
-              if(dep!=10){
-                var threeData,color,material, shape3d, mesh;
-                threeData = SVGtransform.transformSVGPathTHREE(newpart.pathData).path.toShapes(true, false);
-                color = new THREE.Color(0x996600);
-                material = new THREE.MeshLambertMaterial( {
-                  color: color,
-                } );
-                shape3d = new THREE.ExtrudeBufferGeometry( threeData, {
-                  amount: 25.5-dep,
-                  bevelEnabled: false
-                } );
-                mesh = new THREE.Mesh( shape3d, [material,woodMaterial,woodMaterial, woodMaterial]);
-                mesh.translateZ(dep);
-                group.add( mesh );
-
-              }
             }
-
           }
-
-
-
         }
         var hole = SVGtransform.transformSVGPathTHREE(confirmed_area.pathData).path.toShapes(false, false);
         $.each(hole, function(k,v){

@@ -74,7 +74,6 @@ $(document).ready(function(){
           $("#font_size").parent().hide();
 
           if(gameMode==Mode.tutorial){
-            //-----------------------------------------------------------------
             $("#TutorialTab").click(function(){
               if(!openFlag){
                 $("#leftMenu").show("slide");
@@ -82,7 +81,6 @@ $(document).ready(function(){
               }else{
                 closeLeftMenu();
               }
-              //-----------------------------------------------------------------
             });
 
             function closeLeftMenu() {
@@ -675,6 +673,7 @@ $(document).ready(function(){
               if(temp){
                 temp.add(e.point);
                 temp.guide = false;
+                temp.simplify();
                 moving.remove();
               }
               var op = [];
@@ -1262,21 +1261,39 @@ $(document).ready(function(){
           //   g_design.push(v);
           // })
           $.each(gameProject.workingCanvas.children, function(ind, shape){
-            if(shape.data.fill.depth>0){
-              g_design.push(shape);
-            }else if(shape.data.edge.depth>0 && shape.data.edge.type!='cutting'){
-              var t = etchShape3(shape);
-              t.data.fill = {};
-              t.data.fill.depth = shape.data.edge.depth;
-              t.data.fill.darkness = shape.data.edge.darkness;
-              g_design.push(t);
-              console.log(t.area);
-
-            }else{
-              if(shape.data.edge.type=='cutting'){
+            if (shape.visible){
+              if(shape.data.fill.depth>0){
+                shape.reorient(false, true);
                 g_design.push(shape);
+              }else if(shape.data.edge.depth>0 && shape.data.edge.type!='cutting'){
+                var t = etchShape3(shape);
+                t.data.fill = {};
+                t.data.fill.depth = shape.data.edge.depth;
+                t.data.fill.darkness = shape.data.edge.darkness;
+                if(shape.name){
+                  t.name = shape.name;
+                }
+                g_design.push(t);
+
+              }else{
+                if(shape.data.edge.type=='cutting'){
+                  if (shape.closed){
+                    g_design.push(shape);
+                  }else {
+                    var t = etchShape3(shape);
+                    t.data.fill = {};
+                    t.data.fill.depth = 10;
+                    if(shape.name){
+                      t.name = shape.name;
+                    }
+                    g_design.push(t);
+                  }
+
+
+                }
               }
             }
+
           });
           openModel();
           $("#overlay").show();
@@ -1401,6 +1418,7 @@ $(document).ready(function(){
         function limit_position(item){
           if(item.bounds.topLeft.x<40){
             item.bounds.topLeft.x=40;
+
           }
           if(item.bounds.topLeft.y<40){
             item.bounds.topLeft.y=40;
@@ -1587,27 +1605,31 @@ $(document).ready(function(){
           var offset = 0.5;
 
           if(v.closed){
-            var first = new Segment({
-              point:v.getPointAt(1),
-              handleOut: v.firstSegment.handleOut
-            });
             var last = new Segment({
               point:v.firstSegment.point.clone(),
               handleIn: v.firstSegment.handleIn
             })
-            v.closed = false;
-            v.add(last);
-            v.removeSegment(0);
-            v.insert(0,first);
+
+            if(v.firstCurve.length<1){
+              v.closed = false;
+              v.add(last);
+              v.removeSegment(0);
+            }else{
+              var first = new Segment({
+                point:v.getPointAt(1),
+                handleOut: v.firstSegment.handleOut
+              });
+              v.closed = false;
+              v.add(last);
+              v.removeSegment(0);
+              v.insert(0,first);
+            }
+
           }
 
           var d1 = OffsetUtils.offsetPath(v, offset, true);
           var d2 = OffsetUtils.offsetPath(v, -offset, true);
 
-          if(v.name=='M'){
-            console.log(d1);
-            console.log(d2);
-          }
 
           innerPath = new Path(d1);
           outerPath = new Path(d2);
@@ -1627,24 +1649,36 @@ $(document).ready(function(){
             var t = res.firstChild.clone();
             r.reorient(false,false);
             t.reorient(false,true);
-            r.splitAt(1);
+
             var ta = r.getTangentAt(1);
+            r.splitAt(1);
+            r.reorient(false,false);
             r.lastSegment.clearHandles();
 
             var p = t.getNearestLocation(r.firstSegment.point);
+            var ta2 = t.getTangentAt(p.offset);
             t.splitAt(p);
-            var ta2 = t.getTangentAt(t.length-1);
+            t.reorient(false,true);
             t.firstSegment.clearHandles();
 
             r.join(t);
 
-            var sg =  r.lastSegment.point.add(ta.divide(4));
-            var sg2 = r.firstSegment.point.add(ta2.divide(4));
-            r.removeSegment(r.segments.length-1);
-            r.add(sg);
+            if(r.lastCurve.length<0.3){
+              r.removeSegment(r.segments.length-1);
+            }else {
+              var sg2 = r.lastSegment.point.subtract(ta2.divide(4));
+              r.removeSegment(r.segments.length-1);
+              r.add(sg2);
+            }
 
-            r.removeSegment(0);
-            r.insert(0,sg2);
+            if(r.firstCurve.length<0.3){
+              r.removeSegment(0);
+            }else {
+              var sg =  r.firstSegment.point.add(ta.divide(4));
+              r.removeSegment(r.segments.length-1);
+              r.removeSegment(0);
+              r.insert(0,sg);
+            }
             r.reorient(false,true);
             r.closePath();
             res.remove();
@@ -1683,7 +1717,6 @@ $(document).ready(function(){
                     move_to_next_task = false;
                   }
                 });
-
               })
             })
             $("#close_review").click(function(){
