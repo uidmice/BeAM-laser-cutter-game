@@ -409,6 +409,7 @@
           </div>
         </div>
       </div>
+      <div id="interfaceIntro"></div>
     </div>
   </div>
 
