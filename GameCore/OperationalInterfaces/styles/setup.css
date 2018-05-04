@@ -11,6 +11,7 @@ body{
   left: 0;
   right:0;
   margin: auto;
+
 }
 
 #overlay{
@@ -52,6 +53,7 @@ body{
   top: 40px;
   height: 25px;
   width: 25px;
+  z-index: 8;
 }
 #screenTop {
   background: url("../images/wrecked_computer/upper.png") no-repeat center top;
@@ -64,6 +66,7 @@ body{
   left: 25px;
   top: 40px;
   height: 25px;
+  z-index: 8;
 }
 #screenTopRight {
   background: url("../images/wrecked_computer/upperright.png") no-repeat center top;
@@ -77,6 +80,7 @@ body{
   top: 40px;
   height: 25px;
   width: 25px;
+  z-index: 8;
 }
 #screenLeft {
   background: url("../images/wrecked_computer/left.png") no-repeat center top;
@@ -89,6 +93,7 @@ body{
   left: 0;
   top: 65px;
   width: 25px;
+  z-index: 8;
 }
 #screenRight {
   background: url("../images/wrecked_computer/right.png") no-repeat center top;
@@ -101,6 +106,7 @@ body{
   right: 0;
   top: 65px;
   width: 25px;
+  z-index: 8;
 }
 #screenBottom {
   background: url("../images/wrecked_computer/bottom.png") no-repeat center top;
@@ -113,6 +119,7 @@ body{
   left: 25px;
   bottom: 0;
   height: 35px;
+  z-index: 8;
 }
 #screenBottomLeft {
   background: url("../images/wrecked_computer/bottomleft.png") no-repeat center top;
@@ -126,6 +133,7 @@ body{
   bottom: 0;
   height: 35px;
   width: 25px;
+  z-index: 8;
 }
 #screenBottomRight {
   background: url("../images/wrecked_computer/bottomright.png") no-repeat center top;
@@ -139,6 +147,7 @@ body{
   bottom: 0;
   height: 35px;
   width: 25px;
+  z-index: 8;
 }
 
 
@@ -167,6 +176,10 @@ body{
   min-height: 40px;
   overflow:visible;
   z-index: 5;
+}
+
+#leftMenu {
+  z-index: 6;
 }
 #main {
   position: absolute;
@@ -213,7 +226,7 @@ body{
   position: absolute;
   right: 2%;
   bottom: 5%;
-  
+
 }
 
 
