@@ -101,8 +101,8 @@
 
 .buttons{
     position: absolute;
-    top: 35%;
-    left: 5%;
+    top: 45%;
+    left: 15%;
     display: flex;
     flex-direction: column;
     font-size: 20px;
