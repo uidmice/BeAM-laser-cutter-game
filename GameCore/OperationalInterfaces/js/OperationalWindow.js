@@ -193,25 +193,6 @@ $(document).ready(function(){
               intro.setOptions({
                 steps: [
                   {
-                    element: '#DesignTab',
-                    intro: "Click here, <i>design</i> our own!",
-                    // position: 'right'
-                  },
-                  {
-                    element: '#PsTab',
-                    intro: 'Set power and speed here, more <span style="color: red;">f</span><span style="color: green;">u</span><span style="color: blue;">n</span>.',
-                    position: 'left'
-                  },
-                  {
-                    element: '#PositionTab',
-                    intro: "<span style='font-family: Tahoma'>Another step with to set final position!</span>",
-                    position: 'bottom'
-                  },
-                  {
-                    element: '#TutorialTab',
-                    intro: '<strong>Get</strong> some basic ideas, <strong>use</strong> it.'
-                  },
-                  {
                     element: '#save',
                     intro: '<strong>Save</strong> your desingn here'
                   },{
@@ -228,7 +209,7 @@ $(document).ready(function(){
                     intro: '<strong>Set</strong> fill colors here, <strong>IMPORTANT</strong>.'
                   },{
                     element: '#stroke_color',
-                    intro: '<strong>Set</strong> line color here, <strong>IMPORTANT</strong>.'
+                    intro: '<strong>Set</strong> stroke color here, <strong>IMPORTANT</strong>.'
                   },{
                     element: '#stroke_thick',
                     intro: '<strong>Set</strong> line width according to instructions, <strong>IMPORTANT</strong>.'
@@ -248,14 +229,10 @@ $(document).ready(function(){
 
               intro.setOptions({
                 steps: [
-                  {
-                    element: '#DesignTab',
-                    intro: "Click here, if you want to <i>go</i> back",
-                    position: 'right'
-                  },
+
                   {
                     element: '#PsTab',
-                    intro: 'Set power and speed here, it is <span style="color: red;">f</span><span style="color: green;">u</span><span style="color: blue;">n</span>.',
+                    intro: 'Set power and speed here.',
                     position: 'left'
                   },
                   {
@@ -283,13 +260,13 @@ $(document).ready(function(){
                 steps: [
                   {
                     element: '#nozzle',
-                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
+                    intro: 'First click this button and you can change the nozzle by clicking the destination location on the left.'
                   },{
                     element: '#relocate',
-                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
+                    intro: 'First click this button and you can move your design on the left.'
                   },{
                     element: '#timer_btn',
-                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
+                    intro: 'This button gives the estimated time of completing the cutting.'
                   }
                 ]
               });
