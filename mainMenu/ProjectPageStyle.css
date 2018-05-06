@@ -468,4 +468,7 @@ figcaption {
 
 
 /**Project Page Buttons**/
-
+#photoframe{
+    position: relative;
+    top: 20%;
+}
