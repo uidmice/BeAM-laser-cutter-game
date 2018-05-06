@@ -193,6 +193,25 @@ $(document).ready(function(){
               intro.setOptions({
                 steps: [
                   {
+                    element: '#DesignTab',
+                    intro: "Click here, <i>design</i> our own!",
+                    // position: 'right'
+                  },
+                  {
+                    element: '#PsTab',
+                    intro: 'Set power and speed here, more <span style="color: red;">f</span><span style="color: green;">u</span><span style="color: blue;">n</span>.',
+                    position: 'left'
+                  },
+                  {
+                    element: '#PositionTab',
+                    intro: "<span style='font-family: Tahoma'>Another step with to set final position!</span>",
+                    position: 'bottom'
+                  },
+                  {
+                    element: '#TutorialTab',
+                    intro: '<strong>Get</strong> some basic ideas, <strong>use</strong> it.'
+                  },
+                  {
                     element: '#save',
                     intro: '<strong>Save</strong> your desingn here'
                   },{
@@ -230,14 +249,19 @@ $(document).ready(function(){
               intro.setOptions({
                 steps: [
                   {
+                    element: '#DesignTab',
+                    intro: "Click here, if you want to <i>go</i> back",
+                    position: 'right'
+                  },
+                  {
                     element: '#PsTab',
-                    intro: 'Set power and speed here.',
+                    intro: 'Set power and speed here, it is <span style="color: red;">f</span><span style="color: green;">u</span><span style="color: blue;">n</span>.',
                     position: 'left'
                   },
                   {
                     element: '#pSlide',
                     intro: "Click here, set power!",
-                  }, {
+                  },{
                     element: '#sSlide',
                     intro: "Click here, set speed!",
                   }
@@ -259,13 +283,13 @@ $(document).ready(function(){
                 steps: [
                   {
                     element: '#nozzle',
-                    intro: 'First click this button and you can change the nozzle by clicking the destination location on the left.'
+                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
                   },{
                     element: '#relocate',
-                    intro: 'First click this button and you can move your design on the left.'
+                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
                   },{
                     element: '#timer_btn',
-                    intro: 'This button gives the estimated time of completing the cutting.'
+                    intro: '<strong>Get</strong> it, <strong>use</strong> it.'
                   }
                 ]
               });
@@ -956,7 +980,6 @@ $(document).ready(function(){
         var outputPower = $("#demoPower");
         var sliderSpeed = $("#speedRange");
         var outputSpeed =$("#demoSpeed");
-        var cutting_coef = 0.033;
         var PsSelected = null;
 
         sliderPower.on("input", function() {
@@ -966,6 +989,11 @@ $(document).ready(function(){
           updateColor();
 
         })
+
+        function depthEstimation(power, speed){
+          var c1 = 6/2375, c2 = 1/170;
+          return ((c1*power)**0.25-0.243-Math.log(c2*speed)-0.219)*0.03937;
+        }
 
         $(".input-color").click(function(){
           var color = $(this).attr('id');
@@ -1015,7 +1043,7 @@ $(document).ready(function(){
           if(PsSelected){
             $("#"+PsSelected+"Power").text($(sliderPower).val());
             $("#"+PsSelected+"Speed").text($(sliderSpeed).val());
-            $("#"+PsSelected+"Depth").text(Number(cutting_coef*$(sliderPower).val()/$(sliderSpeed).val()).toFixed(3));
+            $("#"+PsSelected+"Depth").text(Number(depthEstimation($(sliderPower).val(),$(sliderSpeed).val())).toFixed(3));
           }
         }
 
