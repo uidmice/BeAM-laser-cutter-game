@@ -70,10 +70,10 @@ $(document).ready(function(){
       sendPHP("gameMode", "p1");
     })
     $("#project2").click(function(){
-      sendPHP("gameMode", "p2");
-    })
-    $("#project3").click(function(){
       sendPHP("gameMode", "p3");
+    })
+    $("#project4").click(function(){
+      sendPHP("gameMode", "p2");
     })
 
 

@@ -47,7 +47,7 @@ var Project = function( mode){
      this.designGraphs.push(new DesignGraph({w: 11, h:5}, 3));
     break;
     case Mode.project1:
-      this.designGraphs.push(new DesignGraph({w: 8, h:6}, 1.3));
+      this.designGraphs.push(new DesignGraph({w: 11, h:11}, 2));
     break;
     case Mode.project2:
       this.designGraphs.push(new DesignGraph({w: 7, h:7}, 0.6));
@@ -651,10 +651,10 @@ function getDesign(mode, progress){
     };
 
     d.push({
-      "x": 140,
-      "y": 130,
-      'height': 820,
-      'width': 820,
+      "x": 135,
+      "y": 125,
+      'height': 830,
+      'width': 830,
       "type": "rect",
       "func": "cutting",
       "options": option1,
