@@ -22,7 +22,7 @@ $(document).ready(function(){
         }else{
           var c = parseColor(v.fillColor.toCSS());
           var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-          v.data.fill.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
+          v.data.fill.depth = Number($("#"+c+"Depth").text());
           v.data.fill.darkness = (d>0 && d<2)? d: 2;
         }
 
@@ -34,18 +34,58 @@ $(document).ready(function(){
           v.data.edge.type='rastering';
           var c = parseColor(v.strokeColor.toCSS());
           var d = 0.4*Number($("#"+c+"Power").text())/(Number($("#"+c+"Speed").text())-20.1);
-          v.data.edge.depth = Number($("#"+c+"Depth").text())>0.225 ? 0.225 : Number($("#"+c+"Depth").text());
+          v.data.edge.depth =  Number($("#"+c+"Depth").text());
           v.data.edge.darkness = (d>0 && d<2)? d: 2;
         }else{
           var c = parseColor(v.strokeColor.toCSS());
           var d = Number($("#"+c+"Depth").text());
-          v.data.edge.type = (d>0.255) ? "cutting": "etching";
-          v.data.edge.depth = d>0.225 ? 0.225 : d;
+          v.data.edge.type = (d>=0.255) ? "cutting": "etching";
+          v.data.edge.depth = d;
           v.data.edge.darkness = 0;
         }
       })
     }
-    // Yingnan Wu Editing
+
+    resizeInterf();
+
+    window.onresize = function(event) {resizeInterf();}
+    function resizeInterf(){
+      var vpw = $(window).width();
+      var vph = $(window).height();
+      var w = vph*1280/800;
+      if(vpw>w){
+        vpw=w;
+      }else{
+        vph = vpw*800/1280;
+      }
+
+      if (vph<400){
+        vph = 400;
+        vpw=640;
+      }
+      $("#gameContainer").css({
+        "height": vph + "px",
+        "width" : vpw + "px"
+      });
+
+      var infw = vpw - 50;
+      var infh = vph - 100;
+      var topH = $("#top").height();
+
+      $("#screenTop").width(infw);
+      $("#screenBottom").width(infw);
+      $("#screenRight").height( infh);
+      $("#screenLeft").height( infh);
+      $("#InterfaceContainer").css({
+        "width": infw+"px",
+        "height": infh + "px"
+      });
+      $("#main").css({
+        "top": topH +"px" ,
+        "height": (infh-topH )+ "px"
+      })
+    }
+
     var designWindow =  {
       show : function (gameMode) {
         $("#scenceContainer").hide();
@@ -57,6 +97,10 @@ $(document).ready(function(){
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#DesignTab").addClass("w3-red");
         $("#select").click();
+
+        if(paper.projects[0]){
+          paper.projects[0].activate();
+        }
 
         // Yingnan Wu Editing starts
         introJs().removeHints();
@@ -211,8 +255,11 @@ $(document).ready(function(){
                     element: '#stroke_color',
                     intro: '<strong>Set</strong> stroke color here, <strong>IMPORTANT</strong>.'
                   },{
-                    element: '#stroke_thick',
+                    element: '#stroke_width',
                     intro: '<strong>Set</strong> line width according to instructions, <strong>IMPORTANT</strong>.'
+                  },{
+                    element: '#print',
+                    intro: 'Sent design to laser cutter, <strong>IMPORTANT</strong>.'
                   }
                 ]
               });
@@ -236,12 +283,19 @@ $(document).ready(function(){
                     position: 'left'
                   },
                   {
-                    element: '#pSlide',
+                    element: '#powerRange',
                     intro: "Click here, set power!",
                   },{
-                    element: '#sSlide',
+                    element: '#speedRange',
                     intro: "Click here, set speed!",
+                  },{
+                    element: '#PsDefaultsButton',
+                    intro: "Reset to default value!",
+                  },{
+                    element: '#PsDoneButton',
+                    intro: "If you are done with power speed value, click here to continue to position page!",
                   }
+
                 ]
               });
 
@@ -249,7 +303,6 @@ $(document).ready(function(){
 
             };
             document.getElementById("positionGuide").onclick = function() {
-              console.log("clicked!");
               fct = 0;
               closeLeftMenu();
 
@@ -274,10 +327,15 @@ $(document).ready(function(){
               intro.start();
             };
 
+            if(openFlag){
+              $("#TutorialTab").click();
+            }
+
           }else{
             $("#TutorialTab").hide();
           }
         }
+        resizeInterf();
       },
 
       canvasSetUp: function(init_function){
@@ -362,7 +420,7 @@ $(document).ready(function(){
             }
             $("#stroke_width").val(hit.item.strokeWidth/1000);
             if(hit.item.className=="PointText" && gameMode==Mode.design){
-              $("#font_size").val(hit.item.fontSize);
+              $("#font_size").val(hit.item.fontSize/2);
             }
           }
         }
@@ -550,6 +608,8 @@ $(document).ready(function(){
         })
         $("#close").click(function(){
           sceneWindow.show();
+          intro = introJs();
+          intro.removeHints();
         })
         if(gameMode==Mode.design){
           var mouseX, mouseY;
@@ -651,6 +711,7 @@ $(document).ready(function(){
                 temp.add(e.point);
                 temp.guide = false;
                 temp.simplify();
+                temp.fillColor = new Color($("#fill_color").attr('class'));
                 moving.remove();
               }
               var op = [];
@@ -674,6 +735,7 @@ $(document).ready(function(){
               e.preventDefault();
               temp.add(e.point);
               temp.guide = false;
+              temp.fillColor = new Color($("#fill_color").attr('class'));
               moving.remove();
               var op = [];
               op.push({
@@ -728,6 +790,7 @@ $(document).ready(function(){
                   copy: null
                 });
                 addOp(new Operation(1, op));
+                temp.fillColor = new Color($("#fill_color").attr('class'));
                 gameProject.workingCanvas.addChild(temp);
                 multi_temp.remove();
                 multi = false;
@@ -843,11 +906,12 @@ $(document).ready(function(){
                 if (keyCode === 13) {
                   var content = this.value.toString();
                   var text = new PointText(text_p);
-                  text.strokeColor = Color($("#stroke_color").attr('class'));
-                  text.fillColor = Color($("#fill_color").attr('class'));
+                  text.strokeColor = new Color($("#stroke_color").attr('class'));
+                  text.fillColor = new Color($("#fill_color").attr('class'));
                   text.content = content;
                   text.bounds.topLeft = text_p;
                   text.guide = false;
+                  text.fontSize = $("#font_size").val()*2;
                   gameProject.workingCanvas.addChild(text);
                   document.body.removeChild(this);
                   hasInput = false;
@@ -919,11 +983,13 @@ $(document).ready(function(){
         if(gameMode==Mode.tutorial){
           $("#overlay").show();
           $('#interfaceIntro').show();
-          $("#interfaceIntro").append('<div id="lines">Ok, let\'s learn how to design first.</div>');
+          $("#interfaceIntro").append('<div id="lines">Ok, let\'s learn how to design first. (click anywhere in dialog box to continue)</div>');
           $("#interfaceIntro").click(function(){
             $("#interfaceIntro").empty().hide();
             $("#overlay").hide();
-            $("#TutorialTab").click();
+            if(!openFlag){
+              $("#TutorialTab").click();
+            }
           })
         }
         designW_f = true;
@@ -938,6 +1004,7 @@ $(document).ready(function(){
         $(".PsPage").show();
         $("#navigationBar .w3-red").removeClass("w3-red");
         $("#PsTab").addClass("w3-red");
+
         pp_f = true;
 
         // Yingnan Wu Editing starts
@@ -950,6 +1017,15 @@ $(document).ready(function(){
         $("#psGuide").css('display', 'block');
         $("#positionGuide").css('display', 'none');
         // Yingnan Wu Editing ends
+
+        if(gameMode==Mode.tutorial){
+          if(openFlag){
+            $("#TutorialTab").click();
+          }
+        }
+        resizeInterf()
+
+        $("#red").click();
 
       },
       init : function(){
@@ -969,7 +1045,8 @@ $(document).ready(function(){
 
         function depthEstimation(power, speed){
           var c1 = 6/2375, c2 = 1/170;
-          return ((c1*power)**0.25-0.243-Math.log(c2*speed)-0.219)*0.03937;
+          var d =  ((c1*power)**0.25-0.243-Math.log(c2*speed)-0.219)*0.06;
+          return d>0.255? 0.255: d;
         }
 
         $(".input-color").click(function(){
@@ -1055,7 +1132,7 @@ $(document).ready(function(){
         function reset(){
           $(".input-color").find('span[id*="Power"]').html("50");
           $(".input-color").find('span[id*="Speed"]').html("60");
-          $(".input-color").find('span[id*="Depth"]').html("0.028");
+          $(".input-color").find('span[id*="Depth"]').html("0.071");
         }
 
         function checkSetting(){
@@ -1088,8 +1165,14 @@ $(document).ready(function(){
           $("#interfaceIntro").click(function(){
             $("#interfaceIntro").empty().hide();
             $("#overlay").hide();
+            if(!openFlag){
+              $("#TutorialTab").click();
+            }
           })
         }
+
+        reset();
+        $("#red").click();
 
         psW_f = true;
       }
@@ -1103,6 +1186,7 @@ $(document).ready(function(){
         $("#PositionTab").addClass("w3-red");
         pp_f = false;
         $("#nozzle").click();
+        resizeInterf();
 
         // Yingnan Wu Editing starts
         introJs().removeHints();
@@ -1114,6 +1198,12 @@ $(document).ready(function(){
         $("#psGuide").css('display', 'none');
         $("#positionGuide").css('display', 'block');
         // Yingnan Wu Editing ends
+
+        if(gameMode==Mode.tutorial){
+          if(openFlag){
+            $("#TutorialTab").click();
+          }
+        }
       },
       setUpCanvas: function(){
         $("#PositionCanvasContainer").append($("<canvas id='positionCanvas' height='"+(2400/2.5+40)+"px' width='"+(3600/2.5+40)+"px'></canvas>"));
@@ -1186,6 +1276,7 @@ $(document).ready(function(){
           pic.remove();
           paper.project.activeLayer.addChild(item);
           item.scale(0.4);
+
           new_file = false;
 
         }
@@ -1227,6 +1318,7 @@ $(document).ready(function(){
           $("#y_nozzle").show().text(((noz.position.y-40)*0.025).toFixed(3));
           $("#x_i").hide();
           $("#y_i").hide();
+          paper.projects[1].deselectAll();
           nozzle.activate();
           noz.visible = true;
           noz.opacity = 1;
@@ -1242,8 +1334,8 @@ $(document).ready(function(){
           $(this).removeClass('w3-red').addClass('w3-brown');
           $("#x_nozzle").hide();
           $("#y_nozzle").hide();
-          $("#x_i").show();
-          $("#y_i").show();
+          $("#x_i").show().val( 0);
+          $("#y_i").show().val( 0);
           relocate.activate();
           noz.opacity = 0.7;
         });
@@ -1259,13 +1351,12 @@ $(document).ready(function(){
           updateDepthInfo();
           g_design.length = 0;
           gameProject.saveDesign(paper.projects[0]);
-          // $.each(gameProject.workingCanvas.children, function(k,v){
-          //   g_design.push(v);
-          // })
+          paper.projects[1].deselectAll();
           $.each(gameProject.workingCanvas.children, function(ind, shape){
             if (shape.visible){
               if(shape.data.fill.depth>0){
                 shape.reorient(false, true);
+                shape.data.edge = null;
                 g_design.push(shape);
               }else if(shape.data.edge.depth>0 && shape.data.edge.type!='cutting'){
                 var t = etchShape3(shape);
@@ -1307,6 +1398,10 @@ $(document).ready(function(){
           }, 500);
 
         })
+        $("#start_button").click(function(){
+          $("#start_text").click();
+        })
+
         var ten = new CompoundPath({
           children: [
             new Path.Line(new Point(70,90), new Point(110,90)),
@@ -1322,6 +1417,7 @@ $(document).ready(function(){
           guide: true
         });
         var noz = new Group(ten, cir);
+        noz.bringToFront();
         var blk = new Blink();
         var mv = new Move();
         var nozzle_moving = false;
@@ -1381,6 +1477,26 @@ $(document).ready(function(){
           nozzle_moving = false;
         };
 
+        $("#up").click(function(){
+          noz.position.y -=4;
+          limit_position(noz);
+        })
+
+        $("#left").click(function(){
+          noz.position.x -=4;
+          limit_position(noz);
+        })
+
+        $("#down").click(function(){
+          noz.position.y +=4;
+          limit_position(noz);
+        })
+
+        $("#right").click(function(){
+          noz.position.x +=4;
+          limit_position(noz);
+        })
+
 
         view.draw();
 
@@ -1393,30 +1509,28 @@ $(document).ready(function(){
               return ((item.clipMask ==false))
             }
           });
-          if(!e.modifiers.shift){
-            paper.project.deselectAll();
-            if (hit){
-              hit.item.selected = true;
-            }
-          }else{
-            if (hit){
-              hit.item.selected = true;
-            }
+          paper.project.deselectAll();
+          if (hit){
+            hit.item.selected = true;
           }
 
+
         }
-        function onKeyDown(e){
-          e.preventDefault();
-          if((e.key=="delete")||(e.key=="backspace")){
-            if(project.selectedItems.length>0){
-              var selected = project.selectedItems;
-              var l = selected.length;
-              for (var i = l-1; i>=0; i--){
-                selected[i].remove();
-              }
-            }
-          }
-        }
+        // function onKeyDown(e){
+        //
+        //   if(($("#x_i").is(":focus" || $("#y_i").is(":focus")))==false){
+        //     e.preventDefault();
+        //     if((e.key=="delete")||(e.key=="backspace")){
+        //       if(project.selectedItems.length>0){
+        //         var selected = project.selectedItems;
+        //         var l = selected.length;
+        //         for (var i = l-1; i>=0; i--){
+        //           selected[i].remove();
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
         function limit_position(item){
           if(item.bounds.topLeft.x<40){
             item.bounds.topLeft.x=40;
@@ -1432,175 +1546,84 @@ $(document).ready(function(){
             item.bounds.bottomRight.y=40+2400/2.5;
           }
         }
+        function updatePosition(){
+          $("#x_i").val(((paper.project.selectedItems[0].bounds.topLeft.x-40)*0.025).toFixed(3) );
+          $("#y_i").val(((paper.project.selectedItems[0].bounds.topLeft.y-40)*0.025).toFixed(3));
+        }
 
-        relocate = new Tool();
-        nozzle = new Tool();
+        function changePosition(){
+          var i;
+          if( i= paper.project.selectedItems[0]){
+            var x = $("#x_i").val()*40+40;
+            var y = $("#y_i").val()*40+40;
+            i.bounds.topLeft.x = x;
+            i.bounds.topLeft.y = y;
+            limit_position(i);
+            updatePosition();
+          }
+        }
+
+        $("#x_i").change(function(){
+          changePosition();
+        })
+        $("#y_i").change(function(){
+          changePosition();
+        })
+
+        var move_tool_flag;
+
+        relocate = new Tool({
+          minDistance : 5,
+          onMouseDown : function(e){
+            e.preventDefault();
+            select_by_click(e);
+            var hit = project.hitTest(e.point, {
+              tolerance: 4,
+              fill: true,
+              stoke: true,
+              segments: true,
+              curves: true
+            });
+            if(hit){
+              move_tool_flag = true;
+              updatePosition();
+            }
+
+          },
+          onMouseDrag : function (e){
+            e.preventDefault();
+            if(move_tool_flag){
+              $.each(project.selectedItems, function(k, v){
+                v.position.x = v.position.x + e.delta.x;
+                v.position.y = v.position.y + e.delta.y;
+              })
+              limit_position(new Group(project.selectedItems));
+              updatePosition();
+
+            }
+          },
+          onMouseUp: function (e){
+            e.preventDefault();
+            if(move_tool_flag){
+              move_tool_flag=false;
+              updatePosition();
+            }
+          },
+          // onKeyDown : onKeyDown
+        });
+        nozzle = new Tool({
+          onMouseDown : function(e){
+            if(!nozzle_moving && e.point.x>40 && e.point.y>40){
+              mv.disx = Math.floor(e.point.x-noz.position.x);
+              mv.disy = Math.floor(e.point.y-noz.position.y);
+              mv.start();
+            }
+          }
+        });
         zoom = new Tool();
         copy = new Tool();
 
-        var move_tool_flag;
-        relocate.minDistance = 5;
-        relocate.onMouseDown = function (e){
-          e.preventDefault();
-          select_by_click(e);
-          var hit = project.hitTest(e.point, {
-            tolerance: 4,
-            fill: true,
-            stoke: true,
-            segments: true,
-            curves: true
-          });
-          if(hit)
-          move_tool_flag = true;
-        }
-        relocate.onMouseDrag = function (e){
-          e.preventDefault();
-          if(move_tool_flag){
-            $.each(project.selectedItems, function(k, v){
-              v.position.x = v.position.x + e.delta.x;
-              v.position.y = v.position.y + e.delta.y;
-            })
-            limit_position(new Group(project.selectedItems));
 
-          }
-        }
-        relocate.onMouseUp = function (e){
-          e.preventDefault();
-          if(move_tool_flag){
-            move_tool_flag=false;
-          }
-        }
-        relocate.onKeyDown = onKeyDown;
-
-        nozzle.onMouseDown = function(e){
-          if(!nozzle_moving && e.point.x>40 && e.point.y>40){
-            mv.disx = Math.floor(e.point.x-noz.position.x);
-            mv.disy = Math.floor(e.point.y-noz.position.y);
-            mv.start();
-          }
-        }
-        function etchShape (v){
-          var et = new Path();
-          var nor, seg, temP;
-          function getOutsidePoint(p){
-            nor = v.getNormalAt(v.getOffsetOf(p));
-            temP = p.add(nor);
-            if (v.contains(temP)){
-              return p.subtract(nor);
-            }else{
-              return temP.clone();
-            }
-          }
-
-          if(v.closed){
-            var first = new Segment({
-              point:v.firstSegment.point.clone(),
-              handleOut: v.firstSegment.handleOut
-            });
-            var last = new Segment({
-              point:v.firstSegment.point.clone(),
-              handleIn: v.firstSegment.handleIn
-            })
-            v.closed = false;
-            v.add(last);
-            v.removeSegment(0);
-            v.insert(0,first);
-
-          }
-          var iter = v.firstSegment;
-          var seg = new Segment({
-            point: getOutsidePoint(iter.point),
-            handleIn: iter.handleIn,
-            handleOut: iter.handleOut
-          });
-          et.add(seg);
-          while(!iter.isLast()){
-            iter = iter.next;
-            seg = new Segment({
-              point:getOutsidePoint(iter.point),
-              handleIn: iter.handleIn,
-              handleOut: iter.handleOut
-            });
-            et.add(seg);
-          }
-          v.reverse();
-          et.join(v.clone());
-          et.clockwise = false;
-          return et;
-        }
-
-        function etchShape2 (v){
-          var segFirst,segLast;
-          var n, n1,n2,temP;
-          if(v.closed){
-            var first = new Segment({
-              point:v.firstSegment.point.clone(),
-              handleOut: v.firstSegment.handleOut
-            });
-            var last = new Segment({
-              point:v.firstSegment.point.clone(),
-              handleIn: v.firstSegment.handleIn
-            })
-            v.closed = false;
-            v.add(last);
-            v.removeSegment(0);
-            v.insert(0,first);
-
-            n1 = v.getNormalAt(0);
-            n2 = v.getNormalAt(v.length);
-            n = n1.add(n2).divide(2);
-
-            segFirst =new Segment({
-              point: first.point.add(n),
-              handleIn: first.handleOut
-            });
-            segLast =new Segment({
-              point: last.point.add(n),
-              handleOut: last.handleIn
-            })
-          }else{
-            n1 = v.getNormalAt(0);
-            n2 = v.getNormalAt(v.length);
-            segFirst =new Segment({
-              point: v.firstSegment.point.add(n1),
-              handleIn: v.firstSegment.handleOut
-            });
-            segLast =new Segment({
-              point: v.lastSegment.point.add(n2),
-              handleOut: v.lastSegment.handleIn
-            })
-          }
-
-          var et = new Path();
-          et.add(segLast);
-          var iter = v.lastSegment.previous;
-          while(!iter.isFirst()){
-            n = getNormalOutside(iter);
-            segLast = new Segment({
-              point: iter.point.add(n),
-              handleIn: iter.handleOut,
-              handleOut: iter.handleIn
-            })
-            et.add(segLast);
-            iter = iter.previous;
-          }
-
-          et.add(segFirst);
-          et.smooth({
-            type: 'catmull-rom'
-          });
-          et.join(v.clone());
-          et.closePath();
-          et.clockwise = false;
-          return et;
-
-          function getNormalOutside(segment){
-            var offset = v.getOffsetOf(segment.point);
-            n1 = v.getNormalAt(offset);
-            n2 = v.getNormalAt(offset-0.1);
-            return n1.add(n2).divide(2);
-          }
-        }
 
         function etchShape3 (v) {
           var outerPath, innerPath, res;
@@ -1677,7 +1700,6 @@ $(document).ready(function(){
               r.removeSegment(0);
             }else {
               var sg =  r.firstSegment.point.add(ta.divide(4));
-              r.removeSegment(r.segments.length-1);
               r.removeSegment(0);
               r.insert(0,sg);
             }
@@ -1699,6 +1721,9 @@ $(document).ready(function(){
           $("#interfaceIntro").click(function(){
             $("#interfaceIntro").empty().hide();
             $("#overlay").hide();
+            if(!openFlag){
+              $("#TutorialTab").click();
+            }
           })
         }
 
@@ -1827,45 +1852,6 @@ $(document).ready(function(){
       default:
       windowControl.sceneWindow.init();
       break;
-    }
-    resizeInterf();
-
-    window.onresize = function(event) {resizeInterf();}
-    function resizeInterf(){
-      var vpw = $(window).width();
-      var vph = $(window).height();
-      var w = vph*1280/800;
-      if(vpw>w){
-        vpw=w;
-      }else{
-        vph = vpw*800/1280;
-      }
-
-      if (vph<400){
-        vph = 400;
-        vpw=640;
-      }
-      $("#gameContainer").css({
-        "height": vph + "px",
-        "width" : vpw + "px"
-      });
-
-      var infw = vpw - 50;
-      var infh = vph - 100;
-      var topH = $("#top").height();
-
-      $("#screenTop").width(infw);
-      $("#screenBottom").width(infw);
-      $("#screenRight").height( infh);
-      $("#screenLeft").height( infh);
-      $("#InterfaceContainer").css({
-        "width": infw+"px",
-        "height": infh + "px"
-      });
-      $("#main").css({
-        "top": topH +"px" ,
-        "height": (infh-topH )+ "px"
-      })
     }
 
     // set select default to Rast/Vect

@@ -13,49 +13,266 @@
 
   <script src="js/OrbitControls.js"></script>
   <style>
-    #modelContainer {
-      position: absolute;
-      width: 1280px;
-      height:800px;
-      top:0;
-      bottom: 0;
-      left: 0;
-      right:0;
-      margin: auto;
-      background: url("scene_pics/scene1.png") no-repeat center top;
-      -webkit-background-size: contain;
-      -moz-background-size: contain;
-      -o-background-size: contain;
-      background-size: contain;
-      overflow: hidden;
-    }
+  #modelContainer {
+    position: absolute;
+    width: 1280px;
+    height:800px;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right:0;
+    margin: auto;
+    background: url("scene_pics/scene1.jpeg") no-repeat center top;
+    -webkit-background-size: contain;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    overflow: hidden;
+  }
 
-    #modelCanvasContainer {
-      position: absolute;
-      width: 50%;
-      height:50%;
-      top: 25%;
-      left: 10%;
-    }
+  #modelCanvasContainer {
+    position: absolute;
+    width: 60%;
+    height:80%;
+    top: 10%;
+    left: 20%;
+    background:rgba(219, 201, 200, 0.7);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-radius: 20px;
+  }
 
-    #modelCloseButton {
-      position: absolute;
-      right: 10%;
-      bottom: 10%;
-    }
 
+  #modelCanvasContainer:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+  #modelCloseButton {
+    position: absolute;
+    right: 10%;
+    bottom: 2%;
+  }
+  .btn {
+  position: relative;
+  display: inline-block;
+  letter-spacing: 1.2px;
+  padding: 12px 32px;
+  text-align: center;
+  text-transform: uppercase;
+  overflow: hidden;
+  z-index: 1;
+  cursor: pointer;
+}
+.btn:focus {
+  outline: none;
+}
+
+.btn--primary {
+  color: white;
+}
+
+.btn--border {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.btn--animated {
+  transition-property: color;
+  transition-duration: 0.5s;
+}
+.btn--animated.btn--border.btn--primary {
+  border: 1px solid lightslategray;
+}
+.btn--animated:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  -webkit-transform: scaleX(0);
+          transform: scaleX(0);
+  -webkit-transform-origin: 0 50%;
+          transform-origin: 0 50%;
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-out;
+  z-index: -1;
+}
+.btn--animated:hover {
+  color: lightslategray;
+}
+.btn--animated:hover:before {
+  -webkit-transform: scaleX(1);
+          transform: scaleX(1);
+  transition-timing-function: cubic-bezier(0.45, 1.64, 0.47, 0.66);
+}
+
+  #loader-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+  #loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    z-index: 1500;
+    border: 3px solid transparent;
+    border-top-color: #3498db;
+    border-radius: 50%;
+    -webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+  }
+
+  #loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 3px solid transparent;
+    border-top-color: #e74c3c;
+    border-radius: 50%;
+    -webkit-animation: spin 3s linear infinite;
+animation: spin 3s linear infinite;
+}
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border: 3px solid transparent;
+    border-top-color: #f9c922;
+    border-radius: 50%;
+    -webkit-animation: spin 1.5s linear infinite;
+animation: spin 1.5s linear infinite;
+}
+#loader-wrapper .loader-section {
+    position: absolute;
+    top: 0;
+    width: 51%;
+    height: 100%;
+    background: #222222;
+    z-index: 1000;
+}
+
+#loader-wrapper .loader-section.section-left {
+    left: 0;
+}
+
+#loader-wrapper .loader-section.section-right {
+    right: 0;
+}
+.loaded #loader-wrapper .loader-section.section-left {
+    -webkit-transform: translateX(-100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+    -ms-transform: translateX(-100%);  /* IE 9 */
+    transform: translateX(-100%);  /* Firefox 16+, IE 10+, Opera */
+}
+
+.loaded #loader-wrapper .loader-section.section-right {
+    -webkit-transform: translateX(100%);  /* Chrome, Opera 15+, Safari 3.1+ */
+    -ms-transform: translateX(100%);  /* IE 9 */
+    transform: translateX(100%);  /* Firefox 16+, IE 10+, Opera */
+}
+.loaded #loader-wrapper .loader-section.section-right,
+.loaded #loader-wrapper .loader-section.section-left {
+  -webkit-transition: all 1s 0.5s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+  transition: all 1s 0.5s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+}
+.loaded #loader {
+    opacity: 0;
+    -webkit-transition: all 0.5s ease-out;
+            transition: all 0.5s ease-out;
+}
+.loaded #loader-wrapper {
+    visibility: hidden;
+    -webkit-transform: translateY(-100%);
+            -ms-transform: translateY(-100%);
+                transform: translateY(-100%);
+
+        -webkit-transition: all 0.5s 1.2s ease-out;
+                transition: all 0.5s 1.2s ease-out;
+}
+
+#info {
+  color: white;
+  position: absolute;
+  bottom:0;
+  left: 5px;
+}
+
+#info span {
+  font-size:large;
+}
+#info span.function {
+  color: red;
+  font-weight:900;
+  text-shadow: 3px rgba(0,0,0,0.5);
+
+}
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
   </style>
+
 </head>
 
 <body>
+
   <div id="modelContainer" >
-    <div id="modelCanvasContainer" ></div>
+    <div id="loader-wrapper">
+      <div id="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    </div>
+    <div id="modelCanvasContainer" style='visibility:hidden; position:absolute'></div>
     <div id="modelInfo"></div>
-    <button id="modelCloseButton" onclick="window.close()">Close</button>
+    <div id="modelCloseButton" class="wrapper">
+        <div class="btn btn--border btn--primary btn--animated" onclick="window.close()">Close</div>
+      </div>
+
+    <p id='info'><span>MOUSE CONTROL:</span> Left: <span class='function'>rotate</span>; Right:<span class='function'> pan</span>; Middle: <span class='function'>zoom </span></p>
+
   </div>
   <div id="other" style="display: none"><canvas width="1000" height="1000" id='pa'></canvas></div>
   <script>
-
   window.onresize = function(event) {
     resize();
   }
@@ -77,6 +294,7 @@
       "height": vph + "px",
       "width" : vpw + "px"
     });
+
 
   }
   function cutShape (v) {
@@ -110,8 +328,8 @@
     var d2 = OffsetUtils.offsetPath(v, -offset, true);
 
 
-    innerPath = new Path(d1);
-    outerPath = new Path(d2);
+    innerPath = new Path(d1, { insert: false });
+    outerPath = new Path(d2, { insert: false });
 
 
     outerPath.reverse();
@@ -120,7 +338,7 @@
 
 
     res.closePath();
-    res = res.unite(res);
+    res = res.unite(res, { insert: false });
     res.reorient(false,true);
 
     while(res.className == "CompoundPath"){
@@ -154,7 +372,6 @@
         r.removeSegment(0);
       }else {
         var sg =  r.firstSegment.point.add(ta.divide(4));
-        r.removeSegment(r.segments.length-1);
         r.removeSegment(0);
         r.insert(0,sg);
       }
@@ -168,17 +385,13 @@
   }
   resize();
   var des = window.opener.g_design;
-
-
-  $(document).ready(function(){
-    paper.setup('pa');
-
-
+  paper.setup('pa');
+  $(window).load(function(){
     var addGeoObject = function( group, svgObject ) {
       var pathN = svgObject.length;
       var confirmed_area,newpart ,dep;
 
-      var t = new Path();
+      var t = new Path({ insert: false });
       var woodMaterial = new THREE.MeshLambertMaterial( {
         color: new THREE.Color(0xffeecc)
       } );
@@ -192,7 +405,7 @@
       })
 
       $.each(cutting, function(k,v){
-        t = t.unite(v);
+        t = t.unite(v, { insert: false });
       })
       var outline = SVGtransform.transformSVGPathTHREE(t.pathData).path;
       var outline_shape = outline.toShapes(true, true);
@@ -201,42 +414,60 @@
 
       if(nPieces==0){
         console.log('nothing is cut out');
+        $("#modelContainer").append($("#modelCloseButton")).append("<p>Nothing is cut out. <br>Please check your power and speed setting for cutting lines.</p>");
+        $("#modelCloseButton").css({
+          'z-index':1600,
+          "left": "45%"
+        });
+
+        $("#modelContainer p").css({
+          'position': 'absolute',
+          'z-index':1600,
+          "left": "30%",
+          'bottom': "20%",
+          'color': 'white',
+          'font-size': "20px",
+          "text-align": "center"
+        });
+
+        $("#info").hide();
+        return false;
       }else if (nPieces==1){
-        confirmed_area = new Path();
+        confirmed_area = new Path({ insert: false });
         for ( var i = pathN-1; i >-1; i--){
           if(svgObject[i].data.edge && svgObject[i].data.edge.type=='cutting'){
             if(svgObject[i].getIntersections(t)==0){
-              confirmed_area = confirmed_area.unite(svgObject[i]);
+              confirmed_area = confirmed_area.unite(svgObject[i], { insert: false });
             }else if (svgObject[i].area < t.area){
-              var inter1 = svgObject[i].intersect(t);
-              var inter2 = svgObject[i].exclude(t);
-              console.log(inter1.pathData);
-              console.log(inter2.pathData);
-              var insideCurve = inter1.intersect(inter2, {trace: false});
+              var inter1 = svgObject[i].intersect(t, { insert: false });
+              var inter2 = svgObject[i].exclude(t, { insert: false });
+              console.log(svgObject[i].pathData);
+              console.log(t.pathData);
+              var insideCurve = inter1.intersect(inter2, {trace: false, insert: false});
 
               if(insideCurve.children){
                 $.each(insideCurve.children, function(k, v){
                   var et = cutShape(v);
-                  confirmed_area = confirmed_area.unite(et);
+                  confirmed_area = confirmed_area.unite(et, { insert: false });
                 })
               }else {
                 var et = cutShape(insideCurve);
-                confirmed_area = confirmed_area.unite(et);
+                confirmed_area = confirmed_area.unite(et, { insert: false });
               }
             }
           }else{
-            var p = svgObject[i].intersect(t);
+            var p = svgObject[i].intersect(t, { insert: false });
             dep = svgObject[i].data.fill.depth*100;
             if(p.area && dep){
-              if(p.intersect(confirmed_area).area==0){
+              if(p.intersect(confirmed_area, { insert: false }).area==0){
                 newpart = p;
               }else{
-                newpart = p.subtract(confirmed_area);
+                newpart = p.subtract(confirmed_area, { insert: false });
               }
 
-              confirmed_area = confirmed_area.unite(p);
+              confirmed_area = confirmed_area.unite(p, { insert: false });
 
-              if(dep!=10){
+              if(dep!=1000){
                 var threeData,color,material, shape3d, mesh;
                 threeData = SVGtransform.transformSVGPathTHREE(newpart.pathData).path.toShapes(true, false);
                 color = new THREE.Color(0x996600);
@@ -250,44 +481,37 @@
                 mesh = new THREE.Mesh( shape3d, [material,woodMaterial,woodMaterial, woodMaterial]);
                 mesh.translateZ(dep);
                 group.add( mesh );
-
               }
             }
-
           }
-
-
-
         }
         var hole = SVGtransform.transformSVGPathTHREE(confirmed_area.pathData).path.toShapes(false, false);
+        console.log(confirmed_area.pathData);
         $.each(hole, function(k,v){
           outline_shape[0].holes.push(v);
         })
         var shape3d = new THREE.ExtrudeBufferGeometry( outline_shape[0], {
-            amount: 25.5,
-            bevelEnabled: false
-          } );
+          amount: 25.5,
+          bevelEnabled: false
+        } );
         var mesh = new THREE.Mesh( shape3d, woodMaterial );
         group.add( mesh );
-
-
-
       }else{
         confirmed_area = [];
         for ( var i = pathN-1; i >-1; i--){
           for (var j = 0; j<nPieces; j++){
             var piec = t.children[j];
-            var p = svgObject[i].intersect(piec);
+            var p = svgObject[i].intersect(piec, { insert: false });
             if(p.area!=0 && Math.abs(p.area)<Math.abs(piec.area)){
               if(!confirmed_area[j]){
-                confirmed_area[j] = new Path();
+                confirmed_area[j] = new Path({ insert: false });
               }
               if(p.intersect(confirmed_area[j]).area==0){
                 newpart = p;
               }else{
-                newpart = p.subtract(confirmed_area[j]);
+                newpart = p.subtract(confirmed_area[j], { insert: false });
               }
-              confirmed_area[j] = confirmed_area[j].unite(p);
+              confirmed_area[j] = confirmed_area[j].unite(p, { insert: false });
               dep = svgObject[i].data.fill.depth*100;
               if(dep!=0){
                 var threeData,color,material, shape3d, mesh;
@@ -310,14 +534,17 @@
         }
 
         for (var j = 0; j<nPieces; j++){
-          var hole = SVGtransform.transformSVGPathTHREE(confirmed_area[j].pathData).path.toShapes(false, false);
-          $.each(hole, function(k,v){
-            outline_shape[j].holes.push(v);
-          })
+          if(confirmed_area[j]){
+            var hole = SVGtransform.transformSVGPathTHREE(confirmed_area[j].pathData).path.toShapes(false, false);
+            $.each(hole, function(k,v){
+              outline_shape[j].holes.push(v);
+            })
+
+          }
           var shape3d = new THREE.ExtrudeBufferGeometry( outline_shape[j], {
-              amount: 25.5,
-              bevelEnabled: false
-            } );
+            amount: 25.5,
+            bevelEnabled: false
+          } );
           var mesh = new THREE.Mesh( shape3d, woodMaterial );
           group.add( mesh );
 
@@ -329,13 +556,16 @@
       group.rotateY(Math.PI);
       group.translateX(-(t.bounds.x+t.bounds.width/2));
       group.translateY(-(t.bounds.y+t.bounds.height/2));
-
+      return {
+        width: t.bounds.width,
+        height: t.bounds.height
+      }
 
     };
 
     var renderer, scene, camera;
 
-    init();
+    if(init())
     animate();
 
     function init() {
@@ -344,11 +574,9 @@
 
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera( 50, 1280 / 800, 1, 10000 );
-      camera.position.set( 0, 0, 500 );
+      camera = new THREE.PerspectiveCamera( 50, 1280*0.6 / 640, 1, 10000 );
 
-      axesHelper = new THREE.AxesHelper( 5 );
-      scene.add( axesHelper );
+
 
       var group = new THREE.Group();
       scene.add( group );
@@ -360,26 +588,41 @@
       var ambientLight = new THREE.AmbientLight( 0xffffff, 0.5 );
       scene.add( ambientLight );
 
-      //var geo = getDesign(des);
 
-      addGeoObject( group, des );
+      var size_info = addGeoObject( group, des );
+
+      if(size_info){
+        camera.position.set( 0, 0, size_info.height>size_info.width ? 2*size_info.height: 2*size_info.width );
 
 
-      renderer = new THREE.WebGLRenderer( {
-        antialias: true,
-        alpha: true
-      } );
-      renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
-      renderer.setClearColor( 0x000000, 0 );
-      container.appendChild( renderer.domElement );
+        renderer = new THREE.WebGLRenderer( {
+          antialias: true,
+          alpha: true
+        } );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( $("#modelCanvasContainer").width(), $("#modelCanvasContainer").height() );
+        renderer.setClearColor( 0x000000, 0 );
+        container.appendChild( renderer.domElement );
 
-      //
+        //
 
-      var controls = new THREE.OrbitControls( camera, renderer.domElement );
-      //
+        var controls = new THREE.OrbitControls( camera, renderer.domElement );
+        controls.maxAzimuthAngle = Math.PI/2;
+        controls.minAzimuthAngle = -Math.PI/2;
+        controls.minDistance = size_info.height>size_info.width ? size_info.height: size_info.width;
+        controls.maxDistance = size_info.height>size_info.width ? 3*size_info.height: 3*size_info.width;
 
-      window.addEventListener( 'resize', onWindowResize, false );
+        //
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        $("#modelCanvasContainer").css('visibility', 'visible')
+
+        $('#modelContainer').addClass('loaded');
+        return true;
+      }else {
+        return false;
+      }
 
     }
     function onWindowResize() {

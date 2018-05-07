@@ -398,7 +398,7 @@
               <div class="item5">
                 <div id="timer"></div>
                 <div id="xcoordinate"><p>X:   <span id="x_nozzle" stype="display:none">0</span><input id="x_i" stype="display:none"/>''</p></div>
-                <div id="ycoordinate"><p>Y:   <span id="y_nozzle" stype="display:none">0</span><input id="y_i"stype="display:none"/>''</p></div>
+                <div id="ycoordinate"><p>Y:   <span id="y_nozzle" stype="display:none">0</span><input id="y_i" stype="display:none"/>''</p></div>
 
               </div>
               <div class="item6">
